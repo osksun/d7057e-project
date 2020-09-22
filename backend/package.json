@@ -1,0 +1,11 @@
+{
+	"name": "D7057E-server",
+	"private": true,
+	"main": "main.js",
+	"dependencies": {
+		"express": "~4.17.0",
+		"body-parser": "~1.19.0",
+		"mysql": "~2.18.0",
+		"bcrypt": "~5.0.0"
+	}
+}
