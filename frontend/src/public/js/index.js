@@ -8,8 +8,7 @@ function updateLevelInfo() {
     levelNumber.innerHTML = "Level " + getLevel() + " | " + getLevelTitle();
 }
 
-
-window.onload = function() {
+window.onload = function () {
     updateXpBar();
     updateLevelInfo();
 }
