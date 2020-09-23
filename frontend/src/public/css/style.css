@@ -17,12 +17,17 @@ body {
 
 #header-level-container {
     padding: min(0.3125vw, 0.55vh) 5% min(0.3125vw, 0.55vh) 0;
-    color: white;
+    display: inline-block;
+    right: 0;
     font-size: min(2.5vw, 4.44vh);
+    vertical-align: middle;
 }
 
 #header-level-container>p {
-    display: inline;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    color: white;
 }
 
 #header-xp-progress-bar {
@@ -42,66 +47,49 @@ body {
     background-color: white;
 }
 
-#header-level-number {
-    display: inline;
-}
-
-#header-level-title {
-    display: inline;
-}
-
 #page-name-container {
+    padding: 0;
+    margin: 0;
     background-color: white;
     width: min(25.0vw, 44.4vh);
     height: min(10vw, 17.76vh);
-    float: left;
     position: absolute;
     font-size: min(6.25vw, 11.1vh);
-    display: table;
-}
-
-#page-name-container>p {
+    line-height: min(10vw, 17.76vh);
     text-align: center;
-    vertical-align: middle;
-    display: table-cell;
-    margin: 0;
-    padding: 0;
 }
 
 #sidebar {
     list-style-type: none;
     margin: 0;
     padding: 0;
-}
-
-#sidebar-container {
-    background-color:  #323232;
+    background-color: #323232;
     position: absolute;
     padding-top: min(2.5vw, 4.44vh);
     height: auto;
     width: min(6.25vw, 11.1vh);
     top: min(10vw, 17.76vh);
     bottom: 0;
-    float: left;
 }
 
-.sidebar-item-container {
+#sidebar>li {
     padding-bottom: min(1.55125vw, 2.775vh);
-}
-
-.sidebar-icon {
     padding: 15%;
     width: 70%;
-    background-color: #323232;
-    fill: black;
+    transition: filter 0.25s, -webkit-filter 0.25s;
 }
 
-.sidebar-icon>img {
-    width: 100%;
-    height: 100%;
+#sidebar>li:target {
+    filter: invert(90%);
+    -webkit-filter: invert(90%);
 }
 
-.sidebar-item-selected>.sidebar-link>.sidebar-icon>img {
+#sidebar>li:hover {
     filter: invert(100%);
     -webkit-filter: invert(100%);
+}
+
+#sidebar>li>a>img {
+    width: 100%;
+    height: 100%;
 }
