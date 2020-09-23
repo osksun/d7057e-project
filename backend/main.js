@@ -4,13 +4,14 @@ console.log("Starting server...");
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const bcryptSaltRounds = 10;
 
 const database = require("./database.js");
+const token = require("./token.js");
 
-function registerUser(email, passwordHash) {
+function registerUser(email, password) {
 	return new Promise((resolve, reject) => {
-		bcrypt.hash(passwordHash, bcryptSaltRounds, (error, hash) => {
+		const passwordSaltRounds = 10;
+		bcrypt.hash(password, passwordSaltRounds, (error, hash) => {
 			if(error) {
 				reject();
 			} else {
@@ -24,19 +25,29 @@ function registerUser(email, passwordHash) {
 	});
 }
 
+function loginUser(email, password) {
+	return new Promise((resolve, reject) => {
+			database.loginUser(email, password).then(() => {
+				resolve();
+			}).catch(() => {
+				reject();
+			});
+	});
+}
+
 function init() {
 	const app = express();
 
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
-	app.post("/registeruser", (request, response) => {
+	app.post("/register", (request, response) => {
 		const email = request.body.email;
-		const passwordHash = request.body.password;
+		const password = request.body.password;
 
 		//TODO validate input
 
-		registerUser(email, passwordHash).then(() => {
+		registerUser(email, password).then(() => {
 			console.log("Registered user \"" + email + "\"");
 			response.end(JSON.stringify({
 				success:true
@@ -44,6 +55,32 @@ function init() {
 		}).catch(() => {
 			response.end(JSON.stringify({
 				success:false
+			}));
+		});
+	});
+
+	app.post("/createrefreshtoken", (request, response) => {
+		const email = request.body.email;
+		const password = request.body.password;
+
+		//TODO validate input
+
+		loginUser(email, password).then(() => {
+			console.log("Created refresh token for \"" + email + "\"");
+
+			token.createRefreshToken(email).then((refreshToken) => {
+				response.end(JSON.stringify({
+					refreshToken:refreshToken
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Failed to create refresh token"
+				}));
+			});
+
+		}).catch(() => {
+			response.end(JSON.stringify({
+				error:"Login failed"
 			}));
 		});
 	});
