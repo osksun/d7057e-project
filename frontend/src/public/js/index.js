@@ -3,18 +3,12 @@ function updateXpBar() {
     xpBar.style.width = getXpPercent() + "%";
 }
 
-function updateLevel() {
-    const levelNumber = document.getElementById("header-level-number");
-    levelNumber.innerHTML = getLevel();
+function updateLevelInfo() {
+    const levelNumber = document.getElementById("header-level-info");
+    levelNumber.innerHTML = "Level " + getLevel() + " | " + getLevelTitle();
 }
 
-function updateLevelTitle() {
-    const levelTitle = document.getElementById("header-level-title");
-    levelTitle.innerHTML = getLevelTitle();
-}
-
-window.onload = function() {
+window.onload = function () {
     updateXpBar();
-    updateLevel();
-    updateLevelTitle();
+    updateLevelInfo();
 }
