@@ -85,6 +85,24 @@ function init() {
 		});
 	});
 
+	app.post("/createaccesstoken", (request, response) => {
+		const email = request.body.email;
+		const refreshToken = request.body.refreshToken;
+
+		//TODO validate input
+
+		token.createAccessToken(email, refreshToken).then(({expireTime, signature}) => {
+			response.end(JSON.stringify({
+				expireTime:expireTime,
+				signature:signature
+			}));
+		}).catch(() => {
+			response.end(JSON.stringify({
+				error:"Failed to create access token"
+			}));
+		});
+	});
+
 	app.listen(80);
 	console.log("Server running on port 80!");
 }
