@@ -44,11 +44,19 @@ body {
     width: min(18.75vw, 33.3vh);
     height: min(1.25vw, 2.22vh);
     background-color: black;
+    position: relative;
 }
 
-#header-xp-progress-bar-front {
-    width: 0%;
+#header-xp-progress-bar-front-green {
     height: 100%;
+    transition: width 0.5s ease-in-out;
+    background-color: rgb(116, 223, 255);
+}
+
+#header-xp-progress-bar-front-white {
+    height: 100%;
+    position: absolute;
+    transition: width 1.0s ease-in-out;
     background-color: white;
 }
 
