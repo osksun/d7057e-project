@@ -4,13 +4,14 @@ console.log("Starting server...");
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
-const bcryptSaltRounds = 10;
 
 const database = require("./database.js");
+const token = require("./token.js");
 
 function registerUser(email, password) {
 	return new Promise((resolve, reject) => {
-		bcrypt.hash(password, bcryptSaltRounds, (error, hash) => {
+		const passwordSaltRounds = 10;
+		bcrypt.hash(password, passwordSaltRounds, (error, hash) => {
 			if(error) {
 				reject();
 			} else {
@@ -40,7 +41,7 @@ function init() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
-	app.post("/registeruser", (request, response) => {
+	app.post("/register", (request, response) => {
 		const email = request.body.email;
 		const password = request.body.password;
 
@@ -58,20 +59,28 @@ function init() {
 		});
 	});
 
-	app.post("/loginuser", (request, response) => {
+	app.post("/createrefreshtoken", (request, response) => {
 		const email = request.body.email;
 		const password = request.body.password;
 
 		//TODO validate input
 
 		loginUser(email, password).then(() => {
-			console.log("User logged in \"" + email + "\"");
-			response.end(JSON.stringify({
-				success:true
-			}));
+			console.log("Created refresh token for \"" + email + "\"");
+
+			token.createRefreshToken(email).then((refreshToken) => {
+				response.end(JSON.stringify({
+					refreshToken:refreshToken
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Failed to create refresh token"
+				}));
+			});
+
 		}).catch(() => {
 			response.end(JSON.stringify({
-				success:false
+				error:"Login failed"
 			}));
 		});
 	});
