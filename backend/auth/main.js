@@ -36,6 +36,56 @@ function loginUser(email, password) {
 	});
 }
 
+function validateEmail(email) {
+	//Checks if email is not undefined
+	if(email) {
+		//Checks if the email is the correct type (String)
+		if(typeof email === "string") {
+			//Checks if the email length is within the range 0-254
+			if(email.length > 0 && email.length <= 254) {
+				//Checks if the email is in a valid form
+				const mailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				if(mailRegex.test(email)) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+function validatePassword(password) {
+	//Checks if password is not undefined
+	if(password) {
+		//Checks if the password is the correct type (String)
+		if(typeof password === "string") {
+			//Checks if the password length is within the range 0-254
+			if(password.length > 0 && password.length <= 254) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+function validateRefreshToken(token) {
+	//Checks if token is not undefined
+	if(token) {
+		//Checks if the token is the correct type (String)
+		if(typeof token === "string") {
+			//Checks if the token is the correct length
+			if(token.length == 96) {
+				//Checks if the token is in a valid format
+				const tokenRegex = /^[a-f0-9]+$/;
+				if(tokenRegex.test(token)) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
 function init() {
 	const app = express();
 
@@ -46,62 +96,74 @@ function init() {
 		const email = request.body.email;
 		const password = request.body.password;
 
-		//TODO validate input
-
-		registerUser(email, password).then(() => {
-			console.log("Registered user \"" + email + "\"");
-			response.end(JSON.stringify({
-				success:true
-			}));
-		}).catch(() => {
+		if(validateEmail(email) && validatePassword(password)) {
+			registerUser(email, password).then(() => {
+				console.log("Registered user \"" + email + "\"");
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					success:false
+				}));
+			});
+		} else {
 			response.end(JSON.stringify({
 				success:false
 			}));
-		});
+		}
 	});
 
 	app.post("/createrefreshtoken", (request, response) => {
 		const email = request.body.email;
 		const password = request.body.password;
 
-		//TODO validate input
+		if(validateEmail(email) && validatePassword(password)) {
+			loginUser(email, password).then(() => {
+				console.log("Created refresh token for \"" + email + "\"");
 
-		loginUser(email, password).then(() => {
-			console.log("Created refresh token for \"" + email + "\"");
+				token.createRefreshToken(email).then((refreshToken) => {
+					response.end(JSON.stringify({
+						refreshToken:refreshToken
+					}));
+				}).catch(() => {
+					response.end(JSON.stringify({
+						error:"Failed to create refresh token"
+					}));
+				});
 
-			token.createRefreshToken(email).then((refreshToken) => {
-				response.end(JSON.stringify({
-					refreshToken:refreshToken
-				}));
 			}).catch(() => {
 				response.end(JSON.stringify({
-					error:"Failed to create refresh token"
+					error:"Login failed"
 				}));
 			});
-
-		}).catch(() => {
+		} else {
 			response.end(JSON.stringify({
-				error:"Login failed"
+				error:"Malformed input"
 			}));
-		});
+		}
 	});
 
 	app.post("/createaccesstoken", (request, response) => {
 		const email = request.body.email;
-		const refreshToken = request.body.refreshToken;
+		const refreshToken = request.body.refreshToken
 
-		//TODO validate input
-
-		token.createAccessToken(email, refreshToken).then(({expireTime, signature}) => {
+		if(validateEmail(email) && validateRefreshToken(refreshToken)) {
+			token.createAccessToken(email, refreshToken).then(({expireTime, signature}) => {
+				response.end(JSON.stringify({
+					expireTime:expireTime,
+					signature:signature
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Failed to create access token"
+				}));
+			});
+		} else {
 			response.end(JSON.stringify({
-				expireTime:expireTime,
-				signature:signature
+				error:"Malformed input"
 			}));
-		}).catch(() => {
-			response.end(JSON.stringify({
-				error:"Failed to create access token"
-			}));
-		});
+		}
 	});
 
 	const port = parseInt(config["port"], 10);
