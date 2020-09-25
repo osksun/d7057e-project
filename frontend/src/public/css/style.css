@@ -133,17 +133,14 @@ body {
     overflow: auto;
 }
 
-#top-category-container {
-}
 
-#top-category-button-container {
-    padding-top: min(5vw, 8.88vh);
-    padding-left: min(25.0vw, 44.4vh);
+/* button-container */
+.button-container {
     width: calc(100vw - min(25.0vw, 44.4vh));
     height: min(3.75vw, 6.66vh);
 }
 
-#top-category-button-container>button {
+.button-container>button {
     font-size: min(2.5vw, 4.44vh);
     background-color: #323232;
     border: none;
@@ -157,16 +154,36 @@ body {
     width: calc(100% / 3 - 1%);
 }
 
-#top-category-button-container>button:hover {
+.button-container>button:hover {
     cursor: pointer;
     background-color: white;
 }
 
-#top-category-button-container>button.active {
+.button-container>button.active {
     background-color: white;
 }
 
-#top-category-card-container {
+#top-button-container {
+    padding-top: min(5vw, 8.88vh);
+    padding-left: min(25.0vw, 44.4vh);
+}
+
+#bot-button-container {
+    padding-top: min(5vw, 8.88vh);
+    padding-left: min(13.5vw, 24.0vh);
+}
+
+/* view-container */
+.view-container>ul {
+    display: none;
+}
+
+.view-container>ul.visible {
+    display: block;
+}
+
+/* view-favourites */
+#view-favourites {
     list-style-type: none;
     margin-left: 15vw;
     padding: 0;
@@ -175,7 +192,7 @@ body {
     margin-top: min(5vw, 8.88vh);
 }
 
-#top-category-card-container>li {
+#view-favourites>li {
     float: left;
     margin-right: 7%;
     height: 100%;
@@ -183,11 +200,11 @@ body {
     background-color: white;
 }
 
-#top-category-card-container>li:last-of-type {
+#view-favourites>li:last-of-type {
     margin-right: 0%;
 }
 
-#top-category-card-container>li>a {
+#view-favourites>li>a {
     display: inline-block;
     height: 100%;
     width: 100%;
@@ -195,7 +212,7 @@ body {
 
 }
 
-#top-category-card-container>li>a>p {
+#view-favourites>li>a>p {
     color: white;
     padding: 0;
     margin: 0;
@@ -209,17 +226,10 @@ body {
     display: flex;
 }
 
-#top-category-card-container>li>a>ul {
+#view-favourites>li>a>ul {
     list-style-type: square;
     color: #46bbfe;
     font-size: min(1.6vw, 2.8416vh);
     height: 70%;
     padding-left: min(5vw, 8.88vh);
 }
-
-#top-category-card-container>li>a>ul>li>p {
-    padding-top: min(1.6vw, 2.8416vh);
-    margin: 0;
-
-}
-
