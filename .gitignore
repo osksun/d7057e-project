@@ -1,3 +1,5 @@
 node_modules/
 backend/auth/config.json
 backend/auth/database_config.json
+backend/main/config.json
+backend/main/database_config.json
