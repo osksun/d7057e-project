@@ -5,6 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 
+const config = require("./config.json");
 const database = require("./database.js");
 const token = require("./token.js");
 
@@ -103,8 +104,17 @@ function init() {
 		});
 	});
 
-	app.listen(80);
-	console.log("Server running on port 80!");
+	const port = parseInt(config["port"], 10);
+	if(isNaN(port)) {
+		console.error("Config specifies invalid port");
+	} else {
+		if(port < 0 || port > 65535) {
+			console.error("Config port should be between 0 and 65535");
+		} else {
+			app.listen(port);
+			console.log("Server running on port " + port + "!");
+		}
+	}
 }
 
 database.connect().then(() => {
