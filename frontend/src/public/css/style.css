@@ -240,11 +240,11 @@ body {
 
 #view-favourites>li>a>p {
     color: white;
-    padding: 0.5em 0;
+    padding: 0.5em 0.5em;
     margin: 0 0;
     border: none;
     background-color: #46bbfe;
-    width: 100%;
+    width: calc(100% - 0.5em * 2);
     font-size: calc(min(9vw, 16vh) / 4.5);
     line-height: 1;
     display: inline-block;
