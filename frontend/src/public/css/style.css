@@ -72,8 +72,8 @@ body {
 
 /* Page name */
 #page-name-container {
-    padding: 0;
-    margin: 0;
+    padding: 0 0 0 calc(min(10vw, 17.76vh) / 2);
+    margin: 0 0 0 calc(min(10vw, 17.76vh) / -2);
     background-color: white;
     width: min(25.0vw, 44.4vh);
     height: min(10vw, 17.76vh);
@@ -81,6 +81,18 @@ body {
     line-height: min(10vw, 17.76vh);
     text-align: center;
     display: inline-block;
+    transform: skew(-45deg, 0deg);
+    -webkit-transform: skew(-45deg, 0deg);
+    -ms-transform: skew(-45deg, 0deg);
+
+}
+
+#page-name-container>span {
+    display: block;
+    transform: skew(45deg, 0deg);
+    -webkit-transform: skew(45deg, 0deg);
+    -ms-transform: skew(45deg, 0deg);
+    font-weight: normal;
 }
 
 /* Sidebar */
