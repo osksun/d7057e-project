@@ -183,4 +183,5 @@ database.connect().then(() => {
 	init();
 }).catch(() => {
 	console.error("Shutting down...");
+	process.exit(1);
 });

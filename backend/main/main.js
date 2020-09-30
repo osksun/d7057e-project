@@ -64,9 +64,11 @@ readline.question("Input auth public key: ", (publicKey) => {
 			init();
 		}).catch(() => {
 			console.error("Shutting down...");
+			process.exit(1);
 		});
 	} else {
 		console.error("Invalid public key!");
 		console.error("Shutting down...");
+		process.exit(2);
 	}
 });
