@@ -260,6 +260,5 @@ body {
     list-style-type: square;
     color: #46bbfe;
     font-size: min(1.6vw, 2.8416vh);
-    height: 70%;
     padding-left: min(5vw, 8.88vh);
 }
