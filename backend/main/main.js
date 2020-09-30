@@ -56,19 +56,28 @@ function init() {
 	}
 }
 
-readline.question("Input auth public key: ", (publicKey) => {
-	publicKey = publicKey.replaceAll("\\n", "\n");
-	if(token.setPublicKey(publicKey)) {
-		console.log("Public key is valid");
-		database.connect().then(() => {
-			init();
-		}).catch(() => {
-			console.error("Shutting down...");
-			process.exit(1);
-		});
-	} else {
-		console.error("Invalid public key!");
+function initDatabase() {
+	database.connect().then(() => {
+		init();
+	}).catch(() => {
 		console.error("Shutting down...");
-		process.exit(2);
-	}
-});
+		process.exit(1);
+	});
+}
+
+if(token.isSkippingVerification) {
+	console.log("WARNING skipping access token verification! For debug purposes only!");
+	initDatabase();
+} else {
+	readline.question("Input auth public key: ", (publicKey) => {
+		publicKey = publicKey.replaceAll("\\n", "\n");
+		if(token.setPublicKey(publicKey)) {
+			console.log("Public key is valid");
+			initDatabase();
+		} else {
+			console.error("Invalid public key!");
+			console.error("Shutting down...");
+			process.exit(2);
+		}
+	});
+}
