@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../../node_modules/chart.js/dist/Chart.js"></script>
+    <script src="./js/2d-visualization.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/2dStyle.css">
+    <script src="../../node_modules/mathjs/dist/math.js" type="text/javascript"></script>
+</head>
+
+<div id="chart-container">
+    <canvas id="myChart"></canvas>
+    <input type="text" id="equationInput" name="input"></label>
+ </div>
+
+<script>
+
+    document.getElementById("equationInput").addEventListener("input", function(){createData(document.getElementById("equationInput").value, minMaxSteps[0], minMaxSteps[1], minMaxSteps[2])})
+
+    let equation = "x*x+3"
+    let minMaxSteps = [0,10,10]
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const dataAndLabels0 = createData(equation, minMaxSteps[0], minMaxSteps[1], minMaxSteps[2])
+    const dataAndLabels1 = createData( "x*x*x", minMaxSteps[0], minMaxSteps[1], minMaxSteps[2])
+    const chart = createChart(ctx, "line","f(x) = " + equation,"rgba(75, 192, 192, 1)", true)
+    addDataPoints(chart, dataAndLabels0[1], dataAndLabels0[0], 0)
+    dataset1 = createDataset("x*x*x", "rgba(0, 192, 192, 1)", true, dataAndLabels1[0])
+    addDataset(chart, dataset1)
+</script>
