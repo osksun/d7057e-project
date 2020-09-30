@@ -157,6 +157,7 @@ body {
 }
 
 .button-container>button {
+    outline : none;
     font-size: min(2.5vw, 4.44vh);
     background-color: #323232;
     border: none;
@@ -171,6 +172,11 @@ body {
     -ms-transform: skew(-45deg, 0deg);
     width: calc((100vw - min(25.0vw, 44.4vh)) / 3 - 1vw);
 }
+
+.button-container>button:focus {
+    outline: 5px solid  rgb(116, 223, 255);
+}
+
 .button-container>button>span {
     display: block;
     transform: skew(45deg, 0deg);
