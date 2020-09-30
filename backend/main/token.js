@@ -27,6 +27,6 @@ function validateAccessToken(email, expireTime, token) {
 	const verifier = crypto.createVerify("SHA256");
 	verifier.update(email + ";" + expireTime);
 	verifier.end();
-	return verifier.verify(publicKey, token, "hex");
+	return verifier.verify(publicKey, token, "base64");
 }
 exports.validateAccessToken = validateAccessToken;

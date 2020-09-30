@@ -14,7 +14,7 @@ function createRefreshToken(email) {
 			if(error) {
 				reject();
 			} else {
-				const token = buffer.toString("hex");
+				const token = buffer.toString("base64");
 				bcrypt.hash(token, refreshTokenSalt, (error, tokenHash) => {
 					if(error) {
 						reject();
@@ -78,7 +78,7 @@ function createAccessToken(email, refreshToken) {
 								const sign = crypto.createSign("SHA256");
 								sign.update(email + ";" + expireTime);
 								sign.end();
-								const signature = sign.sign(privateKey).toString("hex");
+								const signature = sign.sign(privateKey).toString("base64");
 
 								resolve({
 									expireTime:expireTime,
