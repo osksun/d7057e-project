@@ -5,6 +5,7 @@ const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
 
 function connect() {
+	console.log("Connecting MySQL database...");
 	return new Promise((resolve, reject) => {
 		connection.connect((error) => {
 			if(error) {
@@ -18,8 +19,15 @@ function connect() {
 						console.error("Failed to create database tables!");
 						reject();
 					} else {
-						console.log("Database tables created!");
-						resolve();
+						connection.query("CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))", (error, result) => {
+							if(error) {
+								console.error("Failed to create database tables!");
+								reject();
+							} else {
+								console.log("Database tables created!");
+								resolve();
+							}
+						});
 					}
 				});
 			}
@@ -47,3 +55,21 @@ function getXP(email) {
 	});
 }
 exports.getXP = getXP;
+
+function getCourses() {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT name, description, color FROM courses", (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				const courses = [];
+				for(let i = 0; i < result.length; ++i) {
+					const row = result[i];
+					courses.push({name:row.name, description:row.description, color:row.color});
+				}
+				resolve(courses);
+			}
+		});
+	});
+}
+exports.getCourses = getCourses;

@@ -6,6 +6,7 @@ const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
 
 function connect() {
+	console.log("Connecting MySQL database...");
 	return new Promise((resolve, reject) => {
 		connection.connect((error) => {
 			if(error) {

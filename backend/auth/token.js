@@ -2,6 +2,8 @@
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 
+require("../replaceAll_polyfill.js");
+
 const refreshTokens = new Map();
 const refreshTokenSaltRounds = 5;
 const refreshTokenSalt = bcrypt.genSaltSync(refreshTokenSaltRounds);
@@ -12,7 +14,7 @@ function createRefreshToken(email) {
 			if(error) {
 				reject();
 			} else {
-				const token = buffer.toString("hex");
+				const token = buffer.toString("base64");
 				bcrypt.hash(token, refreshTokenSalt, (error, tokenHash) => {
 					if(error) {
 						reject();
@@ -51,7 +53,9 @@ const {privateKey, publicKey} = crypto.generateKeyPairSync("rsa", {
   modulusLength:2048
 });
 
-console.log("Auth public key:\n" + publicKey.export({type:"pkcs1", format:"pem"}));
+let publicKeyString = publicKey.export({type:"pkcs1", format:"pem"});
+publicKeyString = publicKeyString.replaceAll("\n", "\\n");
+console.log("Auth public key:\n" + publicKeyString);
 
 function createAccessToken(email, refreshToken) {
 	return new Promise((resolve, reject) => {
@@ -74,7 +78,7 @@ function createAccessToken(email, refreshToken) {
 								const sign = crypto.createSign("SHA256");
 								sign.update(email + ";" + expireTime);
 								sign.end();
-								const signature = sign.sign(privateKey).toString("hex");
+								const signature = sign.sign(privateKey).toString("base64");
 
 								resolve({
 									expireTime:expireTime,

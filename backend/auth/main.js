@@ -74,9 +74,9 @@ function validateRefreshToken(token) {
 		//Checks if the token is the correct type (String)
 		if(typeof token === "string") {
 			//Checks if the token is the correct length
-			if(token.length == 96) {
+			if(token.length == 64) {
 				//Checks if the token is in a valid format
-				const tokenRegex = /^[a-f0-9]+$/;
+				const tokenRegex = /^[A-Za-z0-9\+\/]*$/;
 				if(tokenRegex.test(token)) {
 					return true;
 				}
@@ -183,4 +183,5 @@ database.connect().then(() => {
 	init();
 }).catch(() => {
 	console.error("Shutting down...");
+	process.exit(1);
 });
