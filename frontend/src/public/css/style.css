@@ -29,13 +29,13 @@ body {
     text-align: right;
     vertical-align: top;
     display: inline-block;
-    width: calc(100vw - min(25.0vw, 44.4vh));
+    width: calc(100vw - min(9vw, 16vh) * 2.8);
 }
 
 #header-level-container {
-    padding: min(0.3125vw, 0.55vh) 5% min(0.3125vw, 0.55vh) 0;
+    padding: calc(min(9vw, 16vh) / 28) 5% calc(min(9vw, 16vh) / 28) 0;
     display: inline-block;
-    font-size: min(2.5vw, 4.44vh);
+    font-size: calc(min(9vw, 16vh) / 3.6);
     vertical-align: middle;
 }
 
@@ -51,8 +51,8 @@ body {
 }
 
 #header-xp-progress-bar-back {
-    width: min(18.75vw, 33.3vh);
-    height: min(1.25vw, 2.22vh);
+    width: calc(min(9vw, 16vh) * 2);
+    height: calc(min(9vw, 16vh) / 7.2);
     background-color: black;
     position: relative;
 }
@@ -72,13 +72,13 @@ body {
 
 /* Page name */
 #page-name-container {
-    padding: 0 0 0 calc(min(10vw, 17.76vh) / 2);
-    margin: 0 0 0 calc(min(10vw, 17.76vh) / -2);
+    padding: 0 0 0 calc(min(9vw, 16vh) * 0.55);
+    margin: 0 0 0 calc(min(9vw, 16vh) * -0.55);
     background-color: white;
-    width: min(25.0vw, 44.4vh);
-    height: min(10vw, 17.76vh);
-    font-size: min(6.25vw, 11.1vh);
-    line-height: min(10vw, 17.76vh);
+    width: calc(min(9vw, 16vh) * 2.8);
+    height: calc(min(9vw, 16vh) * 1.1);
+    font-size: calc(min(9vw, 16vh) * 0.7);
+    line-height: calc(min(9vw, 16vh) * 1.1);
     text-align: center;
     display: inline-block;
     transform: skew(-45deg, 0deg);
@@ -101,13 +101,13 @@ body {
     margin: 0;
     padding: 0;
     background-color: #323232;
-    padding-top: min(2.5vw, 4.44vh);
-    height: calc(100vh - min(10vw, 17.76vh));
-    width: min(6.25vw, 11.1vh);
+    padding-top: calc(min(9vw, 16vh) / 3.6);
+    height: calc(100vh - min(9vw, 16vh) * 1.1);
+    width: calc(min(9vw, 16vh) * 0.7);
 }
 
 #sidebar>li {
-    padding-bottom: min(1.55125vw, 2.775vh);
+    padding-bottom: calc(min(9vw, 16vh) / 5.8);
     padding: 15%;
     width: 70%;
     transition: filter 0.25s, -webkit-filter 0.25s;
@@ -147,18 +147,18 @@ body {
 
 /* button-container */
 .button-container {
-    height: min(3.75vw, 6.66vh);
+    height: calc(min(9vw, 16vh) / 2.4);
 }
 
 .button-container>button:last-of-type {
     padding-right: 100vw;
     margin-right: -100vw;
-    width: calc((100vw - min(25.0vw, 44.4vh)) / 3 - 1vw + 100vw);
+    width: calc((100vw - min(9vw, 16vh) * 2.8) / 3 - 1vw + 100vw);
 }
 
 .button-container>button {
     outline : none;
-    font-size: min(2.5vw, 4.44vh);
+    font-size: calc(min(9vw, 16vh) / 3.6);
     background-color: #323232;
     border: none;
     padding: 0;
@@ -170,7 +170,7 @@ body {
     transform: skew(-45deg, 0deg);
     -webkit-transform: skew(-45deg, 0deg);
     -ms-transform: skew(-45deg, 0deg);
-    width: calc((100vw - min(25.0vw, 44.4vh)) / 3 - 1vw);
+    width: calc((100vw - min(9vw, 16vh) * 2.8) / 3 - 1vw);
 }
 
 .button-container>button:focus {
@@ -194,13 +194,13 @@ body {
 }
 
 #top-button-container {
-    padding-top: min(5vw, 8.88vh);
-    padding-left: min(25.0vw, 44.4vh);
+    padding-top: calc(min(9vw, 16vh) / 1.8);
+    padding-left: calc(min(9vw, 16vh) * 2.8);
 }
 
 #bot-button-container {
-    padding-top: min(5vw, 8.88vh);
-    padding-left: min(13.5vw, 24.0vh);
+    padding-top: calc(min(9vw, 16vh) / 1.8);
+    padding-left: calc(min(9vw, 16vh) * 1.5);
 }
 
 /* view-container */
@@ -219,7 +219,7 @@ body {
     padding: 0;
     width: 74vw;
     height: calc(min(9vw, 16vh) * 1.65);
-    margin-top: min(5vw, 8.88vh);
+    margin-top: calc(min(9vw, 16vh) / 1.8);
     position: relative;
 }
 
@@ -249,7 +249,7 @@ body {
     border: none;
     background-color: #46bbfe;
     width: 100%;
-    font-size: min(2vw, 3.552vh);
+    font-size: calc(min(9vw, 16vh) / 4.5);
     line-height: 3;
     display: inline-block;
     text-align: center;
@@ -259,6 +259,6 @@ body {
 #view-favourites>li>a>ul {
     list-style-type: square;
     color: #46bbfe;
-    font-size: min(1.6vw, 2.8416vh);
-    padding-left: min(5vw, 8.88vh);
+    font-size: calc(min(9vw, 16vh) / 5.5);
+    padding-left: calc(min(9vw, 16vh) / 1.8);
 }
