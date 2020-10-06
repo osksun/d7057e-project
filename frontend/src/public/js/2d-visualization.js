@@ -122,12 +122,13 @@ function userAddDataset(chart, f){
 }
 
 // user calls this function to update the chart with new ranges
-function userUpdateChartRange(chart, min, max, steps){
+function userUpdateChartRange(chart, min, max, stepSize){
     let newLabels = []
-    if (min <= max && steps > 0){
-        const stepSize = math.abs(max-min)/steps
-        for (i = min; i <= steps; i++){
-            newLabels.push(i*stepSize)
+    if (parseFloat(min) <= parseFloat(max) && stepSize > 0){
+        const steps = math.floor(math.abs(max-min)/stepSize)
+        let x = parseFloat(min)
+        for (i = parseFloat(min); i <= max; i+=parseFloat(stepSize)){
+            newLabels.push(i)
         }
         chart.data.labels = newLabels
         updateValues(chart)
