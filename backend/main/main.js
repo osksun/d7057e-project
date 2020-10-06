@@ -1,6 +1,7 @@
 
 console.log("Starting server...");
 
+const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const readline = require("readline").createInterface({
@@ -16,6 +17,10 @@ require("../replaceAll_polyfill.js");
 function init() {
 	const app = express();
 
+	app.use(cors({
+		origin:"http://127.0.0.1:3000",
+		optionsSuccessStatus:200
+	}));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
@@ -53,6 +58,113 @@ function init() {
 		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getCourses().then((courses) => {
 				response.end(JSON.stringify(courses));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
+	app.post("/getmodules", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const courseName = request.body.course;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getModules(courseName).then((modules) => {
+				response.end(JSON.stringify(modules));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
+	app.post("/getquestions", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const courseName = request.body.course;
+		const moduleName = request.body.module;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getQuestions(courseName, moduleName).then((questions) => {
+				response.end(JSON.stringify(questions));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
+	app.post("/getquestion", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const questionID = request.body.question;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getQuestion(questionID).then((question) => {
+				response.end(JSON.stringify(question));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
+	app.post("/answer", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const questionID = request.body.question;
+		const answer = request.body.answer;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getQuestionAnswer(questionID).then((answerRegex) => {
+				const regex = new RegExp(answerRegex);
+				if(regex.test(answer)) {
+					response.end(JSON.stringify({
+						correct:true
+					}));
+				} else {
+					response.end(JSON.stringify({
+						correct:false
+					}));
+				}
 			}).catch(() => {
 				response.end(JSON.stringify({
 					error:"Database error"

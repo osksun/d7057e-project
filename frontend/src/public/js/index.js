@@ -31,6 +31,40 @@ function toggleView(activeButton, visibleView, inactiveButtons, hiddenViews) {
     hiddenViews.forEach(view => view.classList.remove("visible"));
 }
 
+function createCourseCard(name, color) {
+    const courseCard = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = "/courses/" + encodeURI(name);
+    const cardHeader = document.createElement("p");
+    cardHeader.className = "card-header";
+    cardHeader.innerText = name;
+    cardHeader.style.backgroundColor = color;
+    const info = document.createElement("ul");
+    info.innerHTML = "<li><p>Progress: 6/10</p></li><li><p>Next reward: 6/10</p></li>";
+    info.style.color = color;
+    a.appendChild(cardHeader);
+    a.appendChild(info);
+    courseCard.appendChild(a);
+    return courseCard;
+}
+
+function getCourseCards() {
+    const request = new XMLHttpRequest();
+    request.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            const courses = JSON.parse(this.responseText);
+            const favouritesView = document.getElementById("view-favourites");
+            courses.forEach((course) => {
+                const courseCard = createCourseCard(course.name, "#" + course.color);
+                favouritesView.appendChild(courseCard);
+            });
+
+        }
+    }
+    request.open("POST", "http://127.0.0.1:80/getcourses", true);
+    request.send();
+}
+
 window.onload = function () {
     updateXpBar(getXpPercent());
     updateLevelInfo();
@@ -39,4 +73,5 @@ window.onload = function () {
     }, 1000);
     setupCategoryButtons("top-button-container", "top-view-container");
     setupCategoryButtons("bot-button-container", "bot-view-container");
+    getCourseCards();
 }
