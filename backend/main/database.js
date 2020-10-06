@@ -121,12 +121,12 @@ exports.getQuestions = getQuestions;
 
 function getQuestion(id) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, content FROM questions WHERE id = ?", [id], (error, result) => {
+		connection.query("SELECT id, content, course, module FROM questions WHERE id = ?", [id], (error, result) => {
 			if(error) {
 				reject();
 			} else {
 				if(result.length == 1) {
-					resolve({id:result[0].id, content:result[0].content});
+					resolve({id:result[0].id, content:result[0].content, course:result[0].course, module:result[0].module});
 				} else {
 					reject();
 				}
