@@ -70,6 +70,30 @@ function init() {
 		}
 	});
 
+	app.post("/getmodules", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const courseName = request.body.course;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getModules(courseName).then((modules) => {
+				response.end(JSON.stringify(modules));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
 		console.error("Config specifies invalid port");

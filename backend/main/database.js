@@ -16,7 +16,8 @@ function connect() {
 
 				const tables = [
 					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT, PRIMARY KEY(email))",
-					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))"
+					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))",
+					"CREATE TABLE IF NOT EXISTS modules (name VARCHAR(255), course VARCHAR(255), description VARCHAR(255), PRIMARY KEY(name, course), FOREIGN KEY(course) REFERENCES courses(name))"
 				];
 
 				function createTable() {
@@ -80,3 +81,22 @@ function getCourses() {
 	});
 }
 exports.getCourses = getCourses;
+
+
+function getModules(course) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT name, description FROM modules WHERE course = ?", [course], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				const modules = [];
+				for(let i = 0; i < result.length; ++i) {
+					const row = result[i];
+					modules.push({name:row.name, description:row.description});
+				}
+				resolve(modules);
+			}
+		});
+	});
+}
+exports.getModules = getModules;
