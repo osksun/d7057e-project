@@ -49,20 +49,15 @@ function createCourseCard(name, color) {
 }
 
 function getCourseCards() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const courses = JSON.parse(this.responseText);
-            const favouritesView = document.getElementById("view-favourites");
-            courses.forEach((course) => {
-                const courseCard = createCourseCard(course.name, "#" + course.color);
-                favouritesView.appendChild(courseCard);
-            });
-
-        }
-    }
-    request.open("POST", "http://127.0.0.1:80/getcourses", true);
-    request.send();
+    getCourses().then((courses) => {
+        const favouritesView = document.getElementById("view-favourites");
+        courses.forEach((course) => {
+            const courseCard = createCourseCard(course.name, "#" + course.color);
+            favouritesView.appendChild(courseCard);
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
 window.onload = function () {
