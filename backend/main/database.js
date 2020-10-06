@@ -14,22 +14,29 @@ function connect() {
 			} else {
 				console.log("MySQL database connected!");
 
-				connection.query("CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT, PRIMARY KEY(email))", (error, result) => {
-					if(error) {
-						console.error("Failed to create database tables!");
-						reject();
-					} else {
-						connection.query("CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))", (error, result) => {
+				const tables = [
+					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT, PRIMARY KEY(email))",
+					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))"
+				];
+
+				function createTable() {
+					if(tables.length > 0) {
+						const sql = tables.splice(0, 1)[0];
+						connection.query(sql, (error, result) => {
 							if(error) {
 								console.error("Failed to create database tables!");
 								reject();
 							} else {
-								console.log("Database tables created!");
-								resolve();
+								if(tables.length == 0) {
+									resolve();
+								} else {
+									createTable();
+								}
 							}
 						});
 					}
-				});
+				}
+				createTable();
 			}
 		});
 	});
