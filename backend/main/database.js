@@ -18,7 +18,7 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT, PRIMARY KEY(email))",
 					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))",
 					"CREATE TABLE IF NOT EXISTS modules (name VARCHAR(255), course VARCHAR(255), description VARCHAR(255), PRIMARY KEY(name, course), FOREIGN KEY(course) REFERENCES courses(name))",
-					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, module VARCHAR(255), course VARCHAR(255), content TEXT, PRIMARY KEY(id), FOREIGN KEY(module, course) REFERENCES modules(name, course))"
+					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, module VARCHAR(255), course VARCHAR(255), content TEXT, answer TEXT, PRIMARY KEY(id), FOREIGN KEY(module, course) REFERENCES modules(name, course))"
 				];
 
 				function createTable() {
@@ -118,3 +118,20 @@ function getQuestions(courseName, moduleName) {
 	});
 }
 exports.getQuestions = getQuestions;
+
+function getQuestionAnswer(id) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT answer FROM questions WHERE id = ?", [id], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				if(result.length == 1) {
+					resolve(result[0].answer);
+				} else {
+					reject();
+				}
+			}
+		});
+	});
+}
+exports.getQuestionAnswer = getQuestionAnswer;

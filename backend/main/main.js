@@ -119,6 +119,40 @@ function init() {
 		}
 	});
 
+	app.post("/answer", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const questionID = request.body.question;
+		const answer = request.body.answer;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getQuestionAnswer(questionID).then((answerRegex) => {
+				const regex = new RegExp(answerRegex);
+				if(regex.test(answer)) {
+					response.end(JSON.stringify({
+						correct:true
+					}));
+				} else {
+					response.end(JSON.stringify({
+						correct:false
+					}));
+				}
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
 		console.error("Config specifies invalid port");
