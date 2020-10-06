@@ -14,6 +14,10 @@ function getQuestion(id) {
     return ajaxPost("http://127.0.0.1:80/getquestion", encodeURI("question=" + id));
 }
 
+function answerQuestion(id, answer) {
+    return ajaxPost("http://127.0.0.1:80/answer", encodeURI("question=" + id + "&answer=" + answer));
+}
+
 function ajaxPost(url, data = "") {
     return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
