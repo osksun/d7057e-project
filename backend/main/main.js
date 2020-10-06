@@ -119,6 +119,30 @@ function init() {
 		}
 	});
 
+	app.post("/getquestion", (request, response) => {
+		const email = request.body.email;
+		const tokenExpireTime = request.body.tokenExpireTime;
+		const accessToken = request.body.token;
+
+		const questionID = request.body.question;
+
+		//TODO validate input
+
+		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+			database.getQuestion(questionID).then((question) => {
+				response.end(JSON.stringify(question));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		} else {
+			response.end(JSON.stringify({
+				error:"Invalid token"
+			}));
+		}
+	});
+
 	app.post("/answer", (request, response) => {
 		const email = request.body.email;
 		const tokenExpireTime = request.body.tokenExpireTime;

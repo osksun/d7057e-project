@@ -119,6 +119,23 @@ function getQuestions(courseName, moduleName) {
 }
 exports.getQuestions = getQuestions;
 
+function getQuestion(id) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT id, content FROM questions WHERE id = ?", [id], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				if(result.length == 1) {
+					resolve({id:result[0].id, content:result[0].content});
+				} else {
+					reject();
+				}
+			}
+		});
+	});
+}
+exports.getQuestion = getQuestion;
+
 function getQuestionAnswer(id) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT answer FROM questions WHERE id = ?", [id], (error, result) => {
