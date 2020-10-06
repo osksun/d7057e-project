@@ -124,12 +124,18 @@ function userAddDataset(chart, f){
 // user calls this function to update the chart with new ranges
 function userUpdateChartRange(chart, min, max, steps){
     let newLabels = []
-    const stepSize = math.abs(max-min)/steps
-    for (i = 0; i < steps; i++){
-        newLabels.push(i*stepSize)
+    if (min <= max && steps > 0){
+        const stepSize = math.abs(max-min)/steps
+        for (i = min; i <= steps; i++){
+            newLabels.push(i*stepSize)
+        }
+        chart.data.labels = newLabels
+        updateValues(chart)
     }
-    chart.data.labels = newLabels
-    updateValues(chart)
+
+    else{
+        console.log("Invalid input in userUpdateChartRange")
+    }
 }
 // Updates every dataset in chart with values from chart.data.labels
 function updateValues(chart){
