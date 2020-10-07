@@ -15,7 +15,7 @@ function connect() {
 				console.log("MySQL database connected!");
 
 				const tables = [
-					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT, PRIMARY KEY(email))",
+					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT DEFAULT 0, PRIMARY KEY(email))",
 					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))",
 					"CREATE TABLE IF NOT EXISTS modules (name VARCHAR(255), course VARCHAR(255), description VARCHAR(255), PRIMARY KEY(name, course), FOREIGN KEY(course) REFERENCES courses(name))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, module VARCHAR(255), course VARCHAR(255), content TEXT, answer TEXT, PRIMARY KEY(id), FOREIGN KEY(module, course) REFERENCES modules(name, course))"
@@ -45,6 +45,18 @@ function connect() {
 }
 exports.connect = connect;
 
+function createUserIfNotExist(email) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT IGNORE INTO userdata (email, xp) VALUES (?, ?)", [email, 0], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+
 function getXP(email) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT xp FROM userdata WHERE email = ?", [email], (error, result) => {
@@ -64,6 +76,23 @@ function getXP(email) {
 	});
 }
 exports.getXP = getXP;
+
+function addUserXP(email, xp) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(email).then(() => {
+			connection.query("UPDATE userdata SET xp = xp + ? WHERE email = ?", [xp, email], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					resolve();
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.addUserXP = addUserXP;
 
 function getCourses() {
 	return new Promise((resolve, reject) => {

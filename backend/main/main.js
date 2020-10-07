@@ -157,9 +157,16 @@ function init() {
 			database.getQuestionAnswer(questionID).then((answerRegex) => {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
-					response.end(JSON.stringify({
-						correct:true
-					}));
+					const xpReward = 100;
+					database.addUserXP(email, xpReward).then(() => {
+						response.end(JSON.stringify({
+							correct:true
+						}));
+					}).catch(() => {
+						response.end(JSON.stringify({
+							error:"Database error"
+						}));
+					});
 				} else {
 					response.end(JSON.stringify({
 						correct:false
