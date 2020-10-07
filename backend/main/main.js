@@ -35,14 +35,30 @@ function init() {
 			if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 				resolve(email);
 			} else {
-				response.end(JSON.stringify({
-					error:"Invalid token"
-				}));
-				reject();
+				reject("Invalid token");
 			}
 		});
 	}
 
+	function validateAdmin(request, response) {
+		return new Promise((resolve, reject) => {
+			validateUser(request, response).then((email) => {
+				database.getUserIsAdmin(email).then((isAdmin) => {
+					if(isAdmin) {
+						resolve(email);
+					} else {
+						reject("Permission denied");
+					}
+				}).catch(() => {
+					reject("Database error");
+				});
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	}
+
+	//User functions
 	app.post("/getxp", (request, response) => {
 		validateUser(request, response).then((email) => {
 			database.getXP(email).then((xp) => {
@@ -54,6 +70,10 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
@@ -66,6 +86,10 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
@@ -82,6 +106,10 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
@@ -99,6 +127,10 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
@@ -115,6 +147,10 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
@@ -148,9 +184,88 @@ function init() {
 					error:"Database error"
 				}));
 			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
 		});
 	});
 
+	//Admin functions
+	app.post("/createcourse", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const name = request.body.name;
+			const description = request.body.description;
+			const color = request.body.color;
+
+			//TODO validate input
+
+			database.createCourse(name, description, color).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	app.post("/createmodule", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const name = request.body.name;
+			const courseName = request.body.course;
+			const description = request.body.description;
+
+			//TODO validate input
+
+			database.createModule(name, courseName, description).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	app.post("/createquestion", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const courseName = request.body.course;
+			const moduleName = request.body.module;
+			const content = request.body.content;
+			const answer = request.body.answer;
+
+			//TODO validate input
+
+			database.createQuestion(courseName, moduleName, content, answer).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
 		console.error("Config specifies invalid port");

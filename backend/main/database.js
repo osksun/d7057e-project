@@ -15,7 +15,7 @@ function connect() {
 				console.log("MySQL database connected!");
 
 				const tables = [
-					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT DEFAULT 0, PRIMARY KEY(email))",
+					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(email))",
 					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))",
 					"CREATE TABLE IF NOT EXISTS modules (name VARCHAR(255), course VARCHAR(255), description VARCHAR(255), PRIMARY KEY(name, course), FOREIGN KEY(course) REFERENCES courses(name))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, module VARCHAR(255), course VARCHAR(255), content TEXT, answer TEXT, PRIMARY KEY(id), FOREIGN KEY(module, course) REFERENCES modules(name, course))"
@@ -57,6 +57,26 @@ function createUserIfNotExist(email) {
 	});
 }
 
+function getUserIsAdmin(email) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT isAdmin FROM userdata WHERE email = ?", [email], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				if(result.length == 0) {
+					//Return false by default
+					resolve(false);
+				} else if(result.length == 1) {
+					resolve(result[0].isAdmin);
+				} else {
+					reject();
+				}
+			}
+		});
+	});
+}
+exports.getUserIsAdmin = getUserIsAdmin;
+
 function getXP(email) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT xp FROM userdata WHERE email = ?", [email], (error, result) => {
@@ -94,6 +114,19 @@ function addUserXP(email, xp) {
 }
 exports.addUserXP = addUserXP;
 
+function createCourse(name, description, color) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT INTO courses (name, description, color) VALUES (?, ?, ?)", [name, description, color], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.createCourse = createCourse;
+
 function getCourses() {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT name, description, color FROM courses", (error, result) => {
@@ -112,6 +145,19 @@ function getCourses() {
 }
 exports.getCourses = getCourses;
 
+function createModule(name, courseName, description) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT INTO modules (name, course, description) VALUES (?, ?, ?)", [name, courseName, description], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.createModule = createModule;
+
 function getModules(course) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT name, description FROM modules WHERE course = ?", [course], (error, result) => {
@@ -129,6 +175,19 @@ function getModules(course) {
 	});
 }
 exports.getModules = getModules;
+
+function createQuestion(courseName, moduleName, content, answer) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT INTO questions (course, module, content, answer) VALUES (?, ?, ?, ?)", [courseName, moduleName, content, answer], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.createQuestion = createQuestion;
 
 function getQuestions(courseName, moduleName) {
 	return new Promise((resolve, reject) => {
