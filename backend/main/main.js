@@ -12,6 +12,7 @@ const readline = require("readline").createInterface({
 const config = require("./config.json");
 const database = require("./database.js");
 const token = require("./token.js");
+const validation = require("../validation.js");
 require("../replaceAll_polyfill.js");
 
 function init() {
@@ -24,14 +25,45 @@ function init() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
+	function validateUser(request, response) {
+		return new Promise((resolve, reject) => {
+			const email = request.body.email;
+			const tokenExpireTime = parseInt(request.body.tokenExpireTime, 10);
+			const accessToken = request.body.token;
+
+			if((validation.validateEmail(email) && validation.validateTokenExpire(tokenExpireTime) && validation.validateAccessToken(accessToken)) || token.isSkippingVerification()) {
+				if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+					resolve(email);
+				} else {
+					reject("Invalid token");
+				}
+			} else {
+				reject("Malformed input");
+			}
+		});
+	}
+
+	function validateAdmin(request, response) {
+		return new Promise((resolve, reject) => {
+			validateUser(request, response).then((email) => {
+				database.getUserIsAdmin(email).then((isAdmin) => {
+					if(isAdmin) {
+						resolve(email);
+					} else {
+						reject("Permission denied");
+					}
+				}).catch(() => {
+					reject("Database error");
+				});
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	}
+
+	//User functions
 	app.post("/getxp", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
-
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+		validateUser(request, response).then((email) => {
 			database.getXP(email).then((xp) => {
 				response.end(JSON.stringify({
 					xp:xp
@@ -41,21 +73,15 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
 	app.post("/getcourses", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
-
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+		validateUser(request, response).then((email) => {
 			database.getCourses().then((courses) => {
 				response.end(JSON.stringify(courses));
 			}).catch(() => {
@@ -63,23 +89,19 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
 	app.post("/getmodules", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const courseName = request.body.course;
 
-		const courseName = request.body.course;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getModules(courseName).then((modules) => {
 				response.end(JSON.stringify(modules));
 			}).catch(() => {
@@ -87,24 +109,20 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
 	app.post("/getquestions", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const courseName = request.body.course;
+			const moduleName = request.body.module;
 
-		const courseName = request.body.course;
-		const moduleName = request.body.module;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestions(courseName, moduleName).then((questions) => {
 				response.end(JSON.stringify(questions));
 			}).catch(() => {
@@ -112,23 +130,19 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
 	app.post("/getquestion", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const questionID = request.body.question;
 
-		const questionID = request.body.question;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestion(questionID).then((question) => {
 				response.end(JSON.stringify(question));
 			}).catch(() => {
@@ -136,24 +150,20 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
 	app.post("/answer", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const questionID = request.body.question;
+			const answer = request.body.answer;
 
-		const questionID = request.body.question;
-		const answer = request.body.answer;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestionAnswer(questionID).then((answerRegex) => {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
@@ -177,13 +187,88 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
+		}).catch((error) => {
 			response.end(JSON.stringify({
-				error:"Invalid token"
+				error:error
 			}));
-		}
+		});
 	});
 
+	//Admin functions
+	app.post("/createcourse", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const name = request.body.name;
+			const description = request.body.description;
+			const color = request.body.color;
+
+			//TODO validate input
+
+			database.createCourse(name, description, color).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	app.post("/createmodule", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const name = request.body.name;
+			const courseName = request.body.course;
+			const description = request.body.description;
+
+			//TODO validate input
+
+			database.createModule(name, courseName, description).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	app.post("/createquestion", (request, response) => {
+		validateAdmin(request, response).then((email) => {
+			const courseName = request.body.course;
+			const moduleName = request.body.module;
+			const content = request.body.content;
+			const answer = request.body.answer;
+
+			//TODO validate input
+
+			database.createQuestion(courseName, moduleName, content, answer).then(() => {
+				response.end(JSON.stringify({
+					success:true
+				}));
+			}).catch(() => {
+				response.end(JSON.stringify({
+					error:"Database error"
+				}));
+			});
+		}).catch((error) => {
+			response.end(JSON.stringify({
+				error:error
+			}));
+		});
+	});
+
+	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
 		console.error("Config specifies invalid port");
@@ -206,7 +291,7 @@ function initDatabase() {
 	});
 }
 
-if(token.isSkippingVerification) {
+if(token.isSkippingVerification()) {
 	console.log("WARNING skipping access token verification! For debug purposes only!");
 	initDatabase();
 } else {

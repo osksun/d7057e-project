@@ -1,9 +1,8 @@
 
-window.onload = function() {
+window.addEventListener("load",() => {
     const questionID = 1;
     const submitButton = document.getElementById("button-submit");
     submitButton.addEventListener("click", handleSubmit);
-
     const questionElement = document.getElementById("question")
     const coruseNameElement = document.getElementById("course-name")
     const moduleNameElement = document.getElementById("module-name")
@@ -30,4 +29,4 @@ window.onload = function() {
             console.log(result);
         });
     }
-}
+});

@@ -1,53 +1,87 @@
 <h1>Get XP</h1>
 <form action="http://127.0.0.1:81/getxp" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
 	<input type="submit">
 </form>
 
 <h1>Get courses</h1>
 <form action="http://127.0.0.1:81/getcourses" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
 	<input type="submit">
 </form>
 
 <h1>Get modules</h1>
 <form action="http://127.0.0.1:81/getmodules" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
-	<input type="text" name="course">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Course: <input type="text" name="course"><br>
 	<input type="submit">
 </form>
 
 <h1>Get questions</h1>
 <form action="http://127.0.0.1:81/getquestions" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
-	<input type="text" name="course">
-	<input type="text" name="module">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Course: <input type="text" name="course"><br>
+	Module: <input type="text" name="module"><br>
 	<input type="submit">
 </form>
 
 <h1>Get question</h1>
 <form action="http://127.0.0.1:81/getquestion" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
-	<input type="text" name="question">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Question ID: <input type="text" name="question"><br>
 	<input type="submit">
 </form>
 
 <h1>Answer</h1>
 <form action="http://127.0.0.1:81/answer" method="post">
-	<input type="email" name="email">
-	<input type="text" name="tokenExpireTime">
-	<input type="text" name="token">
-	<input type="text" name="question">
-	<input type="text" name="answer">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Question ID: <input type="text" name="question"><br>
+	Answer: <input type="text" name="answer"><br>
+	<input type="submit">
+</form>
+
+<h1>Create course</h1>
+<form action="http://127.0.0.1:81/createcourse" method="post">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Name: <input type="text" name="name"><br>
+	Description: <input type="text" name="description"><br>
+	Color hex: <input type="text" name="color"><br>
+	<input type="submit">
+</form>
+
+<h1>Create module</h1>
+<form action="http://127.0.0.1:81/createmodule" method="post">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Name: <input type="text" name="name"><br>
+	Course name: <input type="text" name="course"><br>
+	Description: <input type="text" name="description"><br>
+	<input type="submit">
+</form>
+
+<h1>Create question</h1>
+<form action="http://127.0.0.1:81/createquestion" method="post">
+	Email: <input type="email" name="email"><br>
+	Token expire time: <input type="text" name="tokenExpireTime"><br>
+	Token: <input type="text" name="token"><br>
+	Course name: <input type="text" name="course"><br>
+	Module name: <input type="text" name="module"><br>
+	Content Latex: <input type="text" name="content"><br>
+	Answer regex: <input type="text" name="answer"><br>
 	<input type="submit">
 </form>
