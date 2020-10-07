@@ -1,15 +1,3 @@
-function updateXpBar(percent) {
-    const xpBarWhite = document.getElementById("header-xp-progress-bar-front-white");
-    const xpBarGreen = document.getElementById("header-xp-progress-bar-front-green");
-    xpBarWhite.style.width = percent + "%";
-    xpBarGreen.style.width = percent + "%";
-}
-
-function updateLevelInfo() {
-    const levelNumber = document.getElementById("header-level-info");
-    levelNumber.innerHTML = "Level " + getLevel() + " | " + getLevelTitle();
-}
-
 function setupCategoryButtons(buttonContainerID, viewContainerID) {
     const topCategoryButtons = document.getElementById(buttonContainerID).getElementsByTagName("button");
     const topCategoryViews = document.getElementById(viewContainerID).getElementsByTagName("ul");
@@ -60,18 +48,8 @@ function getCourseCards() {
     });
 }
 
-window.onload = function () {
-    //updateXpBar(getXpPercent());
-    //updateLevelInfo();
-    setInterval(() => {
-       updateXpBar(Math.random() * 100);
-    }, 1000);
+window.addEventListener("load",() => {
     setupCategoryButtons("top-button-container", "top-view-container");
     setupCategoryButtons("bot-button-container", "bot-view-container");
     getCourseCards();
-    for (let i = 0; i < 8; i++) {
-        const card = createCourseCard("Qwerty", "#5577cc");
-        const favouritesView = document.getElementById("view-favourites");
-        favouritesView.appendChild(card);
-    }
-}
+});
