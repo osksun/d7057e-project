@@ -12,14 +12,30 @@
     width: calc((100% - 30px) / 3);
     outline : none;
     border: none;
+    vertical-align: middle;
+    color: #000000;
     background-color: #323232;
     transform: skew(-45deg, 0deg);
     -webkit-transform: skew(-45deg, 0deg);
     -ms-transform: skew(-45deg, 0deg);
 }
 
+.button-container>button:disabled {
+    color:  #272727;
+    pointer-events: none;
+}
+
 .button-container>button:focus {
-    outline: 4px solid  rgb(116, 223, 255);
+    outline: 4px solid  #74dfff;
+}
+
+.button-container>button:hover {
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.button-container>button.selected {
+    background-color: #ffffff;
 }
 
 .button-container>button>h2 {
@@ -30,15 +46,6 @@
     transform: skew(45deg, 0deg);
     -webkit-transform: skew(45deg, 0deg);
     -ms-transform: skew(45deg, 0deg);
-}
-
-.button-container>button:hover {
-    cursor: pointer;
-    background-color: white;
-}
-
-.button-container>button.active {
-    background-color: white;
 }
 
 #top-button-container {
@@ -68,8 +75,8 @@
     display: block;
 }
 
-/* view-favourites */
-#view-favourites {
+/* view-all-courses */
+#view-all-courses {
     position: relative;
     margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
     padding: 0;
@@ -79,24 +86,24 @@
     text-align: center;
 }
 
-#view-favourites>li {
+#view-all-courses>li {
     display: inline-block;
     margin: 0 25px 65px 25px;
     width: 389.75px;
     vertical-align: middle;
     text-align: left;
-    background-color: white;
+    background-color: #ffffff;
     box-shadow: 15px 15px 0 0 #323232;
 }
 
-#view-favourites>li>a {
+#view-all-courses>li>a {
     display: inline-block;
     height: 100%;
     width: 100%;
     text-decoration: none;
 }
 
-#view-favourites>li>a>h3 {
+#view-all-courses>li>a>h3 {
     padding: 0.5em 0.5em;
     margin: 0 0;
     text-align: center;
@@ -105,10 +112,10 @@
     line-height: 1;
     border: none;
     background-color: #46bbfe;
-    color: white;
+    color: #ffffff;
 }
 
-#view-favourites>li>a>ul {
+#view-all-courses>li>a>ul {
     color: #46bbfe;
     font-size: 25px;
     padding: 10px 0 10px 30px;
@@ -116,6 +123,6 @@
     list-style-position: inside;
 }
 
-#view-favourites>li>a>ul>li {
+#view-all-courses>li>a>ul>li {
     padding: 10px 0;
 }
