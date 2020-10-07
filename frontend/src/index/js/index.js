@@ -64,8 +64,6 @@ function createModuleCard(name, description, color, courseName) {
     a.appendChild(header);
     a.appendChild(span);
     moduleCard.appendChild(a);
-        });
-    });
     return moduleCard;
 }
 
