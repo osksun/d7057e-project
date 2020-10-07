@@ -1,21 +1,21 @@
 function setupCategoryButtons(buttonContainerID, viewContainerID) {
-    const categoryButtons = document.getElementById(buttonContainerID).getElementsByTagName("button");
-    const categoryViews = document.getElementById(viewContainerID).getElementsByTagName("ul");
+    const categoryButtons = document.getElementById(buttonContainerID).children;
+    const categoryViews = document.getElementById(viewContainerID).children;
     for (let i = 0; i < categoryButtons.length; i++) {
         let btns = [...categoryButtons];
         let views = [...categoryViews];
         btns.splice(i, 1);
         views.splice(i, 1);
-        categoryButtons[i].addEventListener("click", function() {
-            toggleView(categoryButtons[i], categoryViews[i], btns, views)
+        categoryButtons[i].addEventListener("click", () => {
+            toggleView(categoryButtons[i], categoryViews[i], btns, views);
         });
     }
 }
 
-function toggleView(activeButton, visibleView, inactiveButtons, hiddenViews) {
-    activeButton.classList.add("active");
+function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
+    activeButton.classList.add("selected");
     visibleView.classList.add("visible");
-    inactiveButtons.forEach(button => button.classList.remove("active"));
+    unselectedButtons.forEach(button => button.classList.remove("selected"));
     hiddenViews.forEach(view => view.classList.remove("visible"));
 }
 
