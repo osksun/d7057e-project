@@ -54,18 +54,6 @@
     width: calc(100% - 336px);
 }
 
-#bot-button-container {
-    padding-top: 0;
-    padding-left: 185px;
-    width: calc(100% - 336px);
-}
-
-#bot-button-container>button:last-of-type {
-    padding-right: 150px;
-    margin-right: -150px;
-    width: calc((100% - 30px) / 3 + 150px);
-}
-
 /* view-container */
 .view-container>ul {
     display: none;

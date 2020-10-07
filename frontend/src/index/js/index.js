@@ -1,13 +1,13 @@
 function setupCategoryButtons(buttonContainerID, viewContainerID) {
-    const topCategoryButtons = document.getElementById(buttonContainerID).getElementsByTagName("button");
-    const topCategoryViews = document.getElementById(viewContainerID).getElementsByTagName("ul");
-    for (let i = 0; i < topCategoryButtons.length; i++) {
-        let btns = [...topCategoryButtons];
-        let views = [...topCategoryViews];
+    const categoryButtons = document.getElementById(buttonContainerID).getElementsByTagName("button");
+    const categoryViews = document.getElementById(viewContainerID).getElementsByTagName("ul");
+    for (let i = 0; i < categoryButtons.length; i++) {
+        let btns = [...categoryButtons];
+        let views = [...categoryViews];
         btns.splice(i, 1);
         views.splice(i, 1);
-        topCategoryButtons[i].addEventListener("click", function() {
-            toggleView(topCategoryButtons[i], topCategoryViews[i], btns, views)
+        categoryButtons[i].addEventListener("click", function() {
+            toggleView(categoryButtons[i], categoryViews[i], btns, views)
         });
     }
 }
@@ -38,7 +38,7 @@ function createCourseCard(name, color) {
 
 function getCourseCards() {
     DbCom.getCourses().then((courses) => {
-        const favouritesView = document.getElementById("view-favourites");
+        const favouritesView = document.getElementById("view-all-courses");
         courses.forEach((course) => {
             const courseCard = createCourseCard(course.name, "#" + course.color);
             favouritesView.appendChild(courseCard);
@@ -50,6 +50,5 @@ function getCourseCards() {
 
 window.addEventListener("load",() => {
     setupCategoryButtons("top-button-container", "top-view-container");
-    setupCategoryButtons("bot-button-container", "bot-view-container");
     getCourseCards();
 });
