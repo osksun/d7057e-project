@@ -35,12 +35,12 @@ function createCourseCard(name, color) {
     const courseCard = document.createElement("li");
     const a = document.createElement("a");
     a.href = "/courses/" + encodeURI(name);
-    const cardHeader = document.createElement("p");
+    const cardHeader = document.createElement("h3");
     cardHeader.className = "card-header";
     cardHeader.innerText = name;
     cardHeader.style.backgroundColor = color;
     const info = document.createElement("ul");
-    info.innerHTML = "<li><p>Progress: 6/10</p></li><li><p>Next reward: 6/10</p></li>";
+    info.innerHTML = "<li><span>Progress: 6/10</span></li><li><span>Next reward: 6/10</span></li>";
     info.style.color = color;
     a.appendChild(cardHeader);
     a.appendChild(info);
@@ -49,29 +49,29 @@ function createCourseCard(name, color) {
 }
 
 function getCourseCards() {
-    const request = new XMLHttpRequest();
-    request.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            const courses = JSON.parse(this.responseText);
-            const favouritesView = document.getElementById("view-favourites");
-            courses.forEach((course) => {
-                const courseCard = createCourseCard(course.name, "#" + course.color);
-                favouritesView.appendChild(courseCard);
-            });
-
-        }
-    }
-    request.open("POST", "http://127.0.0.1:80/getcourses", true);
-    request.send();
+    getCourses().then((courses) => {
+        const favouritesView = document.getElementById("view-favourites");
+        courses.forEach((course) => {
+            const courseCard = createCourseCard(course.name, "#" + course.color);
+            favouritesView.appendChild(courseCard);
+        });
+    }).catch((err) => {
+        console.log(err);
+    });
 }
 
 window.onload = function () {
-    updateXpBar(getXpPercent());
-    updateLevelInfo();
+    //updateXpBar(getXpPercent());
+    //updateLevelInfo();
     setInterval(() => {
        updateXpBar(Math.random() * 100);
     }, 1000);
     setupCategoryButtons("top-button-container", "top-view-container");
     setupCategoryButtons("bot-button-container", "bot-view-container");
     getCourseCards();
+    for (let i = 0; i < 8; i++) {
+        const card = createCourseCard("Qwerty", "#5577cc");
+        const favouritesView = document.getElementById("view-favourites");
+        favouritesView.appendChild(card);
+    }
 }

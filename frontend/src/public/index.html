@@ -5,37 +5,37 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="css/style.css">
-        <script type="application/javascript" src="./js/index.js" defer></script>
-        <script type="application/javascript" src="./js/fake-database.js" defer></script>
+        <script type="application/javascript" src="./js/backend-communication.js"></script>
+        <script type="application/javascript" src="./js/index.js"></script>
     </head>
     <body>
         <div id="page-content-fixed">
             <h1 id="page-name-container"><span>Home</span></h1><!--
          --><header id="header-container">
                 <div id="header-level-container">
-                    <p>XP</p>
+                    <span>XP</span>
                     <div id="header-xp-progress-bar">
                         <div id="header-xp-progress-bar-back">
                             <div id="header-xp-progress-bar-front-white"></div>
                             <div id="header-xp-progress-bar-front-green"></div>
                         </div>
                     </div>
-                    <p id="header-level-info">Level X | Title</p>
+                    <span id="header-level-info">Level X | Title</span>
                 </div>
             </header>
             <ul id="sidebar">
                 <li id="home" class="active">
-                    <a class="sidebar-link" href="">
+                    <a href="">
                         <img src="./svg/home-icon.svg" alt="home"/>
                     </a>
                 </li>
                 <li id="trophy">
-                    <a class="sidebar-link" href="">
+                    <a href="">
                         <img src="./svg/trophy-icon.svg" alt="trophy"/>
                     </a>
                 </li>
                 <li id="gamepad">
-                    <a class="sidebar-link" href="">
+                    <a href="">
                         <img src="./svg/gamepad-icon.svg" alt="gamepad"/>
                     </a>
                 </li>
@@ -44,9 +44,9 @@
         <div id="page-content">
             <div id="top-category-container" class="category-container">
                 <div id="top-button-container" class="button-container">
-                    <button id="button-favourites" class="active"><span>Favourites</span></button>
-                    <button id="button-recent"><span>Recent</span></button>
-                    <button id="button-completed"><span>Completed</span></button>
+                    <button id="button-favourites" class="active"><h2>Favourites</h2></button>
+                    <button id="button-recent"><h2>Recent</h2></button>
+                    <button id="button-completed"><h2>Completed</h2></button>
                 </div>
                 <div id="top-view-container" class="view-container">
                     <ul id="view-favourites" class="visible">
@@ -59,9 +59,9 @@
             </div>
             <div id="bot-category-container" class="category-container">
                 <div id="bot-button-container" class="button-container">
-                    <button id="button-updates" class="active"><span>Updates</span></button>
-                    <button id="button-something-else"><span>Something else</span></button>
-                    <button id="tbutton-another-thing"><span>Another thing</span></button>
+                    <button id="button-updates" class="active"><h2>Updates</h2></button>
+                    <button id="button-something-else"><h2>Something else</h2></button>
+                    <button id="tbutton-another-thing"><h2>Another thing</h2></button>
                 </div>
                 <div id="bot-view-container" class="view-container">
                     <ul id="view-updates" class="visible">
