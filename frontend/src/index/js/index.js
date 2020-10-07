@@ -22,15 +22,16 @@ function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
 function createCourseCard(name, color) {
     const courseCard = document.createElement("li");
     const a = document.createElement("a");
-    a.href = "/courses/" + encodeURI(name);
-    const cardHeader = document.createElement("h3");
-    cardHeader.className = "card-header";
-    cardHeader.innerText = name;
-    cardHeader.style.backgroundColor = color;
+    const header = document.createElement("div");
+    header.className = "card-header";
+    header.style.backgroundColor = color;
+    const title = document.createElement("h3");
+    title.innerText = name;
+    header.appendChild(title);
     const info = document.createElement("ul");
     info.innerHTML = "<li><span>Progress: 6/10</span></li><li><span>Next reward: 6/10</span></li>";
     info.style.color = color;
-    a.appendChild(cardHeader);
+    a.appendChild(header);
     a.appendChild(info);
     courseCard.appendChild(a);
     return courseCard;
@@ -39,15 +40,16 @@ function createCourseCard(name, color) {
 function createModuleCard(name, description, color, courseName) {
     const moduleCard = document.createElement("li");
     const a = document.createElement("a");
-    const cardHeader = document.createElement("h3");
-    cardHeader.className = "card-header";
-    cardHeader.innerText = name;
-    console.log(color);
-    cardHeader.style.backgroundColor = color;
+    const header = document.createElement("div");
+    header.className = "card-header";
+    header.style.backgroundColor = color;
+    const title = document.createElement("h3");
+    title.innerText = name;
+    header.appendChild(title);
     const span = document.createElement("span");
     span.style.color = color;
     span.innerText = description;
-    a.appendChild(cardHeader);
+    a.appendChild(header);
     a.appendChild(span);
     moduleCard.appendChild(a);
         });
