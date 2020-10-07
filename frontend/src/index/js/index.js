@@ -36,18 +36,42 @@ function createCourseCard(name, color) {
     return courseCard;
 }
 
-function getCourseCards() {
-    DbCom.getCourses().then((courses) => {
-        const favouritesView = document.getElementById("view-all-courses");
-        courses.forEach((course) => {
-            const courseCard = createCourseCard(course.name, "#" + course.color);
-            favouritesView.appendChild(courseCard);
+function createModuleCard(name, description, color, courseName) {
+    const moduleCard = document.createElement("li");
+    const a = document.createElement("a");
+    const cardHeader = document.createElement("h3");
+    cardHeader.className = "card-header";
+    cardHeader.innerText = name;
+    console.log(color);
+    cardHeader.style.backgroundColor = color;
+    const span = document.createElement("span");
+    span.style.color = color;
+    span.innerText = description;
+    a.appendChild(cardHeader);
+    a.appendChild(span);
+    moduleCard.appendChild(a);
         });
-    }).catch((err) => {
-        console.log(err);
+    });
+    return moduleCard;
+}
+
+function createModuleCards(modules, color, courseName) {
+    const courseView = document.getElementById("view-course");
+    modules.forEach((module) => {
+        courseView.appendChild(createModuleCard(module.name, module.description, color, courseName));
+    });
+}
+
+function createCourseCards(courses) {
+    const allCoursesView = document.getElementById("view-all-courses");
+    courses.forEach((course) => {
+        allCoursesView.appendChild(createCourseCard(course.name, "#" + course.color));
     });
 }
 
 window.addEventListener("load",() => {
-    getCourseCards();
-});    setupCategoryButtons("button-container", "view-container");
+    setupCategoryButtons("button-container", "view-container");
+    DbCom.getCourses().then((courses) => {
+        createCourseCards(courses);
+    });
+});
