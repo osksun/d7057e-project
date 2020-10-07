@@ -73,8 +73,10 @@ exports.validateAccessToken = validateAccessToken;
 function validateTokenExpire(time) {
 	if(time) {
 		if(typeof time === "number") {
-			if(time > 0) {
-				return true;
+			if(!isNaN(time)) {
+				if(time > 0) {
+					return true;
+				}
 			}
 		}
 	}

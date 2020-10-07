@@ -12,6 +12,7 @@ const readline = require("readline").createInterface({
 const config = require("./config.json");
 const database = require("./database.js");
 const token = require("./token.js");
+const validation = require("../validation.js");
 require("../replaceAll_polyfill.js");
 
 function init() {
@@ -27,15 +28,17 @@ function init() {
 	function validateUser(request, response) {
 		return new Promise((resolve, reject) => {
 			const email = request.body.email;
-			const tokenExpireTime = request.body.tokenExpireTime;
+			const tokenExpireTime = parseInt(request.body.tokenExpireTime, 10);
 			const accessToken = request.body.token;
 
-			//TODO validate input
-
-			if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
-				resolve(email);
+			if((validation.validateEmail(email) && validation.validateTokenExpire(tokenExpireTime) && validation.validateAccessToken(accessToken)) || token.isSkippingVerification()) {
+				if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+					resolve(email);
+				} else {
+					reject("Invalid token");
+				}
 			} else {
-				reject("Invalid token");
+				reject("Malformed input");
 			}
 		});
 	}
