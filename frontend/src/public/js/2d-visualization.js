@@ -80,7 +80,7 @@ function createData(equation ,labels){
 
     }
     catch(err){
-        throw "Invalid input"
+        throw "Invalid input in createData"
     }
 }
 
@@ -104,7 +104,7 @@ function addDataset(chart, dataset){
 
 // Removes the dataset at the specified index
 function removeDataset(chart, Index){
-        if(typeof  chart.data.datasets[Index] === 'undefined') {
+        if(typeof chart.data.datasets[Index] === 'undefined' ) {
             console.log("Dataset at the specified index does not exist")
         }
         else{
@@ -113,20 +113,26 @@ function removeDataset(chart, Index){
     chart.update();
 }
 
-// user calls this function to add a new dataset to chart
+// User calls this function to add a new dataset to chart
 function userAddDataset(chart, f){
-    dataset = createDataset(f, "rgba(75, 192, 192, 1)", true)
-    addDataset(chart, dataset)
-    updateValues(chart)
-    chart.update()
+    
+     let testlabels = [0]
+     let values = createData(f, testlabels)
+     if (values.length === 0){
+         console.log("Invalid user input")
+     }
+     else{   
+         dataset = createDataset(f, "rgba(75, 192, 192, 1)", true)
+         addDataset(chart, dataset)
+         updateValues(chart)
+         chart.update()
+        }
 }
 
-// user calls this function to update the chart with new ranges
+// User calls this function to update the chart with new ranges
 function userUpdateChartRange(chart, min, max, stepSize){
     let newLabels = []
     if (parseFloat(min) <= parseFloat(max) && stepSize > 0){
-        const steps = math.floor(math.abs(max-min)/stepSize)
-        let x = parseFloat(min)
         for (i = parseFloat(min); i <= max; i+=parseFloat(stepSize)){
             newLabels.push(i)
         }
