@@ -81,8 +81,7 @@
 
 #view-favourites>li {
     display: inline-block;
-    margin-bottom: 65px;
-    margin-left: 50px;
+    margin: 0 25px 65px 25px;
     width: 389.75px;
     vertical-align: middle;
     text-align: left;
