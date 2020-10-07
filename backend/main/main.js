@@ -24,14 +24,27 @@ function init() {
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
+	function validateUser(request, response) {
+		return new Promise((resolve, reject) => {
+			const email = request.body.email;
+			const tokenExpireTime = request.body.tokenExpireTime;
+			const accessToken = request.body.token;
+
+			//TODO validate input
+
+			if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+				resolve(email);
+			} else {
+				response.end(JSON.stringify({
+					error:"Invalid token"
+				}));
+				reject();
+			}
+		});
+	}
+
 	app.post("/getxp", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
-
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+		validateUser(request, response).then((email) => {
 			database.getXP(email).then((xp) => {
 				response.end(JSON.stringify({
 					xp:xp
@@ -41,21 +54,11 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	app.post("/getcourses", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
-
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
+		validateUser(request, response).then((email) => {
 			database.getCourses().then((courses) => {
 				response.end(JSON.stringify(courses));
 			}).catch(() => {
@@ -63,23 +66,15 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	app.post("/getmodules", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const courseName = request.body.course;
 
-		const courseName = request.body.course;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getModules(courseName).then((modules) => {
 				response.end(JSON.stringify(modules));
 			}).catch(() => {
@@ -87,24 +82,16 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	app.post("/getquestions", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const courseName = request.body.course;
+			const moduleName = request.body.module;
 
-		const courseName = request.body.course;
-		const moduleName = request.body.module;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestions(courseName, moduleName).then((questions) => {
 				response.end(JSON.stringify(questions));
 			}).catch(() => {
@@ -112,23 +99,15 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	app.post("/getquestion", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const questionID = request.body.question;
 
-		const questionID = request.body.question;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestion(questionID).then((question) => {
 				response.end(JSON.stringify(question));
 			}).catch(() => {
@@ -136,24 +115,16 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	app.post("/answer", (request, response) => {
-		const email = request.body.email;
-		const tokenExpireTime = request.body.tokenExpireTime;
-		const accessToken = request.body.token;
+		validateUser(request, response).then((email) => {
+			const questionID = request.body.question;
+			const answer = request.body.answer;
 
-		const questionID = request.body.question;
-		const answer = request.body.answer;
+			//TODO validate input
 
-		//TODO validate input
-
-		if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
 			database.getQuestionAnswer(questionID).then((answerRegex) => {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
@@ -177,11 +148,7 @@ function init() {
 					error:"Database error"
 				}));
 			});
-		} else {
-			response.end(JSON.stringify({
-				error:"Invalid token"
-			}));
-		}
+		});
 	});
 
 	const port = parseInt(config["port"], 10);
