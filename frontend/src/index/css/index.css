@@ -48,12 +48,6 @@
     -ms-transform: skew(45deg, 0deg);
 }
 
-#top-button-container {
-    padding-top: 64.5px;
-    padding-left: 336px;
-    width: calc(100% - 336px);
-}
-
 /* view-container */
 .view-container>ul {
     display: none;

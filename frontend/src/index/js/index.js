@@ -49,6 +49,5 @@ function getCourseCards() {
 }
 
 window.addEventListener("load",() => {
-    setupCategoryButtons("top-button-container", "top-view-container");
     getCourseCards();
-});
+});    setupCategoryButtons("button-container", "view-container");
