@@ -51,6 +51,25 @@ function validateRefreshToken(token) {
 }
 exports.validateRefreshToken = validateRefreshToken;
 
+function validateAccessToken(token) {
+	//Checks if token is not undefined
+	if(token) {
+		//Checks if the token is the correct type (String)
+		if(typeof token === "string") {
+			//Checks if the token is the correct length
+			if(token.length == 344) {
+				//Checks if the token is in a valid format
+				const tokenRegex = /^[A-Za-z0-9\+\/]*==$/;
+				if(tokenRegex.test(token)) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+exports.validateAccessToken = validateAccessToken;
+
 function validateTokenExpire(time) {
 	if(time) {
 		if(typeof time === "number") {

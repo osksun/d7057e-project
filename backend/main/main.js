@@ -288,7 +288,7 @@ function initDatabase() {
 	});
 }
 
-if(token.isSkippingVerification) {
+if(token.isSkippingVerification()) {
 	console.log("WARNING skipping access token verification! For debug purposes only!");
 	initDatabase();
 } else {
