@@ -14,7 +14,7 @@
     <input type="checkbox" id="equationCheckbox" name="equationCheckbox">
     <label for="equationCheckbox">Preview new graph</label>
     <button type="button" id="addDatasetButton" onclick="userAddDataset(chart, document.getElementById('equationInput').value)">Add new dataset</button> 
-    <button type="button" id="removeButton" onclick="removeDataset(chart, 0)">Remove dataset</button> 
+    <button type="button" id="removeButton" onclick="removeDataset(chart, chart.data.datasets.length-1)">Remove dataset</button> 
  </div>
 
  <input type="text" id="minInput" name="min" value = "0">min</label>
