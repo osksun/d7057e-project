@@ -21,6 +21,9 @@ window.onload = function() {
         loadingIcon.style.display = "inline-block";
         answerQuestion(questionID, answerInput.value).then((result) => {
             if (result.correct) {
+                answerInput.style.backgroundColor = "#00ff00";
+            } else {
+                answerInput.style.backgroundColor = "#ff0000";
             }
             loadingIcon.style.display = "none";
             submitButton.style.display = "inline-block";
