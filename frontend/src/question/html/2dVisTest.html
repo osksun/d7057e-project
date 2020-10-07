@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <script src="../../node_modules/chart.js/dist/Chart.js"></script>
-    <script src="./js/2d-visualization.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/2dStyle.css">
-    <script src="../../node_modules/mathjs/dist/math.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="../css/2dStyle.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.3.0/math.js"></script>
+    <script src="../js/2d-visualization.js"></script>
 </head>
 
 <div id="chart-container">
@@ -13,8 +13,8 @@
 
     <input type="checkbox" id="equationCheckbox" name="equationCheckbox">
     <label for="equationCheckbox">Preview new graph</label>
-    <button type="button" id="addDatasetButton" onclick="userAddDataset(chart, document.getElementById('equationInput').value)">Add new dataset</button> 
-    <button type="button" id="removeButton" onclick="removeDataset(chart, chart.data.datasets.length-1)">Remove dataset</button> 
+    <button type="button" id="addDatasetButton" onclick="userAddDataset(chart, document.getElementById('equationInput').value)">Add new dataset</button>
+    <button type="button" id="removeButton" onclick="removeDataset(chart, chart.data.datasets.length-1)">Remove dataset</button>
  </div>
 
  <input type="text" id="minInput" name="min" value = "0">min</label>

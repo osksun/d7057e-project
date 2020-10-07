@@ -38,7 +38,7 @@ function ajaxPostAuth(url, data = "") {
     });
 }
 
-function ajaxPostPromise(url, data, sendFunction) {
+function ajaxPostPromise(url, data, send) {
     return new Promise((resolve, reject) => {
         const request = new XMLHttpRequest();
         request.open("POST", url, true);
@@ -58,6 +58,6 @@ function ajaxPostPromise(url, data, sendFunction) {
                 }
             }
         }
-        sendFunction(request, data);
+        send(request, data);
     });
 }

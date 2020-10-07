@@ -1,0 +1,122 @@
+/* button-container */
+.button-container {
+    height: 52px;
+    white-space: nowrap;
+}
+
+.button-container>button {
+    display: inline-block;
+    padding: 0;
+    margin: 0 0 0 16px;
+    height: 100%;
+    width: calc((100% - 30px) / 3);
+    outline : none;
+    border: none;
+    background-color: #323232;
+    transform: skew(-45deg, 0deg);
+    -webkit-transform: skew(-45deg, 0deg);
+    -ms-transform: skew(-45deg, 0deg);
+}
+
+.button-container>button:focus {
+    outline: 4px solid  rgb(116, 223, 255);
+}
+
+.button-container>button>h2 {
+    padding-top: 0;
+    margin: 0;
+    font-weight: normal;
+    font-size: 36px;
+    transform: skew(45deg, 0deg);
+    -webkit-transform: skew(45deg, 0deg);
+    -ms-transform: skew(45deg, 0deg);
+}
+
+.button-container>button:hover {
+    cursor: pointer;
+    background-color: white;
+}
+
+.button-container>button.active {
+    background-color: white;
+}
+
+#top-button-container {
+    padding-top: 64.5px;
+    padding-left: 336px;
+    width: calc(100% - 336px);
+}
+
+#bot-button-container {
+    padding-top: 0;
+    padding-left: 185px;
+    width: calc(100% - 336px);
+}
+
+#bot-button-container>button:last-of-type {
+    padding-right: 150px;
+    margin-right: -150px;
+    width: calc((100% - 30px) / 3 + 150px);
+}
+
+/* view-container */
+.view-container>ul {
+    display: none;
+}
+
+.view-container>ul.visible {
+    display: block;
+}
+
+/* view-favourites */
+#view-favourites {
+    position: relative;
+    margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
+    padding: 0;
+    width: auto;
+    list-style-type: none;
+    overflow-y: hidden;
+    text-align: center;
+}
+
+#view-favourites>li {
+    display: inline-block;
+    margin-bottom: 65px;
+    margin-left: 50px;
+    width: 389.75px;
+    vertical-align: middle;
+    text-align: left;
+    background-color: white;
+    box-shadow: 15px 15px 0 0 #323232;
+}
+
+#view-favourites>li>a {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+#view-favourites>li>a>h3 {
+    padding: 0.5em 0.5em;
+    margin: 0 0;
+    text-align: center;
+    width: calc(100% - 0.5em * 2);
+    font-size: 30px;
+    line-height: 1;
+    border: none;
+    background-color: #46bbfe;
+    color: white;
+}
+
+#view-favourites>li>a>ul {
+    color: #46bbfe;
+    font-size: 25px;
+    padding: 10px 0 10px 30px;
+    list-style-type: square;
+    list-style-position: inside;
+}
+
+#view-favourites>li>a>ul>li {
+    padding: 10px 0;
+}
