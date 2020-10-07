@@ -51,10 +51,10 @@ function validateRefreshToken(token) {
 }
 exports.validateRefreshToken = validateRefreshToken;
 
-function validateTokenExpire(token) {
-	if(token) {
-		if(typeof token === "number") {
-			if(number > 0) {
+function validateTokenExpire(time) {
+	if(time) {
+		if(typeof time === "number") {
+			if(time > 0) {
 				return true;
 			}
 		}
