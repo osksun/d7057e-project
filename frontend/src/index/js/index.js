@@ -49,7 +49,7 @@ function createCourseCard(name, color) {
 }
 
 function getCourseCards() {
-    getCourses().then((courses) => {
+    DbCom.getCourses().then((courses) => {
         const favouritesView = document.getElementById("view-favourites");
         courses.forEach((course) => {
             const courseCard = createCourseCard(course.name, "#" + course.color);
