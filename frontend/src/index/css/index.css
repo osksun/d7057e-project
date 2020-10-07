@@ -63,7 +63,7 @@
 }
 
 /* view-all-courses */
-#view-all-courses {
+.view-container>ul {
     position: relative;
     margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
     padding: 0;
@@ -73,36 +73,47 @@
     text-align: center;
 }
 
-#view-all-courses>li {
+.view-container>ul>li {
     display: inline-block;
     margin: 0 25px 65px 25px;
     width: 389.75px;
-    vertical-align: middle;
+    vertical-align: top;
     text-align: left;
     background-color: #ffffff;
     box-shadow: 15px 15px 0 0 #323232;
+    cursor: pointer;
 }
 
-#view-all-courses>li>a {
+.view-container>ul>li>a>span {
+    font-size: 24px;
+    padding: 15px;
+    float: left;
+}
+
+.view-container>ul>li>a {
     display: inline-block;
     height: 100%;
     width: 100%;
     text-decoration: none;
 }
 
-#view-all-courses>li>a>h3 {
-    padding: 0.5em 0.5em;
-    margin: 0 0;
-    text-align: center;
-    width: calc(100% - 0.5em * 2);
+.card-header {
+    width: 100%;
+    padding: 10px 0;
+    margin: 0;
     font-size: 30px;
-    line-height: 1;
-    border: none;
+    line-height: 35px;
     background-color: #46bbfe;
     color: #ffffff;
+    text-align: center;
 }
 
-#view-all-courses>li>a>ul {
+.card-header>h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.view-container>ul>li>a>ul {
     color: #46bbfe;
     font-size: 25px;
     padding: 10px 0 10px 30px;
@@ -110,6 +121,6 @@
     list-style-position: inside;
 }
 
-#view-all-courses>li>a>ul>li {
+.view-container>ul>li>a>ul>li {
     padding: 10px 0;
 }
