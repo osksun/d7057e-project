@@ -1,7 +1,10 @@
 /* button-container */
 .button-container {
     height: 52px;
+    width: calc(100% - 336px);
     white-space: nowrap;
+    padding-top: calc(128px - 52px);
+    padding-left: 336px;
 }
 
 .button-container>button {
@@ -39,7 +42,9 @@
 }
 
 .button-container>button>h2 {
-    padding-top: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
     margin: 0;
     font-weight: normal;
     font-size: 36px;
