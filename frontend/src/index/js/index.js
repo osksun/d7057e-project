@@ -34,6 +34,18 @@ function createCourseCard(name, color) {
     a.appendChild(header);
     a.appendChild(info);
     courseCard.appendChild(a);
+    courseCard.addEventListener("click", () => {
+        DbCom.getModules(name).then((modules) => {
+            createModuleCards(modules, color, name);
+            const url = "/courses/" + encodeURI(name.toLowerCase());
+            document.title = name;
+            window.history.pushState({"html":modules, "pageTitle":name}, "", url);
+            const courseButton = document.getElementById("button-course");
+            courseButton.disabled = false;
+            courseButton.children[0].innerText = name;
+            courseButton.click();
+        });
+    });
     return courseCard;
 }
 
