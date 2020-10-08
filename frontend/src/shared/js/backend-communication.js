@@ -45,10 +45,11 @@ const DbCom = new function() {
         return DbCom.ajaxPost("http://127.0.0.1:80/answer", encodeURI("questionID=" + id + "&answer=" + answer));
     },
 
+    /**
+     * Ajax request to get the xp of the current user
+     * @return {Promise<number>} Promise resolves to a number representing the amount of xp the current user has
+     */
     this.getXp = function() {
-        // TODO: Instead of hardcoding the email, it should be taken from storage of the logged in user.
-        //       The email should not be passed in here when this is fixed, it should be passed in every request using the ajaxPost function
-        //return ajaxPost("http://127.0.0.1:80/getxp") // <-- Should be like this when fixed
         return DbCom.ajaxPost("http://127.0.0.1:80/getxp")
     },
 
@@ -66,7 +67,7 @@ const DbCom = new function() {
                 data += "&";
             }
             request.send(data + encodeURI("userID=0"));
-            // TODO: When available we want to append the email, tokenExpireTime and the token to every request made here, see comment below
+            // TODO: When available we want to append the userID, tokenExpireTime and the token to every request made here, see comment below
             //request.send(data + "&userID=" + userID + "&tokenExpireTime=" + tokenExpireTime + "&token=" + token);
         });
     },
