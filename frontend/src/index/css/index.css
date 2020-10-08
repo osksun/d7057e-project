@@ -62,7 +62,7 @@
     display: block;
 }
 
-/* view-all-courses */
+/* view-courses */
 .view-container>ul {
     position: relative;
     margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
@@ -88,6 +88,7 @@
     font-size: 24px;
     padding: 15px;
     float: left;
+    overflow-wrap: break-word;
 }
 
 .view-container>ul>li>a {
