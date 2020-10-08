@@ -26,7 +26,7 @@ function connect() {
 						const sql = tables.splice(0, 1)[0];
 						connection.query(sql, (error, result) => {
 							if(error) {
-								console.error("Failed to create database tables!");
+								console.error("Failed to create database tables: " + error);
 								reject();
 							} else {
 								if(tables.length == 0) {
