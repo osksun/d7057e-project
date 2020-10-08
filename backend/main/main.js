@@ -98,11 +98,11 @@ function init() {
 
 	app.post("/getmodules", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const courseName = request.body.course;
+			const courseID = parseInt(request.body.courseID, 10);
 
 			//TODO validate input
 
-			database.getModules(courseName).then((modules) => {
+			database.getModules(courseID).then((modules) => {
 				response.end(JSON.stringify(modules));
 			}).catch(() => {
 				response.end(JSON.stringify({
@@ -118,12 +118,11 @@ function init() {
 
 	app.post("/getquestions", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const courseName = request.body.course;
-			const moduleName = request.body.module;
+			const moduleID = parseInt(request.body.moduleID, 10);
 
 			//TODO validate input
 
-			database.getQuestions(courseName, moduleName).then((questions) => {
+			database.getQuestions(moduleID).then((questions) => {
 				response.end(JSON.stringify(questions));
 			}).catch(() => {
 				response.end(JSON.stringify({
@@ -139,7 +138,7 @@ function init() {
 
 	app.post("/getquestion", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const questionID = request.body.question;
+			const questionID = parseInt(request.body.questionID, 10);
 
 			//TODO validate input
 
@@ -159,7 +158,7 @@ function init() {
 
 	app.post("/answer", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const questionID = request.body.question;
+			const questionID = parseInt(request.body.questionID, 10);
 			const answer = request.body.answer;
 
 			//TODO validate input
@@ -222,12 +221,12 @@ function init() {
 	app.post("/createmodule", (request, response) => {
 		validateAdmin(request, response).then((userID) => {
 			const name = request.body.name;
-			const courseName = request.body.course;
+			const courseID = parseInt(request.body.courseID, 10);
 			const description = request.body.description;
 
 			//TODO validate input
 
-			database.createModule(name, courseName, description).then(() => {
+			database.createModule(courseID, name, description).then(() => {
 				response.end(JSON.stringify({
 					success:true
 				}));
@@ -245,14 +244,13 @@ function init() {
 
 	app.post("/createquestion", (request, response) => {
 		validateAdmin(request, response).then((userID) => {
-			const courseName = request.body.course;
-			const moduleName = request.body.module;
+			const moduleID = parseInt(request.body.moduleID, 10);
 			const content = request.body.content;
 			const answer = request.body.answer;
 
 			//TODO validate input
 
-			database.createQuestion(courseName, moduleName, content, answer).then(() => {
+			database.createQuestion(moduleID, content, answer).then(() => {
 				response.end(JSON.stringify({
 					success:true
 				}));
