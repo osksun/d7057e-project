@@ -1,0 +1,26 @@
+#loading-icon {
+    vertical-align: middle;
+    width: 25px;
+    padding: 15px;
+    margin: -20px 0;
+    display: none;
+    -webkit-animation: rotation 2s infinite linear; /* Chr, Saf */
+    animation: rotation 2s infinite linear; /* IE >9, Fx >15, Op >12.0 */
+}
+
+#view-question {
+    color: #ffffff;
+}
+
+@keyframes rotation {
+    from {
+        -webkit-transform: rotate(0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+        -ms-transform: rotate(0deg); /* IE 9 */
+        transform: rotate(0deg); /* IE 10, Fx 16+, Op 12.1+ */
+    }
+    to {
+        -webkit-transform: rotate(360deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+        -ms-transform: rotate(360deg); /* IE 9 */
+        transform: rotate(360deg); /* IE 10, Fx 16+, Op 12.1+ */
+    }
+}
