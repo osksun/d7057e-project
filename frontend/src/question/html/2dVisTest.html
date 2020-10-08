@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="../css/2dStyle.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/7.3.0/math.js"></script>
+    <script src="../js/2d-visualization.js"></script>
+</head>
+
+<div id="chart-container">
+    <canvas id="myChart"></canvas>
+    <input type="text" id="equationInput" name="input">Equation input</label>
+
+    <input type="checkbox" id="equationCheckbox" name="equationCheckbox">
+    <label for="equationCheckbox">Preview new graph</label>
+    <button type="button" id="addDatasetButton" onclick="userAddDataset(chart, document.getElementById('equationInput').value)">Add new dataset</button>
+    <button type="button" id="removeButton" onclick="removeDataset(chart, chart.data.datasets.length-1)">Remove dataset</button>
+ </div>
+
+ <input type="text" id="minInput" name="min" value = "0">min</label>
+ <input type="text" id="maxInput" name="max" value = "10">max</label>
+ <input type="text" id="stepSizeInput" name="stepSize" value = "10">stepSize</label>
+ <button type="buttton" id="minMaxStepsButton" onclick="userUpdateChartRange(chart, minInput.value, maxInput.value, stepSizeInput.value)">Update range</button>
+<script>
+    let equationInput = document.getElementById("equationInput")
+    let minInput = document.getElementById("minInput")
+    let maxInput = document.getElementById("maxInput")
+    let stepSizeInput = document.getElementById("stepSizeInput")
+   /* equationInput.addEventListener("input", function(){createData(equationInput.value, minMaxSteps[0], minMaxSteps[1], minMaxSteps[2])})
+    minInput.addEventListener("input", function(){minMaxSteps[0] = minInput.value})
+    maxInput.addEventListener("input", function(){minMaxSteps[1] = maxInput.value})
+    stepsInput.addEventListener("input", function(){minMaxSteps[2] = stepsInput.value})
+    let minMaxSteps = [0,10,10]
+    */
+    const ctx = document.getElementById('myChart').getContext('2d');
+    const chart = createChart(ctx, "line","rgba(75, 192, 192, 1)", true)
+    chart.data.labels = [0,1,2,3,4,5,6,7,8,9,10]
+    updateValues(chart)
+
+
+
+</script>

@@ -1,0 +1,126 @@
+/* button-container */
+.button-container {
+    height: 52px;
+    width: calc(100% - 336px);
+    white-space: nowrap;
+    padding-top: calc(128px - 52px);
+    padding-left: 336px;
+}
+
+.button-container>button {
+    display: inline-block;
+    padding: 0;
+    margin: 0 0 0 16px;
+    height: 100%;
+    width: calc((100% - 30px) / 3);
+    outline : none;
+    border: none;
+    vertical-align: middle;
+    color: #000000;
+    background-color: #323232;
+    transform: skew(-45deg, 0deg);
+    -webkit-transform: skew(-45deg, 0deg);
+    -ms-transform: skew(-45deg, 0deg);
+}
+
+.button-container>button:disabled {
+    color:  #272727;
+    pointer-events: none;
+}
+
+.button-container>button:focus {
+    outline: 4px solid  #74dfff;
+}
+
+.button-container>button:hover {
+    cursor: pointer;
+    background-color: #ffffff;
+}
+
+.button-container>button.selected {
+    background-color: #ffffff;
+}
+
+.button-container>button>h2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
+    margin: 0;
+    font-weight: normal;
+    font-size: 36px;
+    transform: skew(45deg, 0deg);
+    -webkit-transform: skew(45deg, 0deg);
+    -ms-transform: skew(45deg, 0deg);
+}
+
+/* view-container */
+.view-container>ul {
+    display: none;
+}
+
+.view-container>ul.visible {
+    display: block;
+}
+
+/* view-all-courses */
+.view-container>ul {
+    position: relative;
+    margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
+    padding: 0;
+    width: auto;
+    list-style-type: none;
+    overflow-y: hidden;
+    text-align: center;
+}
+
+.view-container>ul>li {
+    display: inline-block;
+    margin: 0 25px 65px 25px;
+    width: 389.75px;
+    vertical-align: top;
+    text-align: left;
+    background-color: #ffffff;
+    box-shadow: 15px 15px 0 0 #323232;
+    cursor: pointer;
+}
+
+.view-container>ul>li>a>span {
+    font-size: 24px;
+    padding: 15px;
+    float: left;
+}
+
+.view-container>ul>li>a {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+.card-header {
+    width: 100%;
+    padding: 10px 0;
+    margin: 0;
+    font-size: 30px;
+    line-height: 35px;
+    background-color: #46bbfe;
+    color: #ffffff;
+    text-align: center;
+}
+
+.card-header>h3 {
+    padding: 0;
+    margin: 0;
+}
+
+.view-container>ul>li>a>ul {
+    color: #46bbfe;
+    font-size: 25px;
+    padding: 10px 0 10px 30px;
+    list-style-type: square;
+    list-style-position: inside;
+}
+
+.view-container>ul>li>a>ul>li {
+    padding: 10px 0;
+}
