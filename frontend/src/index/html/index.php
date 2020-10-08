@@ -23,7 +23,7 @@
             <div id="category-container" class="category-container">
                 <div id="button-container" class="button-container">
                     <button id="button-courses" class="selected"><h2>All courses</h2></button>
-                    <button id="button-course" disabled><h2>Modules</h2></button>
+                    <button id="button-modules" disabled><h2>Modules</h2></button>
                     <button id="button-question" disabled><h2>Question</h2></button>
                 </div>
                 <div id="view-container" class="view-container">

@@ -38,7 +38,7 @@ const modulesView = new function() {
             this.clear();
             this.createCards(modules, color, courseId, courseName);
             updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, modules);
-            const courseButton = document.getElementById("button-course");
+            const courseButton = document.getElementById("button-modules");
             courseButton.disabled = false;
             courseButton.children[0].innerText = courseName;
             courseButton.removeEventListener("click", displayHandler);
