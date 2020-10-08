@@ -32,8 +32,6 @@ window.addEventListener("load",() => {
         unselectedButtons.forEach(button => button.classList.remove("selected"));
         hiddenViews.forEach(view => view.classList.remove("visible"));
     }
-
-
 });
 
 function updatePage(url, title, html) {
