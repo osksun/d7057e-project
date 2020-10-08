@@ -55,22 +55,6 @@ window.addEventListener("load",() => {
         return courseCard;
     }
 
-
-    function displayCourseModule(courseName, color) {
-        const courseButton = document.getElementById("button-course");
-        DbCom.getModules(courseName).then((modules) => {
-            clearModuleCards();
-            createModuleCards(modules, color, courseName);
-            updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, modules);
-            courseButton.disabled = false;
-            courseButton.children[0].innerText = courseName;
-            courseButton.removeEventListener("click", displayCourseModuleHandler);
-            displayCourseModuleHandler = displayCourseModule.bind(null, courseName, color);
-            courseButton.click();
-            courseButton.addEventListener("click", displayCourseModuleHandler);
-        });
-    }
-
     function updatePage(url, title, html) {
         document.title = title;
         window.history.pushState({"html":html, "pageTitle":title}, "", url);
@@ -87,7 +71,6 @@ window.addEventListener("load",() => {
         const courseView = document.getElementById("view-all-courses");
         courseView.innerHTML = "";
     }
-
 
     function createModuleCard(name, description, color, courseName) {
         const moduleCard = document.createElement("li");
@@ -117,5 +100,20 @@ window.addEventListener("load",() => {
     function clearModuleCards() {
         const courseView = document.getElementById("view-course");
         courseView.innerHTML = "";
+    }
+
+    function displayCourseModule(courseName, color) {
+        const courseButton = document.getElementById("button-course");
+        DbCom.getModules(courseName).then((modules) => {
+            clearModuleCards();
+            createModuleCards(modules, color, courseName);
+            updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, modules);
+            courseButton.disabled = false;
+            courseButton.children[0].innerText = courseName;
+            courseButton.removeEventListener("click", displayCourseModuleHandler);
+            displayCourseModuleHandler = displayCourseModule.bind(null, courseName, color);
+            courseButton.click();
+            courseButton.addEventListener("click", displayCourseModuleHandler);
+        });
     }
 });
