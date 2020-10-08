@@ -8,7 +8,7 @@
 			canvas { display: block; }
 		</style>
 		<script src="../js/3d-visualization.js"></script>
-		<script src="../js/three.js"></script>
+		<script src="../../../res/lib/three/three.js"></script>
 
 	</head>
 	<body>
@@ -23,7 +23,7 @@
 			let materialgreen = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000})
 			let cube = new THREE.Mesh( geometry0, materialgreen );
-			
+
 			var geo = new THREE.PlaneBufferGeometry(10, 10, 4, 4);
 			var mat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
 			var plane = new THREE.Mesh(geo, mat);
