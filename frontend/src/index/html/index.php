@@ -6,6 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="../../shared/css/body.css">
         <link rel="stylesheet" type="text/css" href="../css/index.css">
+        <link rel="stylesheet" type="text/css" href="../css/courses-view.css">
+        <link rel="stylesheet" type="text/css" href="../css/modules-view.css">
         <link rel="stylesheet" type="text/css" href="../css/question-view.css">
         <link rel="stylesheet" type="text/css" href="../../shared/css/fixed-content.css">
         <script src="../js/mathjax-config.js" defer></script>

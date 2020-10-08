@@ -2,10 +2,11 @@ const coursesView = new function() {
     const coursesViewDiv = document.getElementById("view-courses");
 
     function createCard(id, name, color) {
-        const courseCard = document.createElement("li");
+        const card = document.createElement("li");
+        card.className = "course-card";
         const a = document.createElement("a");
         const header = document.createElement("div");
-        header.className = "card-header";
+        header.className = "course-card-header";
         header.style.backgroundColor = color;
         const title = document.createElement("h3");
         title.innerText = name;
@@ -15,11 +16,11 @@ const coursesView = new function() {
         info.style.color = color;
         a.appendChild(header);
         a.appendChild(info);
-        courseCard.appendChild(a);
-        courseCard.addEventListener("click", () => {
+        card.appendChild(a);
+        card.addEventListener("click", () => {
             modulesView.display(id, name, color);
         });
-        return courseCard;
+        return card;
     }
 
     this.createCards = function(courses) {

@@ -3,10 +3,11 @@ const modulesView = new function() {
     let displayHandler;
 
     function createCard(id, name, description, color, courseId, courseName) {
-        const moduleCard = document.createElement("li");
+        const card = document.createElement("li");
+        card.className = "module-card";
         const a = document.createElement("a");
         const header = document.createElement("div");
-        header.className = "card-header";
+        header.className = "module-card-header";
         header.style.backgroundColor = color;
         const title = document.createElement("h3");
         title.innerText = name;
@@ -16,11 +17,11 @@ const modulesView = new function() {
         span.innerText = description;
         a.appendChild(header);
         a.appendChild(span);
-        moduleCard.appendChild(a);
-        moduleCard.addEventListener("click", () => {
+        card.appendChild(a);
+        card.addEventListener("click", () => {
             questionView.displayRandom(courseId, courseName, id, name);
         });
-        return moduleCard;
+        return card;
     }
 
     this.createCards = function(modules, color, courseId, courseName) {
