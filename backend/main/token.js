@@ -27,7 +27,7 @@ function setPublicKey(pemKey) {
 }
 exports.setPublicKey = setPublicKey;
 
-function validateAccessToken(email, expireTime, token) {
+function validateAccessToken(id, expireTime, token) {
 	if(skipVerification) {
 		return true;
 	}
@@ -38,7 +38,7 @@ function validateAccessToken(email, expireTime, token) {
 	}
 
 	const verifier = crypto.createVerify("SHA256");
-	verifier.update(email + ";" + expireTime);
+	verifier.update(id + ";" + expireTime);
 	verifier.end();
 	return verifier.verify(publicKey, token, "base64");
 }

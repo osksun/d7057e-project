@@ -83,3 +83,17 @@ function validateTokenExpire(time) {
 	return false;
 }
 exports.validateTokenExpire = validateTokenExpire;
+
+function validateUnsignedInt(id) {
+	if(id) {
+		if(typeof id === "number") {
+			if(!isNaN(id)) {
+				if(id >= 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+exports.validateUnsignedInt = validateUnsignedInt;

@@ -15,7 +15,7 @@ function connect() {
 				console.log("MySQL database connected!");
 
 				const tables = [
-					"CREATE TABLE IF NOT EXISTS userdata (email VARCHAR(255), xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(email))",
+					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (name VARCHAR(255), description VARCHAR(255), color CHAR(6), PRIMARY KEY(name))",
 					"CREATE TABLE IF NOT EXISTS modules (name VARCHAR(255), course VARCHAR(255), description VARCHAR(255), PRIMARY KEY(name, course), FOREIGN KEY(course) REFERENCES courses(name))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, module VARCHAR(255), course VARCHAR(255), content TEXT, answer TEXT, PRIMARY KEY(id), FOREIGN KEY(module, course) REFERENCES modules(name, course))"
@@ -45,9 +45,9 @@ function connect() {
 }
 exports.connect = connect;
 
-function createUserIfNotExist(email) {
+function createUserIfNotExist(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT IGNORE INTO userdata (email, xp) VALUES (?, ?)", [email, 0], (error, result) => {
+		connection.query("INSERT IGNORE INTO userdata (id, xp) VALUES (?, ?)", [userID, 0], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -57,9 +57,9 @@ function createUserIfNotExist(email) {
 	});
 }
 
-function getUserIsAdmin(email) {
+function getUserIsAdmin(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT isAdmin FROM userdata WHERE email = ?", [email], (error, result) => {
+		connection.query("SELECT isAdmin FROM userdata WHERE id = ?", [userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -77,9 +77,9 @@ function getUserIsAdmin(email) {
 }
 exports.getUserIsAdmin = getUserIsAdmin;
 
-function getXP(email) {
+function getXP(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT xp FROM userdata WHERE email = ?", [email], (error, result) => {
+		connection.query("SELECT xp FROM userdata WHERE id = ?", [userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -97,10 +97,10 @@ function getXP(email) {
 }
 exports.getXP = getXP;
 
-function addUserXP(email, xp) {
+function addUserXP(userID, xp) {
 	return new Promise((resolve, reject) => {
-		createUserIfNotExist(email).then(() => {
-			connection.query("UPDATE userdata SET xp = xp + ? WHERE email = ?", [xp, email], (error, result) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("UPDATE userdata SET xp = xp + ? WHERE id = ?", [xp, userID], (error, result) => {
 				if(error) {
 					reject();
 				} else {
@@ -207,9 +207,9 @@ function getQuestions(courseName, moduleName) {
 }
 exports.getQuestions = getQuestions;
 
-function getQuestion(id) {
+function getQuestion(questionID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, content, course, module FROM questions WHERE id = ?", [id], (error, result) => {
+		connection.query("SELECT id, content, course, module FROM questions WHERE id = ?", [questionID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -224,9 +224,9 @@ function getQuestion(id) {
 }
 exports.getQuestion = getQuestion;
 
-function getQuestionAnswer(id) {
+function getQuestionAnswer(questionID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT answer FROM questions WHERE id = ?", [id], (error, result) => {
+		connection.query("SELECT answer FROM questions WHERE id = ?", [questionID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
