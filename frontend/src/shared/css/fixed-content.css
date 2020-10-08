@@ -57,17 +57,29 @@ body {
     background-color: black;
 }
 
-#header-xp-progress-bar-front-green {
-    height: calc(100% - 128px); /* 128px is the height of #page-name-container */
+#header-xp-progress-bar-back.skip-animation>div {
+    transition: none;
+}
+
+#header-xp-progress-bar-front-blue {
+    height: 100%;
+    width: 0;
     transition: width 0.5s ease-in-out;
     background-color: rgb(116, 223, 255);
 }
 
 #header-xp-progress-bar-front-white {
     height: 100%;
+    width: 0;
     position: absolute;
     transition: width 1.0s ease-in-out;
     background-color: white;
+}
+
+#header-level-info {
+    display: inline-block;
+    text-align: left;
+    width: 250px;
 }
 
 /* Page name */
