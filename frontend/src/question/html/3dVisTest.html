@@ -12,11 +12,23 @@
 
 	</head>
 	<body>
+		<div>
+			<input type="text" id="xInput" name="xInput">x
+			<input type="test" id="yInput" name="yInput">y
+			<input type="test" id="zInput" name="zInput">z
+			<input type="test" id="planeConstantInput" name="planeConstantInput">Plane constant
+			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstant.value, 20, 0x00ff00)"></button>
+		</div>
+
 		<script>
+			xInput = document.getElementById("xInput")
+			yInput = document.getElementById("yInput")
+			zInput = document.getElementById("zInput")
+			plantConstantInput = document.getElementById("planeConstantInput")
 			let scene = new THREE.Scene();
 			let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
 			let renderer = new THREE.WebGLRenderer();
-			renderer.setSize( window.innerWidth, window.innerHeight );
+			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 			document.body.appendChild( renderer.domElement );
 
 			let geometry0 = new THREE.BoxGeometry();
@@ -30,8 +42,8 @@
 
 			//let optionalNormalMatrix = new THREE.Matrix3().getNormalMatrix( matrix );
 			let points = [];
-			let myPlaneGe0 = new THREE.PlaneBufferGeometry(10,10, 3,3)
-			let myPlane = new THREE.Plane(new THREE.Vector3(1,1,-1), 1)
+			let myPlaneGeo = new THREE.PlaneBufferGeometry(10,10, 3,3)
+			let myPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 			points.push( new THREE.Vector3(-10,0,-1));
 			points.push( new THREE.Vector3(0,10,-1));
 			points.push( new THREE.Vector3(10,0,-1));
@@ -40,11 +52,11 @@
 			let materialblue = new THREE.LineBasicMaterial( {color: 0x0000ff})
 
 			var superPlane = new THREE.Plane( new THREE.Vector3( 1, -1, 1 ), 1 );
-			var helper = new THREE.PlaneHelper( superPlane, 20, 0xffff00 );
+			var helper = new THREE.PlaneHelper( myPlane, 30, 0xff0000 );
 			scene.add( helper );
 			let line = new THREE.Line( geometry1, materialblue );
 			plane.rotateX( - Math.PI / 3);
-			camera.position.set(0,0,20);
+			camera.position.set(0,4,20);
 			camera.lookAt(0,0,0)
 			scene.add(plane);
 			scene.add( cube );
