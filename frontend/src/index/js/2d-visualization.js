@@ -6,7 +6,7 @@ function updateChart(chart, value){
 }
 
 function addLabels(chart, f, labels, indexOfDataSet) {
-     chart.data.labels = []
+     chart.data.labels = [];
      if (chart.data.datasets.length > 0){
         for (i = 0; i < labels.length; i++){
             chart.config.data.labels.push(labels[i]);
@@ -20,7 +20,7 @@ function addLabels(chart, f, labels, indexOfDataSet) {
             borderColor: "rgba(75, 192, 192, 1)",
             fill: true
         }
-        chart.data.datasets.push(data)
+        chart.data.datasets.push(data);
         for (i = 0; i < labels.length; i++){
             chart.data.labels.push(labels[i]);
             //chart.data.datasets[0].data.push(dataPoints[i])
@@ -42,7 +42,7 @@ function removeData(chart) {
 // Used in createData to calculate datapoints and their respective labels
 function calcFuncValues(f, labels){
     let values = [];
-    let x
+    let x;
     for (let i = 0; i < labels.length; i++){
         x = labels[i]
         values.push(f(x));
@@ -68,19 +68,19 @@ function createChart(ctx, chartTypeInString, borderColor, fillSetting){
         }
     });
 
-    return chart
+    return chart;
 }
 
 // creates values of the functions based on lables as input
 function createData(equation ,labels){
     try{
-         let f = math.evaluate('f(x) = ' + equation)
-         let values = calcFuncValues(f, labels)
-         return values
+         let f = math.evaluate('f(x) = ' + equation);
+         let values = calcFuncValues(f, labels);
+         return values;
 
     }
     catch(err){
-        throw "Invalid input in createData"
+        throw "Invalid input in createData";
     }
 }
 
@@ -93,11 +93,11 @@ function createDataset(f, borderColor, fillSetting){
         borderColor: borderColor,
         fill: fillSetting
     }
-    return dataset
+    return dataset;
 }
     
 function addDataset(chart, dataset){
-    chart.data.datasets.push(dataset)
+    chart.data.datasets.push(dataset);
     chart.update();
 
 }
@@ -105,10 +105,10 @@ function addDataset(chart, dataset){
 // Removes the dataset at the specified index
 function removeDataset(chart, Index){
         if(typeof chart.data.datasets[Index] === 'undefined' ) {
-            console.log("Dataset at the specified index does not exist")
+            console.log("Dataset at the specified index does not exist");
         }
         else{
-            chart.data.datasets.splice(Index, 1)
+            chart.data.datasets.splice(Index, 1);
         }
     chart.update();
 }
@@ -116,43 +116,43 @@ function removeDataset(chart, Index){
 // User calls this function to add a new dataset to chart
 function userAddDataset(chart, f){
     
-     let testlabels = [0]
+     let testlabels = [0];
      let values = createData(f, testlabels)
      if (values.length === 0){
-         console.log("Invalid user input")
+         console.log("Invalid user input");
      }
      else{   
-         dataset = createDataset(f, "rgba(75, 192, 192, 1)", true)
-         addDataset(chart, dataset)
-         updateValues(chart)
-         chart.update()
+         dataset = createDataset(f, "rgba(75, 192, 192, 1)", true);
+         addDataset(chart, dataset);
+         updateValues(chart);
+         chart.update();
         }
 }
 
 // User calls this function to update the chart with new ranges
 function userUpdateChartRange(chart, min, max, stepSize){
-    let newLabels = []
+    let newLabels = [];
     if (parseFloat(min) <= parseFloat(max) && stepSize > 0){
         for (i = parseFloat(min); i <= max; i+=parseFloat(stepSize)){
-            newLabels.push(i)
+            newLabels.push(i);
         }
-        chart.data.labels = newLabels
-        updateValues(chart)
+        chart.data.labels = newLabels;
+        updateValues(chart);
     }
 
     else{
-        console.log("Invalid input in userUpdateChartRange")
+        console.log("Invalid input in userUpdateChartRange");
     }
 }
 // Updates every dataset in chart with values from chart.data.labels
 function updateValues(chart){
         // For every dataset
         for (let i = 0; i < chart.data.datasets.length; i++) {
-            let fct = chart.data.datasets[i].label
-            let values = createData(fct,chart.data.labels)
-            chart.data.datasets[i].data = values
+            let fct = chart.data.datasets[i].label;
+            let values = createData(fct,chart.data.labels);
+            chart.data.datasets[i].data = values;
         }
-        chart.update()
+        chart.update();
 
 }
 
