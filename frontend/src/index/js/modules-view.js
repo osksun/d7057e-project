@@ -48,4 +48,4 @@ const modulesView = new function() {
             courseButton.addEventListener("click", displayHandler);
         });
     }
-}
+}();

@@ -20,7 +20,7 @@ const displayLevel = new function() {
             const percent = getXpPercent(result.xp, level);
             if (previousLevel === null) {
                 updateXpBar(percent * 100);
-                updateLevelInfo(level, "Title")
+                updateLevelInfo(level, "Title");
             } else if (level > previousLevel) {
                 updateXpBar(100);
                 setTimeout(() => {
@@ -28,14 +28,14 @@ const displayLevel = new function() {
                     updateXpBar(0);
                     xpBarBack.offsetWidth; // Trigger reflow
                     xpBarBack.classList.remove("skip-animation");
-                    updateLevelInfo(level, "Title")
+                    updateLevelInfo(level, "Title");
                     updateXpBar(percent * 100);
                 }, 500);
             } else {
                 updateXpBar(percent * 100);
             }
             previousLevel = level;
-        })
+        });
     }
 
     function xpRequired(level) {
@@ -50,7 +50,7 @@ const displayLevel = new function() {
         const xpForCurrentLevel = xpRequired(level);
         return (xp - xpForCurrentLevel) / (xpRequired(level + 1) - xpForCurrentLevel);
     }
-}()
+}();
 
 window.addEventListener("load",() => {
     displayLevel.updateXp();

@@ -32,4 +32,4 @@ const coursesView = new function() {
     this.clear = function() {
         coursesViewDiv.innerHTML = "";
     }
-}
+}();

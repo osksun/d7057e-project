@@ -38,13 +38,13 @@ const questionView = new function() {
     this.displayRandom = function(courseId, courseName, moduleId, moduleName) {
         DbCom.getQuestions(courseId, moduleId).then((questions) => {
             if (questions.length == 0) {
-                return
+                return;
             }
             let randomQuestion;
             if (!this.hasOwnProperty("randomQuestion")) {
                 randomQuestion = questions[Math.floor(Math.random() * questions.length)];
             } else {
-                randomQuestion = this.randomQuestion
+                randomQuestion = this.randomQuestion;
             }
             questionId = randomQuestion.id;
             this.clear();
@@ -64,4 +64,4 @@ const questionView = new function() {
             submitButton.addEventListener("click", submitHandler);
         });
     }
-}
+}();

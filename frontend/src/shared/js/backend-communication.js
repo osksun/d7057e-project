@@ -115,4 +115,4 @@ const DbCom = new function() {
             send(request, data);
         });
     }
-}
+}();
