@@ -15,3 +15,9 @@ function animate() {
 function createPlane(x,y,z, constant){
     return THREE.Plane(new THREE.Vector3(x,y,z), constant);
 }
+
+function userCreatePlane(scene,x,y,z ,constant, size, color){
+    plane = createPlane(x,y,z,constant)
+    planeHelper = new THREE.PlaneHelper(plane, size, color)
+    scene.add(planeHelper)
+}
