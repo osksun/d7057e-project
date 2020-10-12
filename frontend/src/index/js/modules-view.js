@@ -28,11 +28,11 @@ const modulesView = new function() {
         modules.forEach((module) => {
             modulesViewDiv.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName));
         });
-    }
+    };
 
     this.clear = function() {
         modulesViewDiv.innerHTML = "";
-    }
+    };
 
     this.display = function(courseId, courseName, color) {
         DbCom.getModules(courseId).then((modules) => {
@@ -47,5 +47,5 @@ const modulesView = new function() {
             courseButton.click();
             courseButton.addEventListener("click", displayHandler);
         });
-    }
+    };
 }();

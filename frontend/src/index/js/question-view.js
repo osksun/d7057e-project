@@ -11,14 +11,14 @@ const questionView = new function() {
     this.update = function(questionContent) {
         document.getElementById("question").innerHTML = questionContent;
         MathJax.typeset();
-    }
+    };
 
     this.clear = function() {
         document.getElementById("course-name").innerText = "";
         document.getElementById("module-name").innerText = "";
         document.getElementById("question").innerHTML = "";
         document.getElementById("button-question").disabled = true;
-    }
+    };
 
     this.handleSubmit = function() {
         submitButton.style.display = "none";
@@ -33,7 +33,7 @@ const questionView = new function() {
             loadingIcon.style.display = "none";
             submitButton.style.display = "inline-block";
         });
-    }
+    };
 
     this.displayRandom = function(courseId, courseName, moduleId, moduleName) {
         DbCom.getQuestions(courseId, moduleId).then((questions) => {
@@ -63,5 +63,5 @@ const questionView = new function() {
             submitHandler = this.handleSubmit.bind(null, randomQuestion.id);
             submitButton.addEventListener("click", submitHandler);
         });
-    }
+    };
 }();

@@ -27,9 +27,9 @@ const coursesView = new function() {
         courses.forEach((course) => {
             coursesViewDiv.appendChild(createCard(course.id, course.name, "#" + course.color));
         });
-    }
+    };
 
     this.clear = function() {
         coursesViewDiv.innerHTML = "";
-    }
+    };
 }();
