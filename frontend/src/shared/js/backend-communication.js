@@ -50,7 +50,7 @@ const DbCom = new function() {
      * @return {Promise<number>} Promise resolves to a number representing the amount of xp the current user has
      */
     this.getXp = function() {
-        return DbCom.ajaxPost("http://127.0.0.1:80/getxp")
+        return DbCom.ajaxPost("http://127.0.0.1:80/getxp");
     },
 
     /**
@@ -111,8 +111,8 @@ const DbCom = new function() {
                         reject();
                     }
                 }
-            }
+            };
             send(request, data);
         });
-    }
-}
+    };
+}();
