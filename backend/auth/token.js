@@ -8,7 +8,7 @@ const refreshTokens = new Map();
 const refreshTokenSaltRounds = 5;
 const refreshTokenSalt = bcrypt.genSaltSync(refreshTokenSaltRounds);
 
-function createRefreshToken(email) {
+function createRefreshToken(userID) {
 	return new Promise((resolve, reject) => {
 		crypto.randomBytes(48, (error, buffer) => {
 			if(error) {
@@ -23,11 +23,11 @@ function createRefreshToken(email) {
 						const expireTime = Date.now() + 7 * 24 * 60 * 60 * 1000;
 
 						let userTokens;
-						if(!refreshTokens.has(email)) {
+						if(!refreshTokens.has(userID)) {
 							userTokens = [];
-							refreshTokens.set(email, userTokens);
+							refreshTokens.set(userID, userTokens);
 						} else {
-							userTokens = refreshTokens.get(email);
+							userTokens = refreshTokens.get(userID);
 						}
 
 						//Remove oldest refresh token
@@ -57,14 +57,14 @@ let publicKeyString = publicKey.export({type:"pkcs1", format:"pem"});
 publicKeyString = publicKeyString.replaceAll("\n", "\\n");
 console.log("Auth public key:\n" + publicKeyString);
 
-function createAccessToken(email, refreshToken) {
+function createAccessToken(userID, refreshToken) {
 	return new Promise((resolve, reject) => {
 		bcrypt.hash(refreshToken, refreshTokenSalt, (error, refreshTokenHash) => {
 			if(error) {
 				reject();
 			} else {
-				if(refreshTokens.has(email)) {
-					const userRefreshTokens = refreshTokens.get(email);
+				if(refreshTokens.has(userID)) {
+					const userRefreshTokens = refreshTokens.get(userID);
 
 					for(let i = 0; i < userRefreshTokens.length; ++i) {
 						if(userRefreshTokens[i].tokenHash == refreshTokenHash) {
@@ -76,7 +76,7 @@ function createAccessToken(email, refreshToken) {
 								const expireTime = Date.now() + 5 * 60 * 1000;
 
 								const sign = crypto.createSign("SHA256");
-								sign.update(email + ";" + expireTime);
+								sign.update(userID + ";" + expireTime);
 								sign.end();
 								const signature = sign.sign(privateKey).toString("base64");
 
@@ -92,7 +92,7 @@ function createAccessToken(email, refreshToken) {
 					//Refresh token not found
 					reject();
 				} else {
-					//Email not found in refresh tokens list
+					//User ID not found in refresh tokens list
 					reject();
 				}
 			}

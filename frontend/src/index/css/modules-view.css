@@ -1,0 +1,40 @@
+.module-card {
+    display: inline-block;
+    margin: 0 25px 65px 25px;
+    width: 389.75px;
+    vertical-align: top;
+    text-align: left;
+    background-color: #ffffff;
+    box-shadow: 15px 15px 0 0 #323232;
+    cursor: pointer;
+}
+
+.module-card>a {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    text-decoration: none;
+}
+
+.module-card>a>span {
+    font-size: 24px;
+    padding: 15px;
+    float: left;
+    overflow-wrap: break-word;
+}
+
+.module-card-header {
+    width: 100%;
+    padding: 10px 0;
+    margin: 0;
+    font-size: 30px;
+    line-height: 35px;
+    background-color: #46bbfe;
+    color: #ffffff;
+    text-align: center;
+}
+
+.module-card-header>h3 {
+    padding: 0;
+    margin: 0;
+}

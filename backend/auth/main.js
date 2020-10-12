@@ -30,8 +30,8 @@ function registerUser(email, password) {
 
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
-			database.loginUser(email, password).then(() => {
-				resolve();
+			database.loginUser(email, password).then((userID) => {
+				resolve(userID);
 			}).catch(() => {
 				reject();
 			});
@@ -71,11 +71,12 @@ function init() {
 		const password = request.body.password;
 
 		if(validation.validateEmail(email) && validation.validatePassword(password)) {
-			loginUser(email, password).then(() => {
+			loginUser(email, password).then((userID) => {
 				console.log("Created refresh token for \"" + email + "\"");
 
-				token.createRefreshToken(email).then((refreshToken) => {
+				token.createRefreshToken(userID).then((refreshToken) => {
 					response.end(JSON.stringify({
+						userID:userID,
 						refreshToken:refreshToken
 					}));
 				}).catch(() => {
@@ -97,11 +98,11 @@ function init() {
 	});
 
 	app.post("/createaccesstoken", (request, response) => {
-		const email = request.body.email;
+		const userID = parseInt(request.body.userID, 10);
 		const refreshToken = request.body.refreshToken
 
-		if(validation.validateEmail(email) && validation.validateRefreshToken(refreshToken)) {
-			token.createAccessToken(email, refreshToken).then(({expireTime, signature}) => {
+		if(validation.validateUnsignedInt(userID) && validation.validateRefreshToken(refreshToken)) {
+			token.createAccessToken(userID, refreshToken).then(({expireTime, signature}) => {
 				response.end(JSON.stringify({
 					expireTime:expireTime,
 					signature:signature

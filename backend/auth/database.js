@@ -15,7 +15,7 @@ function connect() {
 			} else {
 				console.log("MySQL database connected!");
 
-				connection.query("CREATE TABLE IF NOT EXISTS users (email VARCHAR(255), password VARCHAR(255), PRIMARY KEY(email))", (error, result) => {
+				connection.query("CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))", (error, result) => {
 					if(error) {
 						console.error("Failed to create database tables!");
 						reject();
@@ -46,7 +46,7 @@ exports.createUser = createUser;
 
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT password FROM users WHERE email = ?", [email], (error, result) => {
+		connection.query("SELECT id, password FROM users WHERE email = ?", [email], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -54,9 +54,9 @@ function loginUser(email, password) {
 					reject();
 				} else {
 					const storedPasswordHash = result[0].password;
-					bcrypt.compare(password, storedPasswordHash).then((result) => {
-						if(result == true) {
-							resolve();
+					bcrypt.compare(password, storedPasswordHash).then((success) => {
+						if(success == true) {
+							resolve(result[0].id);
 						} else {
 							reject();
 						}

@@ -27,13 +27,13 @@ function init() {
 
 	function validateUser(request, response) {
 		return new Promise((resolve, reject) => {
-			const email = request.body.email;
+			const userID = parseInt(request.body.userID, 10);
 			const tokenExpireTime = parseInt(request.body.tokenExpireTime, 10);
 			const accessToken = request.body.token;
 
-			if((validation.validateEmail(email) && validation.validateTokenExpire(tokenExpireTime) && validation.validateAccessToken(accessToken)) || token.isSkippingVerification()) {
-				if(token.validateAccessToken(email, tokenExpireTime, accessToken)) {
-					resolve(email);
+			if((validation.validateUnsignedInt(userID) && validation.validateTokenExpire(tokenExpireTime) && validation.validateAccessToken(accessToken)) || token.isSkippingVerification()) {
+				if(token.validateAccessToken(userID, tokenExpireTime, accessToken)) {
+					resolve(userID);
 				} else {
 					reject("Invalid token");
 				}
@@ -45,10 +45,10 @@ function init() {
 
 	function validateAdmin(request, response) {
 		return new Promise((resolve, reject) => {
-			validateUser(request, response).then((email) => {
-				database.getUserIsAdmin(email).then((isAdmin) => {
+			validateUser(request, response).then((userID) => {
+				database.getUserIsAdmin(userID).then((isAdmin) => {
 					if(isAdmin) {
-						resolve(email);
+						resolve(userID);
 					} else {
 						reject("Permission denied");
 					}
@@ -63,8 +63,8 @@ function init() {
 
 	//User functions
 	app.post("/getxp", (request, response) => {
-		validateUser(request, response).then((email) => {
-			database.getXP(email).then((xp) => {
+		validateUser(request, response).then((userID) => {
+			database.getXP(userID).then((xp) => {
 				response.end(JSON.stringify({
 					xp:xp
 				}));
@@ -81,7 +81,7 @@ function init() {
 	});
 
 	app.post("/getcourses", (request, response) => {
-		validateUser(request, response).then((email) => {
+		validateUser(request, response).then((userID) => {
 			database.getCourses().then((courses) => {
 				response.end(JSON.stringify(courses));
 			}).catch(() => {
@@ -97,12 +97,12 @@ function init() {
 	});
 
 	app.post("/getmodules", (request, response) => {
-		validateUser(request, response).then((email) => {
-			const courseName = request.body.course;
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
 
 			//TODO validate input
 
-			database.getModules(courseName).then((modules) => {
+			database.getModules(courseID).then((modules) => {
 				response.end(JSON.stringify(modules));
 			}).catch(() => {
 				response.end(JSON.stringify({
@@ -117,13 +117,12 @@ function init() {
 	});
 
 	app.post("/getquestions", (request, response) => {
-		validateUser(request, response).then((email) => {
-			const courseName = request.body.course;
-			const moduleName = request.body.module;
+		validateUser(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
 
 			//TODO validate input
 
-			database.getQuestions(courseName, moduleName).then((questions) => {
+			database.getQuestions(moduleID).then((questions) => {
 				response.end(JSON.stringify(questions));
 			}).catch(() => {
 				response.end(JSON.stringify({
@@ -138,8 +137,8 @@ function init() {
 	});
 
 	app.post("/getquestion", (request, response) => {
-		validateUser(request, response).then((email) => {
-			const questionID = request.body.question;
+		validateUser(request, response).then((userID) => {
+			const questionID = parseInt(request.body.questionID, 10);
 
 			//TODO validate input
 
@@ -158,8 +157,8 @@ function init() {
 	});
 
 	app.post("/answer", (request, response) => {
-		validateUser(request, response).then((email) => {
-			const questionID = request.body.question;
+		validateUser(request, response).then((userID) => {
+			const questionID = parseInt(request.body.questionID, 10);
 			const answer = request.body.answer;
 
 			//TODO validate input
@@ -168,7 +167,7 @@ function init() {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
 					const xpReward = 100;
-					database.addUserXP(email, xpReward).then(() => {
+					database.addUserXP(userID, xpReward).then(() => {
 						response.end(JSON.stringify({
 							correct:true
 						}));
@@ -196,7 +195,7 @@ function init() {
 
 	//Admin functions
 	app.post("/createcourse", (request, response) => {
-		validateAdmin(request, response).then((email) => {
+		validateAdmin(request, response).then((userID) => {
 			const name = request.body.name;
 			const description = request.body.description;
 			const color = request.body.color;
@@ -220,14 +219,14 @@ function init() {
 	});
 
 	app.post("/createmodule", (request, response) => {
-		validateAdmin(request, response).then((email) => {
+		validateAdmin(request, response).then((userID) => {
 			const name = request.body.name;
-			const courseName = request.body.course;
+			const courseID = parseInt(request.body.courseID, 10);
 			const description = request.body.description;
 
 			//TODO validate input
 
-			database.createModule(name, courseName, description).then(() => {
+			database.createModule(courseID, name, description).then(() => {
 				response.end(JSON.stringify({
 					success:true
 				}));
@@ -244,15 +243,14 @@ function init() {
 	});
 
 	app.post("/createquestion", (request, response) => {
-		validateAdmin(request, response).then((email) => {
-			const courseName = request.body.course;
-			const moduleName = request.body.module;
+		validateAdmin(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
 			const content = request.body.content;
 			const answer = request.body.answer;
 
 			//TODO validate input
 
-			database.createQuestion(courseName, moduleName, content, answer).then(() => {
+			database.createQuestion(moduleID, content, answer).then(() => {
 				response.end(JSON.stringify({
 					success:true
 				}));

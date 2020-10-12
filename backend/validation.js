@@ -6,7 +6,7 @@ function validateEmail(email) {
 			//Checks if the email length is within the range 0-254
 			if(email.length > 0 && email.length <= 254) {
 				//Checks if the email is in a valid form
-				const mailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+				const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 				if(mailRegex.test(email)) {
 					return true;
 				}
@@ -83,3 +83,17 @@ function validateTokenExpire(time) {
 	return false;
 }
 exports.validateTokenExpire = validateTokenExpire;
+
+function validateUnsignedInt(id) {
+	if(id) {
+		if(typeof id === "number") {
+			if(!isNaN(id)) {
+				if(id >= 0) {
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+exports.validateUnsignedInt = validateUnsignedInt;
