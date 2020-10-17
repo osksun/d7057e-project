@@ -6,7 +6,7 @@ const DbCom = new function() {
      * @returns {Promise<Array<Course>>} Promise resolves to an array of Course objects
      */
     this.getCourses = function() {
-        return DbCom.ajaxPost(mainURL + "getcourses");
+        return this.ajaxPost(mainURL + "getcourses");
     },
 
     /**
@@ -15,7 +15,7 @@ const DbCom = new function() {
      * @return {Promise<Array<Module>>} Promise resolves to an array of Module objects
      */
     this.getModules = function(courseId) {
-        return DbCom.ajaxPost(mainURL + "getmodules", encodeURI("courseID=" + courseId));
+        return this.ajaxPost(mainURL + "getmodules", encodeURI("courseID=" + courseId));
     },
 
     /**
@@ -25,7 +25,7 @@ const DbCom = new function() {
      * @return {Promise<Array<Question>>} Promise resolves to an array of Question objects
      */
     this.getQuestions = function(courseId, moduleId) {
-        return DbCom.ajaxPost(mainURL + "getquestions", encodeURI("courseID=" + courseId + "&moduleID=" + moduleId));
+        return this.ajaxPost(mainURL + "getquestions", encodeURI("courseID=" + courseId + "&moduleID=" + moduleId));
     },
 
     /**
@@ -34,7 +34,7 @@ const DbCom = new function() {
      * @return {Promise<Question>} Promise resolves to a Question object
      */
     this.getQuestion = function(id) {
-        return DbCom.ajaxPost(mainURL + "getquestion", encodeURI("questionID=" + id));
+        return this.ajaxPost(mainURL + "getquestion", encodeURI("questionID=" + id));
     },
 
     /**
@@ -44,7 +44,7 @@ const DbCom = new function() {
      * @return {Promise<boolean>} Promise resolves to a boolean value depending on if the answer was an correct answer for the given question
      */
     this.answerQuestion = function(id, answer) {
-        return DbCom.ajaxPost(mainURL + "answer", encodeURI("questionID=" + id + "&answer=" + answer));
+        return this.ajaxPost(mainURL + "answer", encodeURI("questionID=" + id + "&answer=" + answer));
     },
 
     /**
@@ -52,7 +52,7 @@ const DbCom = new function() {
      * @return {Promise<number>} Promise resolves to a number representing the amount of xp the current user has
      */
     this.getXp = function() {
-        return DbCom.ajaxPost(mainURL + "getxp");
+        return this.ajaxPost(mainURL + "getxp");
     },
 
     /**
@@ -63,7 +63,7 @@ const DbCom = new function() {
      * @return {Promise<any>} Promise resolves to the response to the request
      */
     this.ajaxPost = function(url, data = "") {
-        return DbCom.ajaxPostPromise(url, data, (request, data) => {
+        return this.ajaxPostPromise(url, data, (request, data) => {
             if (data.length > 0)
             {
                 data += "&";
@@ -82,7 +82,7 @@ const DbCom = new function() {
      * @return {Promise<any>} Promise resolves to the response of the request
      */
     this.ajaxPostAuth = function(url, data = "") {
-        return DbCom.ajaxPostPromise(url, data, (request, data) => {
+        return this.ajaxPostPromise(url, data, (request, data) => {
             request.send(data);
         });
     },
