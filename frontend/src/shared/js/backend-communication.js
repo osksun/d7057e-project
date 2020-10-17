@@ -1,6 +1,18 @@
 const DbCom = new function() {
     const mainURL = "http://127.0.0.1:80/";
     const authURL = "http://127.0.0.1:81/";
+
+    /**
+     * Ajax request to create a course
+     * @param {string} name the name of the new course
+     * @param {string} description the description of the new course
+     * @param {string} color the color as a hexadecimal value for the cards of the new course
+     * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the course was successfully created or not
+     */
+    this.createCourse = function(name, description, color) {
+        return this.ajaxPost(mainURL + "createcourse", encodeURI("name=" + name + "&description=" + description + "&color=" + color));
+    }
+
     /**
      * Ajax request to get all courses
      * @returns {Promise<Array<Course>>} Promise resolves to an array of Course objects
