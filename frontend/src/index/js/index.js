@@ -16,7 +16,7 @@ window.addEventListener("load",() => {
                 toggleView(categoryButtons[i], categoryViews[i], btns, views);
             });
         }
-        const allCoursesButton = document.getElementById("button-courses");
+        const allCoursesButton = document.getElementById("courses-button");
         allCoursesButton.addEventListener("click", () => {
             DbCom.getCourses().then((courses) => {
                 coursesView.clear();
