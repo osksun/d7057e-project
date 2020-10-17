@@ -25,6 +25,17 @@ const DbCom = new function() {
     }
 
     /**
+     * Ajax request to create question for a module
+     * @param {unsigned int} moduleId the id of the module the question should belong to
+     * @param {string} content the content of the question
+     * @param {string} answer a regular expression for defining the answer of the question
+     * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the module was successfully created or not
+     */
+    this.createQuestion = function(moduleId, content, answer) {
+        return this.ajaxPost(mainURL + "createquestion", encodeURI("moduleID=" + moduleId + "&content=" + content + "&answer=" + answer));
+    }
+
+    /**
      * Ajax request to get all courses
      * @returns {Promise<Array<Course>>} Promise resolves to an array of Course objects
      */
