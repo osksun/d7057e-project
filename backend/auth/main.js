@@ -51,18 +51,18 @@ function init() {
 		if(validation.validateEmail(email) && validation.validatePassword(password)) {
 			registerUser(email, password).then(() => {
 				console.log("Registered user \"" + email + "\"");
-				response.end(JSON.stringify({
+				response.json({
 					success:true
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					success:false
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				success:false
-			}));
+			});
 		}
 	});
 
@@ -75,25 +75,25 @@ function init() {
 				console.log("Created refresh token for \"" + email + "\"");
 
 				token.createRefreshToken(userID).then((refreshToken) => {
-					response.end(JSON.stringify({
+					response.json({
 						userID:userID,
 						refreshToken:refreshToken
-					}));
+					});
 				}).catch(() => {
-					response.end(JSON.stringify({
+					response.json({
 						error:"Failed to create refresh token"
-					}));
+					});
 				});
 
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Login failed"
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				error:"Malformed input"
-			}));
+			});
 		}
 	});
 
@@ -103,19 +103,19 @@ function init() {
 
 		if(validation.validateUnsignedInt(userID) && validation.validateRefreshToken(refreshToken)) {
 			token.createAccessToken(userID, refreshToken).then(({expireTime, signature}) => {
-				response.end(JSON.stringify({
+				response.json({
 					expireTime:expireTime,
 					signature:signature
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Failed to create access token"
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				error:"Malformed input"
-			}));
+			});
 		}
 	});
 
