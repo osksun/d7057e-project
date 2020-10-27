@@ -20,7 +20,7 @@ const DbCom = new function() {
 					this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken)).then((result) => {
 						accessToken = result.signature;
 						accessTokenExpireTime = result.expireTime;
-						resolve();
+						resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
 					}).catch((error) => {
 						reject();
 					});
