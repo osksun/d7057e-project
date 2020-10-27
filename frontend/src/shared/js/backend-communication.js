@@ -2,6 +2,45 @@ const DbCom = new function() {
     const mainURL = "http://127.0.0.1:80/";
     const authURL = "http://127.0.0.1:81/";
 
+		const skipVerification = false;
+
+		let userID = null;
+		let refreshToken = null;
+		let loginData = localStorage.getItem("login_data");
+		if(loginData) {
+			loginData = JSON.parse(loginData);
+			userID = loginData["userID"];
+			refreshToken = loginData["refreshToken"];
+		}
+
+		let accessToken = null;
+		let accessTokenExpireTime = 0;
+		this.createAccessToken = function() {
+			return new Promise((resolve, reject) => {
+					this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken)).then((result) => {
+						accessToken = result.signature;
+						accessTokenExpireTime = result.expireTime;
+						resolve();
+					}).catch((error) => {
+						reject();
+					});
+			});
+		};
+		this.getAccessToken = function() {
+				return new Promise((resolve, reject) => {
+						if(accessToken != null) {
+								resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
+						} else {
+								this.createAccessToken().then(() => {
+										resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
+								}).catch(() => {
+										//TODO if refreshtoken has expired redirect to login page
+										reject();
+								});
+						}
+				});
+		};
+
     /**
      * Ajax request to create a course
      * @param {string} name the name of the new course
@@ -97,15 +136,67 @@ const DbCom = new function() {
      * @return {Promise<any>} Promise resolves to the response to the request
      */
     this.ajaxPost = function(url, data = "") {
-        return this.ajaxPostPromise(url, data, (request, data) => {
-            if (data.length > 0)
-            {
-                data += "&";
-            }
-            request.send(data + encodeURI("userID=0"));
-            // TODO: When available we want to append the userID, tokenExpireTime and the token to every request made here, see comment below
-            //request.send(data + "&userID=" + userID + "&tokenExpireTime=" + tokenExpireTime + "&token=" + token);
-        });
+			return new Promise((resolve, reject) => {
+					if(skipVerification) {
+						function createAuthData() {
+							let authenticationData = "";
+							if (data.length > 0)
+							{
+									authenticationData += "&";
+							}
+							authenticationData += "userID=" + userID;
+							return authenticationData;
+						}
+
+						this.ajaxPostPromise(url, data + createAuthData(), (request, data) => {
+								request.send(data);
+						}).then((result) => {
+								resolve(result);
+						}).catch((result) => {
+								reject(result);
+						});
+					} else {
+						this.getAccessToken().then((tokenData) => {
+								function createAuthData(accessToken, accessTokenExpireTime) {
+									let authenticationData = "";
+			            if (data.length > 0)
+			            {
+			                authenticationData += "&";
+			            }
+			            authenticationData += "userID=" + userID + "&token=" + encodeURIComponent(accessToken) + "&tokenExpireTime=" + accessTokenExpireTime;
+									return authenticationData;
+								}
+
+								this.ajaxPostPromise(url, data + createAuthData(tokenData.accessToken, tokenData.accessTokenExpireTime), (request, data) => {
+				            request.send(data);
+				        }).then((result) => {
+										resolve(result);
+								}).catch((result) => {
+										if(result != null) {
+											if(result.error == "Invalid token") {//TODO check with error code instead
+												this.createAccessToken().then((tokenData) => {
+														this.ajaxPostPromise(url, data + createAuthData(tokenData.accessToken, tokenData.accessTokenExpireTime), (request, data) => {
+										            request.send(data);
+										        }).then((result) => {
+																resolve(result);
+														}).catch((result) => {
+																reject(result);
+														});
+												}).catch(() => {
+														reject();
+												});
+											} else {
+												reject(result);
+											}
+										} else {
+											reject(result);
+										}
+								});
+						}).catch(() => {
+								reject();
+						});
+					}
+			});
     };
 
     /**
