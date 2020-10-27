@@ -21,7 +21,7 @@ window.addEventListener("load",() => {
             DbCom.getCourses().then((courses) => {
                 coursesView.clear();
                 coursesView.createCards(courses);
-                updatePage("/frontend/src/index/html/", "All courses", null);
+                updatePage("/courses/", "All courses", null);
             });
         });
     }
