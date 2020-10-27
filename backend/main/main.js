@@ -65,34 +65,34 @@ function init() {
 	app.post("/getxp", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			database.getXP(userID).then((xp) => {
-				response.end(JSON.stringify({
+				response.json({
 					xp:xp
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
 	app.post("/getcourses", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			database.getCourses().then((courses) => {
-				response.end(JSON.stringify(courses));
+				response.json(courses);
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -103,16 +103,16 @@ function init() {
 			//TODO validate input
 
 			database.getModules(courseID).then((modules) => {
-				response.end(JSON.stringify(modules));
+				response.json(modules);
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -123,16 +123,16 @@ function init() {
 			//TODO validate input
 
 			database.getQuestions(moduleID).then((questions) => {
-				response.end(JSON.stringify(questions));
+				response.json(questions);
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -143,16 +143,16 @@ function init() {
 			//TODO validate input
 
 			database.getQuestion(questionID).then((question) => {
-				response.end(JSON.stringify(question));
+				response.json(question);
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -168,28 +168,28 @@ function init() {
 				if(regex.test(answer)) {
 					const xpReward = 100;
 					database.addUserXP(userID, xpReward).then(() => {
-						response.end(JSON.stringify({
+						response.json({
 							correct:true
-						}));
+						});
 					}).catch(() => {
-						response.end(JSON.stringify({
+						response.json({
 							error:"Database error"
-						}));
+						});
 					});
 				} else {
-					response.end(JSON.stringify({
+					response.json({
 						correct:false
-					}));
+					});
 				}
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -203,18 +203,18 @@ function init() {
 			//TODO validate input
 
 			database.createCourse(name, description, color).then(() => {
-				response.end(JSON.stringify({
+				response.json({
 					success:true
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -227,18 +227,18 @@ function init() {
 			//TODO validate input
 
 			database.createModule(courseID, name, description).then(() => {
-				response.end(JSON.stringify({
+				response.json({
 					success:true
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
@@ -251,18 +251,18 @@ function init() {
 			//TODO validate input
 
 			database.createQuestion(moduleID, content, answer).then(() => {
-				response.end(JSON.stringify({
+				response.json({
 					success:true
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Database error"
-				}));
+				});
 			});
 		}).catch((error) => {
-			response.end(JSON.stringify({
+			response.json({
 				error:error
-			}));
+			});
 		});
 	});
 
