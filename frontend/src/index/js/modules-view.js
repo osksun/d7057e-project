@@ -38,7 +38,7 @@ const modulesView = new function() {
         DbCom.getModules(courseId).then((modules) => {
             this.clear();
             this.createCards(modules, color, courseId, courseName);
-            updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, modules);
+            updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, null);
             const courseButton = document.getElementById("modules-button");
             courseButton.disabled = false;
             courseButton.children[0].innerText = courseName;
