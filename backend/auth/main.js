@@ -104,7 +104,7 @@ function init() {
 
 	app.post("/createaccesstoken", (request, response) => {
 		const userID = parseInt(request.body.userID, 10);
-		const refreshToken = request.body.refreshToken
+		const refreshToken = request.body.refreshToken;
 
 		if(validation.validateUnsignedInt(userID) && validation.validateRefreshToken(refreshToken)) {
 			token.createAccessToken(userID, refreshToken).then(({expireTime, signature}) => {
