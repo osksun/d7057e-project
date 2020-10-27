@@ -10,7 +10,7 @@ const questionView = new function() {
 
     this.update = function(questionContent) {
         document.getElementById("question").innerHTML = questionContent;
-        MathJax.typeset();
+        MathJax.typeset("question");
     };
 
     this.clear = function() {
