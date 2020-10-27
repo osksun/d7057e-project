@@ -10,7 +10,7 @@
         <link rel="stylesheet" type="text/css" href="../css/modules-view.css">
         <link rel="stylesheet" type="text/css" href="../css/question-view.css">
         <link rel="stylesheet" type="text/css" href="../../shared/css/fixed-content.css">
-        <script src="../js/mathjax-config.js" defer></script>
+        <script src="../../shared/js/mathjax-config.js" defer></script>
         <script type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
         <script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
         <script type="application/javascript" src="../../shared/js/fixed-content.js" defer></script>
