@@ -137,16 +137,18 @@ const DbCom = new function() {
                 if(request.readyState === XMLHttpRequest.DONE) {
                     const status = request.status;
                     if (status === 0 || (status >= 200 && status < 400)) {
-                        if (request.hasOwnProperty('error')) {
-                            reject(request.error);
-                        } else if (request.responseText.length > 0) {
+                        if (request.responseText.length > 0) {
                             const result = JSON.parse(request.responseText);
-                            resolve(result);
+														if (result.hasOwnProperty('error')) {
+																reject(result);
+		                        } else {
+																resolve(result);
+														}
                         } else {
-                            resolve();
+                            reject(null);
                         }
                     } else {
-                        reject();
+                        reject(null);
                     }
                 }
             };
