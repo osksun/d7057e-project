@@ -11,7 +11,7 @@ const DbCom = new function() {
      */
     this.createCourse = function(name, description, color) {
         return this.ajaxPost(mainURL + "createcourse", encodeURI("name=" + name + "&description=" + description + "&color=" + color));
-    }
+    };
 
     /**
      * Ajax request to create a module for a course
@@ -22,7 +22,7 @@ const DbCom = new function() {
      */
     this.createModule = function(name, courseId, description) {
         return this.ajaxPost(mainURL + "createmodule", encodeURI("name=" + name + "&courseID=" + courseId + "&description=" + description));
-    }
+    };
 
     /**
      * Ajax request to create question for a module
@@ -33,7 +33,7 @@ const DbCom = new function() {
      */
     this.createQuestion = function(moduleId, content, answer) {
         return this.ajaxPost(mainURL + "createquestion", encodeURI("moduleID=" + moduleId + "&content=" + content + "&answer=" + answer));
-    }
+    };
 
     /**
      * Ajax request to get all courses
@@ -41,7 +41,7 @@ const DbCom = new function() {
      */
     this.getCourses = function() {
         return this.ajaxPost(mainURL + "getcourses");
-    },
+    };
 
     /**
      * Ajax request to get all modules of given courseName
@@ -50,7 +50,7 @@ const DbCom = new function() {
      */
     this.getModules = function(courseId) {
         return this.ajaxPost(mainURL + "getmodules", encodeURI("courseID=" + courseId));
-    },
+    };
 
     /**
      * Ajax request to get all questions in a module of a course given the courseName and moduleName
@@ -60,7 +60,7 @@ const DbCom = new function() {
      */
     this.getQuestions = function(courseId, moduleId) {
         return this.ajaxPost(mainURL + "getquestions", encodeURI("courseID=" + courseId + "&moduleID=" + moduleId));
-    },
+    };
 
     /**
      * Ajax request to get a specific question by its id
@@ -69,7 +69,7 @@ const DbCom = new function() {
      */
     this.getQuestion = function(id) {
         return this.ajaxPost(mainURL + "getquestion", encodeURI("questionID=" + id));
-    },
+    };
 
     /**
      * Ajax request to post an answer to a question given answer and the id of the question
@@ -79,7 +79,7 @@ const DbCom = new function() {
      */
     this.answerQuestion = function(id, answer) {
         return this.ajaxPost(mainURL + "answer", encodeURI("questionID=" + id + "&answer=" + answer));
-    },
+    };
 
     /**
      * Ajax request to get the xp of the current user
@@ -87,7 +87,7 @@ const DbCom = new function() {
      */
     this.getXp = function() {
         return this.ajaxPost(mainURL + "getxp");
-    },
+    };
 
     /**
      * Creates an ajax post request to given url with given data
@@ -106,7 +106,7 @@ const DbCom = new function() {
             // TODO: When available we want to append the userID, tokenExpireTime and the token to every request made here, see comment below
             //request.send(data + "&userID=" + userID + "&tokenExpireTime=" + tokenExpireTime + "&token=" + token);
         });
-    },
+    };
 
     /**
      * Creates an ajax post request to given url with given data
@@ -119,7 +119,7 @@ const DbCom = new function() {
         return this.ajaxPostPromise(url, data, (request, data) => {
             request.send(data);
         });
-    },
+    };
 
     /**
      * Creates an ajax post request
