@@ -102,6 +102,17 @@ const DbCom = new function() {
 	};
 
 	/**
+	 * Ajax request to get a specific module by name
+	 * @param {string} name the name of the module
+	 * @returns {Promise<Module>} Promise resolves to a Module object
+	 */
+	this.getModuleByName = function(courseId, name) {
+		return this.ajaxPost(mainURL + "getmodulebyname",
+			"courseID=" + encodeURIComponent(courseId) +
+			"&name=" + encodeURIComponent(name));
+	};
+
+	/**
 	 * Ajax request to get all modules of given courseName
 	 * @param {unsigned int} id the id of the course
 	 * @return {Promise<Array<Module>>} Promise resolves to an array of Module objects
