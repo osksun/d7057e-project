@@ -2,7 +2,7 @@ const DbCom = new function() {
 	const mainURL = "http://127.0.0.1:80/";
 	const authURL = "http://127.0.0.1:81/";
 
-	const skipVerification = true;
+	const skipVerification = false;
 
 	let userID = null;
 	let refreshToken = null;
