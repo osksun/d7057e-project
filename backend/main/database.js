@@ -68,7 +68,7 @@ function getUserIsAdmin(userID) {
 					//Return false by default
 					resolve(false);
 				} else if(result.length == 1) {
-					resolve(result[0].isAdmin);
+					resolve(result[0].isAdmin == 1);
 				} else {
 					reject();
 				}

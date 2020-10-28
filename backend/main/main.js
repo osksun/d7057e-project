@@ -44,6 +44,24 @@ function init() {
 	}
 
 	//User functions
+	app.post("/isadmin", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			database.getUserIsAdmin(userID).then((isAdmin) => {
+				response.json({
+					isAdmin:isAdmin
+				});
+			}).catch(() => {
+				response.json({
+					error:"Database error"
+				});
+			});
+		}).catch((error) => {
+			response.json({
+				error:error
+			});
+		});
+	});
+
 	app.post("/getxp", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			database.getXP(userID).then((xp) => {
