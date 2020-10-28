@@ -67,7 +67,6 @@ function init() {
 			const name = request.body.name;
 
 			//TODO validate input
-
 			database.getCourseByName(name).then((course) => {
 				response.json(course);
 			}).catch(() => {
