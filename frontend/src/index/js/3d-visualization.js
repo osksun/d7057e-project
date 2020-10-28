@@ -13,8 +13,9 @@ function animate() {
     plane.rotateY(0.01);
     plane.rotateX(0.01);
     
-	requestAnimationFrame( animate )
-	renderer.render( scene, camera );
+    requestAnimationFrame(animate);
+    controls.update();
+	renderer.render(scene, camera);
 }
 
 function createPlane(x,y,z, constant){
