@@ -1,0 +1,16 @@
+
+#page-content {
+	margin-top:200px;
+}
+
+#page-content > * {
+	display:block;
+	margin:0;
+	padding:0;
+	color:#fff;
+	text-align:center;
+}
+
+#page-content > a {
+	margin-top:200px;
+}

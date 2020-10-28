@@ -4,3 +4,6 @@ RewriteRule ^createcourse$ /src/course-editor/html/course-editor.php [L]
 RewriteRule ^$ /src/index/html/index.php [L]
 RewriteRule ^login$ /src/register/html/login.php [L]
 RewriteRule ^register$ /src/register/html/register.php [L]
+
+ErrorDocument 403 /src/404/html/404.php
+ErrorDocument 404 /src/404/html/404.php
