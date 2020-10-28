@@ -82,6 +82,15 @@ const DbCom = new function() {
 			"&content=" + encodeURIComponent(content) +
 			"&answer=" + encodeURIComponent(answer));
 	};
+
+	/**
+	 * Ajax request to get a specific course by name
+	 * @param {string} name the name of the course
+	 * @returns {Promise<Course>} Promise resolves to a Course object
+	 */
+	this.getCourseByName = function(name) {
+		return this.ajaxPost(mainURL + "getcoursebyname",
+			"name=" + encodeURIComponent(name));
 	};
 
 	/**
