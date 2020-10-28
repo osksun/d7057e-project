@@ -51,7 +51,7 @@ const questionView = new function() {
             questionId = randomQuestion.id;
             this.clear();
             this.update(randomQuestion.content);
-            updatePage("/courses/" + encodeURI(courseName.toLowerCase() + "/" + moduleName.toLowerCase() + "/" + randomQuestion.id.toString().toLowerCase()), moduleName, null);
+            updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, null);
             const questionButton = document.getElementById("question-button");
             questionButton.disabled = false;
             questionButton.children[0].innerText = moduleName;
