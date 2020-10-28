@@ -23,9 +23,26 @@ function createPlane(x,y,z, constant){
 }
 
 function userCreatePlane(scene,x,y,z ,constant, size, color){
-    plane = createPlane(x,y,z,constant);
-    planeHelper = new THREE.PlaneHelper(plane, size, color);
-    scene.add(planeHelper);
+    let plane = new THREE.Plane(new THREE.Vector3(x,y,z), constant);
+    let planeBuffer = new THREE.PlaneBufferGeometry(size,size, 10,10);
+    let material = new THREE.MeshBasicMaterial( {color: color, side: THREE.DoubleSide});
+    let normPlane = new THREE.Plane().copy(plane).normalize();
+    let quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), normPlane.normal);
+
+    let position = new THREE.Vector3(
+        -normPlane.constant*normPlane.normal.x,
+        -normPlane.constant*normPlane.normal.y,
+        -normPlane.constant*normPlane.normal.z
+    );
+
+    let matrix = new THREE.Matrix4().compose(position, quaternion, new THREE.Vector3(1,1,1))
+    planeBuffer.applyMatrix4(matrix);
+
+    let planeMesh = new THREE.Mesh(planeBuffer, material)
+    scene.add(planeMesh);
+
+}
+
 function onMouseMove(event) {
 	// calculate mouse position in normalized device coordinates
 	// (-1 to +1) for both components
