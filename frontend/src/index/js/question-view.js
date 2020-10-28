@@ -40,6 +40,7 @@ const questionView = new function() {
     this.displayRandom = function(courseId, courseName, moduleId, moduleName, addToHistory = true) {
         DbCom.getQuestions(courseId, moduleId).then((questions) => {
             if (questions.length == 0) {
+                console.log("No questions found");
                 return;
             }
             let randomQuestion;
