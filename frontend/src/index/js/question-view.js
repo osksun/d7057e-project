@@ -10,7 +10,9 @@ const questionView = new function() {
 
     this.update = function(questionContent) {
         document.getElementById("question").innerHTML = questionContent;
-        MathJax.typeset();
+        MathJax.texReset(0);
+		MathJax.typesetClear();
+		MathJax.typesetPromise();
     };
 
     this.clear = function() {
