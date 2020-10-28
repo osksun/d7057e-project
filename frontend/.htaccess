@@ -1,0 +1,6 @@
+
+RewriteEngine On
+RewriteRule ^createcourse$ /src/course-editor/html/course-editor.php [L]
+RewriteRule ^$ /src/index/html/index.php [L]
+RewriteRule ^login$ /src/register/html/login.php [L]
+RewriteRule ^register$ /src/register/html/register.php [L]

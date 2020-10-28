@@ -40,9 +40,9 @@
         <title>D7057E</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="../../shared/css/body.css">
-        <link rel="stylesheet" type="text/css" href="../css/register.css">
-        <script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
+        <link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
+        <link rel="stylesheet" type="text/css" href="/src/register/css/register.css">
+        <script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
     </head>
     <body>
         <!--LOGIN FORM SECTION -->
@@ -74,4 +74,3 @@
         </div>
     </body>
 </html>
-
