@@ -58,7 +58,7 @@ const questionView = new function() {
             questionButton.removeEventListener("click", displayRandomHandler);
             this.randomQuestion = randomQuestion;
             displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
-            questionButton.click();
+            viewManager.toggleQuestionView();
             questionButton.addEventListener("click", displayRandomHandler);
             const submitButton = document.getElementById("submit-button");
             submitButton.removeEventListener("click", submitHandler);
