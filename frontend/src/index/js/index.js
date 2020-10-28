@@ -73,7 +73,7 @@ window.addEventListener("load", () => {
 					this.loadCourses(addToHistory);
 			}
 		};
-		this.loadPath(window.location.pathname);
+		this.loadPath(window.location.pathname, false);
 
 		function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
 			activeButton.classList.add("selected");
@@ -97,9 +97,5 @@ window.addEventListener("load", () => {
 });
 
 window.onpopstate = function(e) {
-	if(e.state) {
-		//document.getElementById("content").innerHTML = e.state.html;
-		document.title = e.state.pageTitle;
-		viewManager.loadPath(window.location.pathname, false);
-	}
+	viewManager.loadPath(window.location.pathname, false);
 };
