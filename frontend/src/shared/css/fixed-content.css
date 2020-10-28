@@ -87,7 +87,7 @@
     -ms-transform: skew(-45deg, 0deg); /* IE 9 */
 }
 
-#page-name-container>span {
+#page-name-container>a {
     display: inline-block;
     height: 100%;
     width: 100%;
@@ -95,6 +95,8 @@
     line-height: 128px;
     font-size: 85px;
     font-weight: normal;
+		color:#000;
+		text-decoration:none;
     transform: skew(45deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
     -webkit-transform: skew(45deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
     -ms-transform: skew(45deg, 0deg); /* IE 9 */
