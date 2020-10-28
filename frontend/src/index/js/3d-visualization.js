@@ -26,16 +26,3 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
     planeHelper = new THREE.PlaneHelper(plane, size, color);
     scene.add(planeHelper);
 }
-
-function zoom( event ) {
-    console.log("event.deltaY " ,event.deltaY);
-    camera.position.z += event.deltaY * 0.1;
-
-   /* var fovMAX = 160;
-    var fovMIN = 1;
-
-    camera.fov -= event.wheelDeltaY * 0.05;
-    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
-    camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);*/
-
-}
