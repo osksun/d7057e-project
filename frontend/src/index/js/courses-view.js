@@ -64,7 +64,7 @@ const coursesView = new function() {
 		DbCom.getCourses().then((courses) => {
 			this.clear();
 			this.createCards(courses);
-			updatePage("/", "All courses", addToHistory);
+			viewManager.updatePage("/", "All courses", addToHistory);
 			viewManager.toggleCourseView();
 		});
 	};

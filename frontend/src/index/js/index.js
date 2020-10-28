@@ -19,6 +19,13 @@ window.addEventListener("load", () => {
 		questionButton.addEventListener("click", () => {
 			this.toggleQuestionView();
 		});
+
+		this.updatePage = function(url, title, addToHistory) {
+			document.title = title;
+			if (addToHistory) {
+				window.history.pushState({"pageTitle":title}, "", url);
+			}
+		};
 		
 		this.loadCourses = function (addToHistory) {
 			coursesView.display(addToHistory);
@@ -88,13 +95,6 @@ window.addEventListener("load", () => {
 		};
 	}();
 });
-
-function updatePage(url, title, addToHistory) {
-	document.title = title;
-	if (addToHistory) {
-		window.history.pushState({"pageTitle":title}, "", url);
-	}
-}
 
 window.onpopstate = function(e) {
 	if(e.state) {
