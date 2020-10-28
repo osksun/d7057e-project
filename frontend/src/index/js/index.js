@@ -35,15 +35,15 @@ window.addEventListener("load",() => {
 });
 
 function updatePage(url, title, html) {
-    document.title = title;
-    window.history.pushState({"html":html, "pageTitle":title}, "", url);
+	document.title = title;
+	window.history.pushState({"html":html, "pageTitle":title}, "", url);
 }
 
 /*
 window.onpopstate = function(e) {
-    if(e.state) {
-        document.getElementById("content").innerHTML = e.state.html;
-        document.title = e.state.pageTitle;
-    }
+	if(e.state) {
+		document.getElementById("content").innerHTML = e.state.html;
+		document.title = e.state.pageTitle;
+	}
 };
 */
