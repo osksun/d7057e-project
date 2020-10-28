@@ -26,4 +26,15 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
     plane = createPlane(x,y,z,constant);
     planeHelper = new THREE.PlaneHelper(plane, size, color);
     scene.add(planeHelper);
+function onMouseMove(event) {
+	// calculate mouse position in normalized device coordinates
+	// (-1 to +1) for both components
+	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+    
+    console.log("mouse.x = ",mouse.x);
+    console.log("mouse.y =", mouse.y);
+
+}
+
 }
