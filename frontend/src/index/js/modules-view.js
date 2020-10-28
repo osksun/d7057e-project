@@ -1,5 +1,6 @@
 const modulesView = new function() {
     const modulesViewDiv = document.getElementById("view-modules");
+    const coursebutton = document.getElementById("modules-button");
     let displayHandler;
 
     function createCard(id, name, description, color, courseId, courseName) {
@@ -38,14 +39,19 @@ const modulesView = new function() {
         DbCom.getModules(courseId).then((modules) => {
             this.clear();
             this.createCards(modules, color, courseId, courseName);
-            updatePage("/courses/" + encodeURI(courseName.toLowerCase()), courseName, null);
-            const courseButton = document.getElementById("modules-button");
-            courseButton.disabled = false;
-            courseButton.children[0].innerText = courseName;
-            courseButton.removeEventListener("click", displayHandler);
-            displayHandler = this.display.bind(this, courseId, courseName, color);
-            courseButton.click();
-            courseButton.addEventListener("click", displayHandler);
+            updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, null);
+            this.updateButton(courseId, courseName, color, true);
         });
+    };
+    
+    this.updateButton = function(courseId, courseName, color, click = false) {
+        coursebutton.disabled = false;
+        coursebutton.children[0].innerText = courseName;
+        coursebutton.removeEventListener("click", displayHandler);
+        displayHandler = this.display.bind(this, courseId, courseName, color);
+        if (click) {
+            coursebutton.click();
+        }
+        coursebutton.addEventListener("click", displayHandler);
     };
 }();
