@@ -59,4 +59,13 @@ const coursesView = new function() {
 	this.clear = function() {
 		coursesViewDiv.innerHTML = "";
 	};
+
+	this.display = function(addToHistory = true) {
+		DbCom.getCourses().then((courses) => {
+			this.clear();
+			this.createCards(courses);
+			updatePage("/", "All courses", addToHistory);
+			viewManager.toggleCourseView();
+		});
+	};
 }();

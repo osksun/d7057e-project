@@ -61,12 +61,13 @@ const modulesView = new function() {
 		modulesViewDiv.innerHTML = "";
 	};
 
-	this.display = function(courseId, courseName, color) {
+	this.display = function(courseId, courseName, color, addToHistory = true) {
 		DbCom.getModules(courseId).then((modules) => {
 			this.clear();
 			this.createCards(modules, color, courseId, courseName);
-			updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, null);
-			this.updateButton(courseId, courseName, color, true);
+			updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
+            this.updateButton(courseId, courseName, color, true);
+            viewManager.toggleModulesView();
 		});
 	};
 
@@ -75,9 +76,6 @@ const modulesView = new function() {
 		coursebutton.children[0].innerText = courseName;
 		coursebutton.removeEventListener("click", displayHandler);
 		displayHandler = this.display.bind(this, courseId, courseName, color);
-		if (click) {
-			coursebutton.click();
-		}
 		coursebutton.addEventListener("click", displayHandler);
 	};
 }();

@@ -37,7 +37,7 @@ const questionView = new function() {
         });
     };
 
-    this.displayRandom = function(courseId, courseName, moduleId, moduleName) {
+    this.displayRandom = function(courseId, courseName, moduleId, moduleName, addToHistory = true) {
         DbCom.getQuestions(courseId, moduleId).then((questions) => {
             if (questions.length == 0) {
                 return;
@@ -51,7 +51,7 @@ const questionView = new function() {
             questionId = randomQuestion.id;
             this.clear();
             this.update(randomQuestion.content);
-            updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, null);
+            updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
             const questionButton = document.getElementById("question-button");
             questionButton.disabled = false;
             questionButton.children[0].innerText = moduleName;
