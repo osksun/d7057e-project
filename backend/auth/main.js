@@ -1,6 +1,7 @@
 
 console.log("Starting server...");
 
+const cors = require("cors");
 const express = require("express");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
@@ -41,6 +42,10 @@ function loginUser(email, password) {
 function init() {
 	const app = express();
 
+	app.use(cors({
+		origin:"http://127.0.0.1:3000",
+		optionsSuccessStatus:200
+	}));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({extended:true}));
 
@@ -51,18 +56,18 @@ function init() {
 		if(validation.validateEmail(email) && validation.validatePassword(password)) {
 			registerUser(email, password).then(() => {
 				console.log("Registered user \"" + email + "\"");
-				response.end(JSON.stringify({
+				response.json({
 					success:true
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					success:false
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				success:false
-			}));
+			});
 		}
 	});
 
@@ -75,47 +80,47 @@ function init() {
 				console.log("Created refresh token for \"" + email + "\"");
 
 				token.createRefreshToken(userID).then((refreshToken) => {
-					response.end(JSON.stringify({
+					response.json({
 						userID:userID,
 						refreshToken:refreshToken
-					}));
+					});
 				}).catch(() => {
-					response.end(JSON.stringify({
+					response.json({
 						error:"Failed to create refresh token"
-					}));
+					});
 				});
 
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Login failed"
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				error:"Malformed input"
-			}));
+			});
 		}
 	});
 
 	app.post("/createaccesstoken", (request, response) => {
 		const userID = parseInt(request.body.userID, 10);
-		const refreshToken = request.body.refreshToken
+		const refreshToken = request.body.refreshToken;
 
 		if(validation.validateUnsignedInt(userID) && validation.validateRefreshToken(refreshToken)) {
 			token.createAccessToken(userID, refreshToken).then(({expireTime, signature}) => {
-				response.end(JSON.stringify({
+				response.json({
 					expireTime:expireTime,
 					signature:signature
-				}));
+				});
 			}).catch(() => {
-				response.end(JSON.stringify({
+				response.json({
 					error:"Failed to create access token"
-				}));
+				});
 			});
 		} else {
-			response.end(JSON.stringify({
+			response.json({
 				error:"Malformed input"
-			}));
+			});
 		}
 	});
 

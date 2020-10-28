@@ -1,0 +1,31 @@
+#content-container>* {
+    display: inline-block;
+    padding: 0;
+    width: calc((100% - 105px - 40px) * 0.5);
+    height: 500px;
+    background-color: transparent;
+    resize: none;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+	vertical-align: middle;
+	font-size: 20px
+}
+
+#latex-input {
+	margin: 135px 0 0 105px;
+}
+
+#latex-output {
+	margin: 135px 0 0 0;
+}
+
+#submit-button {
+	margin: 0 0 0 105px;
+}
+
+textarea,
+pre {
+    -moz-tab-size : 4;
+      -o-tab-size : 4;
+         tab-size : 4;
+}

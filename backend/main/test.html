@@ -3,24 +3,60 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
-		<h1>Get XP</h1>
-		<form action="http://127.0.0.1:81/getxp" method="post">
+		<h1>Is admin</h1>
+		<form action="http://127.0.0.1:80/isadmin" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Is moderator</h1>
+		<form action="http://127.0.0.1:80/ismoderator" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Course ID: <input type="text" name="courseID"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Get XP</h1>
+		<form action="http://127.0.0.1:80/getxp" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Get course by name</h1>
+		<form action="http://127.0.0.1:80/getcoursebyname" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Name: <input type="text" name="name"><br>
 			<input type="submit">
 		</form>
 
 		<h1>Get courses</h1>
-		<form action="http://127.0.0.1:81/getcourses" method="post">
+		<form action="http://127.0.0.1:80/getcourses" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
 			<input type="submit">
 		</form>
 
+		<h1>Get module by name</h1>
+		<form action="http://127.0.0.1:80/getmodulebyname" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Course ID: <input type="text" name="courseID"><br>
+			Name: <input type="text" name="name"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Get modules</h1>
-		<form action="http://127.0.0.1:81/getmodules" method="post">
+		<form action="http://127.0.0.1:80/getmodules" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -29,7 +65,7 @@
 		</form>
 
 		<h1>Get questions</h1>
-		<form action="http://127.0.0.1:81/getquestions" method="post">
+		<form action="http://127.0.0.1:80/getquestions" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -38,7 +74,7 @@
 		</form>
 
 		<h1>Get question</h1>
-		<form action="http://127.0.0.1:81/getquestion" method="post">
+		<form action="http://127.0.0.1:80/getquestion" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -47,7 +83,7 @@
 		</form>
 
 		<h1>Answer</h1>
-		<form action="http://127.0.0.1:81/answer" method="post">
+		<form action="http://127.0.0.1:80/answer" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -57,7 +93,7 @@
 		</form>
 
 		<h1>Create course</h1>
-		<form action="http://127.0.0.1:81/createcourse" method="post">
+		<form action="http://127.0.0.1:80/createcourse" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -68,7 +104,7 @@
 		</form>
 
 		<h1>Create module</h1>
-		<form action="http://127.0.0.1:81/createmodule" method="post">
+		<form action="http://127.0.0.1:80/createmodule" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
@@ -79,7 +115,7 @@
 		</form>
 
 		<h1>Create question</h1>
-		<form action="http://127.0.0.1:81/createquestion" method="post">
+		<form action="http://127.0.0.1:80/createquestion" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>

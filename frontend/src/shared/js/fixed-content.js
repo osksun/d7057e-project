@@ -36,14 +36,14 @@ const displayLevel = new function() {
             }
             previousLevel = level;
         });
-    }
+    };
 
     function xpRequired(level) {
         return 700 * (Math.pow(1.15, level - 1) - 1);
     }
 
     function getLevel(xp) {
-        return Math.floor(Math.log(xp / 700 + 1) / Math.log(1.15) + 1)
+        return Math.floor(Math.log(xp / 700 + 1) / Math.log(1.15) + 1);
     }
 
     function getXpPercent(xp, level) {
