@@ -45,14 +45,14 @@ const coursesView = new function() {
 
 	this.createCards = function(courses) {
 		courses.forEach((course) => {
-		coursesViewDiv.appendChild(createCard(course.id, course.name, "#" + course.color));
-	});
+			coursesViewDiv.appendChild(createCard(course.id, course.name, "#" + course.color));
+		});
 
-	DbCom.isAdmin().then((result) => {
-		if(result.isAdmin) {
-			coursesViewDiv.appendChild(createAdminCreateCard());
-		}
-	});
+		DbCom.isAdmin().then((result) => {
+			if(result.isAdmin) {
+				coursesViewDiv.appendChild(createAdminCreateCard());
+			}
+		});
 
 	};
 
