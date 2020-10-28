@@ -13,6 +13,15 @@ function animate() {
     plane.rotateY(0.01);
     plane.rotateX(0.01);
     
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    if(firstTime == true){
+        console.log(intersects);
+        firstTime = false;
+    }
+	for ( let i = 0; i < intersects.length; i ++ ) {
+		intersects[i].object.material.color.set(0xf0ff0f);
+	}
     requestAnimationFrame(animate);
     controls.update();
 	renderer.render(scene, camera);
