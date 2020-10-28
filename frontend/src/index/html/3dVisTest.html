@@ -2,13 +2,14 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>3d-visualization</title>
 		<style>
 			body { margin: 0; }
 			canvas { display: block; }
 		</style>
 		<script src="../js/3d-visualization.js"></script>
 		<script src="../../../res/lib/three/three.js"></script>
+		<script src="../../../res/lib/three/OrbitControls.js"></script>
 
 	</head>
 	<body>
@@ -16,12 +17,11 @@
 			<input type="text" id="xInput" name="xInput">x
 			<input type="test" id="yInput" name="yInput">y
 			<input type="test" id="zInput" name="zInput">z
-			<input type="test" id="planeConstantInput" name="planeConstantInput">constant
-			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstant.value, 20, 0x00ff00)"> Add plane</button>
+			<input type="test" id="planeConstantInput" name="planeConstantInput">plane constant
+			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstantInput.value, 20, 0x00ff00)"> Add plane</button>
 		</div>
 
 		<script>
-			document.addEventListener( 'wheel', zoom, false );
 			xInput = document.getElementById("xInput");
 			yInput = document.getElementById("yInput");
 			zInput = document.getElementById("zInput");
@@ -31,10 +31,13 @@
 			let renderer = new THREE.WebGLRenderer();
 			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 			document.body.appendChild( renderer.domElement );
+			let controls = new OrbitControls( camera, renderer.domElement );
 
 			let geometry0 = new THREE.BoxGeometry();
 			let materialgreen = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000})
+			console.log(materialRed)
+			materialRed.side = THREE.DoubleSide
 			let cube = new THREE.Mesh( geometry0, materialgreen );
 
 			var geo = new THREE.PlaneBufferGeometry(10, 10, 4, 4);
