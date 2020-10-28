@@ -13,6 +13,13 @@ const DbCom = new function() {
 		refreshToken = loginData["refreshToken"];
 	}
 
+	this.registerUser = function(email, passwordHash) {
+		return this.ajaxPost(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+	};
+	this.createRefreshToken = function(email, passwordHash) {
+		return this.ajaxPost(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+	};
+
 	let accessToken = null;
 	let accessTokenExpireTime = 0;
 	this.createAccessToken = function() {
