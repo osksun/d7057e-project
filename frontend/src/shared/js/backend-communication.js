@@ -45,6 +45,10 @@ const DbCom = new function() {
 		return this.ajaxPost(mainURL + "isadmin");
 	};
 
+	this.isModerator = function(courseID) {
+		return this.ajaxPost(mainURL + "ismoderator", "courseID=" + courseID);
+	};
+
 	/**
 	 * Ajax request to create a course
 	 * @param {string} name the name of the new course

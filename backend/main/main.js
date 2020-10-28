@@ -62,6 +62,28 @@ function init() {
 		});
 	});
 
+	app.post("/ismoderator", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				response.json({
+					isModerator:isModerator
+				});
+			}).catch(() => {
+				response.json({
+					error:"Database error"
+				});
+			});
+		}).catch((error) => {
+			response.json({
+				error:error
+			});
+		});
+	});
+
 	app.post("/getxp", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			database.getXP(userID).then((xp) => {
@@ -85,6 +107,7 @@ function init() {
 			const name = request.body.name;
 
 			//TODO validate input
+
 			database.getCourseByName(name).then((course) => {
 				response.json(course);
 			}).catch(() => {
