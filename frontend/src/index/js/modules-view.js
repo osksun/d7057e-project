@@ -27,11 +27,11 @@ const modulesView = new function() {
 		return card;
 	}
 
-	function createAdminCreateCard() {
+	function createAdminCreateCard(courseName) {
 		const card = document.createElement("li");
 		card.className = "module-card";
 		const a = document.createElement("a");
-		a.href = "/createmodule";
+		a.href = "/createmodule/" + encodeURIComponent(courseName);
 		const header = document.createElement("div");
 		header.className = "module-card-header";
 		header.style.backgroundColor = "#fff";
@@ -52,7 +52,7 @@ const modulesView = new function() {
 
 		DbCom.isModerator(courseId).then((result) => {
 			if(result.isModerator) {
-				modulesViewDiv.appendChild(createAdminCreateCard());
+				modulesViewDiv.appendChild(createAdminCreateCard(courseName));
 			}
 		});
 	};
