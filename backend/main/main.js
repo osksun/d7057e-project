@@ -62,11 +62,52 @@ function init() {
 		});
 	});
 
+	app.post("/getcoursebyname", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const name = request.body.name;
+
+			//TODO validate input
+
+			database.getCourseByName(name).then((course) => {
+				response.json(course);
+			}).catch(() => {
+				response.json({
+					error:"Database error"
+				});
+			});
+		}).catch((error) => {
+			response.json({
+				error:error
+			});
+		});
+	});
+
 	app.post("/getcourses", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			database.getCourses().then((courses) => {
 				response.json(courses);
 			}).catch(() => {
+				response.json({
+					error:"Database error"
+				});
+			});
+		}).catch((error) => {
+			response.json({
+				error:error
+			});
+		});
+	});
+
+	app.post("/getmodulebyname", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+			const name = request.body.name;
+
+			//TODO validate input
+
+			database.getModuleByName(courseID, name).then((module) => {
+				response.json(module);
+			}).catch((e) => {
 				response.json({
 					error:"Database error"
 				});

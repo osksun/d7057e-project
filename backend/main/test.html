@@ -11,11 +11,30 @@
 			<input type="submit">
 		</form>
 
+		<h1>Get course by name</h1>
+		<form action="http://127.0.0.1:80/getcoursebyname" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Name: <input type="text" name="name"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Get courses</h1>
 		<form action="http://127.0.0.1:80/getcourses" method="post">
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Get module by name</h1>
+		<form action="http://127.0.0.1:80/getmodulebyname" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Course ID: <input type="text" name="courseID"><br>
+			Name: <input type="text" name="name"><br>
 			<input type="submit">
 		</form>
 

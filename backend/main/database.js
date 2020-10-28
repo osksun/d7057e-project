@@ -128,6 +128,24 @@ function createCourse(name, description, color) {
 }
 exports.createCourse = createCourse;
 
+function getCourseByName(name) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT id, name, description, color FROM courses WHERE name=?", [name], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				if(result.length == 1) {
+					const row = result[0];
+					resolve({id:row.id, name:row.name, description:row.description, color:row.color});
+				} else {
+					reject();
+				}
+			}
+		});
+	});
+}
+exports.getCourseByName = getCourseByName;
+
 function getCourses() {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT id, name, description, color FROM courses", (error, result) => {
@@ -158,6 +176,25 @@ function createModule(courseID, name, description) {
 	});
 }
 exports.createModule = createModule;
+
+function getModuleByName(courseID, name) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT id, name, description FROM modules WHERE courseID=? AND name=?", [courseID, name], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+
+				if(result.length == 1) {
+					const row = result[0];
+					resolve({id:row.id, name:row.name, description:row.description});
+				} else {
+					reject();
+				}
+			}
+		});
+	});
+}
+exports.getModuleByName = getModuleByName;
 
 function getModules(courseID) {
 	return new Promise((resolve, reject) => {
