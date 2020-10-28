@@ -27,9 +27,33 @@ const modulesView = new function() {
 		return card;
 	}
 
+	function createAdminCreateCard() {
+		const card = document.createElement("li");
+		card.className = "module-card";
+		const a = document.createElement("a");
+		a.href = "/createmodule";
+		const header = document.createElement("div");
+		header.className = "module-card-header";
+		header.style.backgroundColor = "#fff";
+		const span = document.createElement("span");
+		span.style.float = "none";
+		span.style.display = "block";
+		span.innerHTML = "<img style=\"display:block;margin:20px auto 35px auto;width:64px;\" src=\"/src/index/svg/add.svg\">";
+		a.appendChild(header);
+		a.appendChild(span);
+		card.appendChild(a);
+		return card;
+	}
+
 	this.createCards = function(modules, color, courseId, courseName) {
 		modules.forEach((module) => {
 			modulesViewDiv.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName));
+		});
+
+		DbCom.isModerator(courseId).then((result) => {
+			if(result.isModerator) {
+				modulesViewDiv.appendChild(createAdminCreateCard());
+			}
 		});
 	};
 
