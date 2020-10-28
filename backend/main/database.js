@@ -18,7 +18,8 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id), CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
-					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID int NOT NULL, content TEXT NOT NULL, answer TEXT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id))"
+					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID int NOT NULL, content TEXT NOT NULL, answer TEXT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id))",
+					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))"
 				];
 
 				function createTable() {
@@ -240,3 +241,66 @@ function getQuestionAnswer(questionID) {
 	});
 }
 exports.getQuestionAnswer = getQuestionAnswer;
+
+//Also returns true if the user is an admin
+function isUserModeratorOfCourse(userID, courseID) {
+	return new Promise((resolve, reject) => {
+		getUserIsAdmin(userID).then((isAdmin) => {
+			if(isAdmin) {
+				resolve(true);
+			} else {
+				connection.query("SELECT userID, courseID FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
+					if(error) {
+						reject();
+					} else {
+						if(result.length == 1) {
+							resolve(true);
+						} else {
+							resolve(false);
+						}
+					}
+				});
+			}
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.isUserModeratorOfCourse = isUserModeratorOfCourse;
+
+//Also returns true if the user is an admin
+function isUserModeratorOfModule(userID, moduleID) {
+	return new Promise((resolve, reject) => {
+		getUserIsAdmin(userID).then((isAdmin) => {
+			if(isAdmin) {
+				resolve(true);
+			} else {
+				connection.query("SELECT courseID from modules WHERE id = ?", [moduleID], (error, result) => {
+					if(error) {
+						reject();
+					} else {
+						if(result.length == 1) {
+							const courseID = result[0].courseID;
+							connection.query("SELECT userID, courseID FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
+								if(error) {
+									reject();
+								} else {
+									if(result.length == 1) {
+										resolve(true);
+									} else {
+										resolve(false);
+									}
+								}
+							});
+						} else {
+							reject();
+						}
+					}
+				});
+			}
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.isUserModeratorOfModule = isUserModeratorOfModule;

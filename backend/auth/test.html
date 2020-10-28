@@ -4,21 +4,21 @@
 	</head>
 	<body>
 		<h1>Register</h1>
-		<form action="http://127.0.0.1:80/register" method="post">
+		<form action="http://127.0.0.1:81/register" method="post">
 			<input type="text" name="email" required>
 			<input type="password" name="password" required>
 			<input type="submit">
 		</form>
 
 		<h1>Create refresh token</h1>
-		<form action="http://127.0.0.1:80/createrefreshtoken" method="post">
+		<form action="http://127.0.0.1:81/createrefreshtoken" method="post">
 			<input type="text" name="email" required>
 			<input type="password" name="password" required>
 			<input type="submit">
 		</form>
 
 		<h1>Create access token</h1>
-		<form action="http://127.0.0.1:80/createaccesstoken" method="post">
+		<form action="http://127.0.0.1:81/createaccesstoken" method="post">
 			<input type="text" name="userID" required>
 			<input type="text" name="refreshToken" required>
 			<input type="submit">

@@ -43,24 +43,6 @@ function init() {
 		});
 	}
 
-	function validateAdmin(request, response) {
-		return new Promise((resolve, reject) => {
-			validateUser(request, response).then((userID) => {
-				database.getUserIsAdmin(userID).then((isAdmin) => {
-					if(isAdmin) {
-						resolve(userID);
-					} else {
-						reject("Permission denied");
-					}
-				}).catch(() => {
-					reject("Database error");
-				});
-			}).catch((error) => {
-				reject(error);
-			});
-		});
-	}
-
 	//User functions
 	app.post("/getxp", (request, response) => {
 		validateUser(request, response).then((userID) => {
@@ -195,17 +177,29 @@ function init() {
 
 	//Admin functions
 	app.post("/createcourse", (request, response) => {
-		validateAdmin(request, response).then((userID) => {
-			const name = request.body.name;
-			const description = request.body.description;
-			const color = request.body.color;
+		validateUser(request, response).then((userID) => {
+			database.getUserIsAdmin(userID).then((isAdmin) => {
+				if(isAdmin) {
+					const name = request.body.name;
+					const description = request.body.description;
+					const color = request.body.color;
 
-			//TODO validate input
+					//TODO validate input
 
-			database.createCourse(name, description, color).then(() => {
-				response.json({
-					success:true
-				});
+					database.createCourse(name, description, color).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error"
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied"
+					});
+				}
 			}).catch(() => {
 				response.json({
 					error:"Database error"
@@ -218,19 +212,33 @@ function init() {
 		});
 	});
 
+	//Admin & Moderator functions
+
 	app.post("/createmodule", (request, response) => {
-		validateAdmin(request, response).then((userID) => {
+		validateUser(request, response).then((userID) => {
 			const name = request.body.name;
 			const courseID = parseInt(request.body.courseID, 10);
 			const description = request.body.description;
 
 			//TODO validate input
 
-			database.createModule(courseID, name, description).then(() => {
-				response.json({
-					success:true
-				});
-			}).catch(() => {
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					database.createModule(courseID, name, description).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error"
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied"
+					});
+				}
+			}).catch((error) => {
 				response.json({
 					error:"Database error"
 				});
@@ -243,18 +251,30 @@ function init() {
 	});
 
 	app.post("/createquestion", (request, response) => {
-		validateAdmin(request, response).then((userID) => {
+		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
 			const content = request.body.content;
 			const answer = request.body.answer;
 
 			//TODO validate input
 
-			database.createQuestion(moduleID, content, answer).then(() => {
-				response.json({
-					success:true
-				});
-			}).catch(() => {
+			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+				if(isModerator) {
+					database.createQuestion(moduleID, content, answer).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error"
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied"
+					});
+				}
+			}).catch((error) => {
 				response.json({
 					error:"Database error"
 				});
