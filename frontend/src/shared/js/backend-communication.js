@@ -49,7 +49,10 @@ const DbCom = new function() {
 	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the course was successfully created or not
 	 */
 	this.createCourse = function(name, description, color) {
-		return this.ajaxPost(mainURL + "createcourse", encodeURI("name=" + name + "&description=" + description + "&color=" + color));
+		return this.ajaxPost(mainURL + "createcourse",
+			"name=" + encodeURIComponent(name) +
+			"&description=" + encodeURIComponent(description) +
+			"&color=" + encodeURIComponent(color));
 	};
 
 	/**
@@ -60,7 +63,10 @@ const DbCom = new function() {
 	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the module was successfully created or not
 	 */
 	this.createModule = function(name, courseId, description) {
-		return this.ajaxPost(mainURL + "createmodule", encodeURI("name=" + name + "&courseID=" + courseId + "&description=" + description));
+		return this.ajaxPost(mainURL + "createmodule",
+			"name=" + encodeURIComponent(name) +
+			"&courseID=" + encodeURIComponent(courseId) +
+			"&description=" + encodeURIComponent(description));
 	};
 
 	/**
@@ -71,7 +77,20 @@ const DbCom = new function() {
 	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the module was successfully created or not
 	 */
 	this.createQuestion = function(moduleId, content, answer) {
-		return this.ajaxPost(mainURL + "createquestion", encodeURI("moduleID=" + moduleId + "&content=" + content + "&answer=" + answer));
+		return this.ajaxPost(mainURL + "createquestion",
+			"moduleID=" + encodeURIComponent(moduleId) +
+			"&content=" + encodeURIComponent(content) +
+			"&answer=" + encodeURIComponent(answer));
+	};
+
+	/**
+	 * Ajax request to get a specific course by name
+	 * @param {string} name the name of the course
+	 * @returns {Promise<Course>} Promise resolves to a Course object
+	 */
+	this.getCourseByName = function(name) {
+		return this.ajaxPost(mainURL + "getcoursebyname",
+			"name=" + encodeURIComponent(name));
 	};
 
 	/**
@@ -83,12 +102,24 @@ const DbCom = new function() {
 	};
 
 	/**
+	 * Ajax request to get a specific module by name
+	 * @param {string} name the name of the module
+	 * @returns {Promise<Module>} Promise resolves to a Module object
+	 */
+	this.getModuleByName = function(courseId, name) {
+		return this.ajaxPost(mainURL + "getmodulebyname",
+			"courseID=" + encodeURIComponent(courseId) +
+			"&name=" + encodeURIComponent(name));
+	};
+
+	/**
 	 * Ajax request to get all modules of given courseName
 	 * @param {unsigned int} id the id of the course
 	 * @return {Promise<Array<Module>>} Promise resolves to an array of Module objects
 	 */
 	this.getModules = function(courseId) {
-		return this.ajaxPost(mainURL + "getmodules", encodeURI("courseID=" + courseId));
+		return this.ajaxPost(mainURL + "getmodules",
+			"courseID=" + encodeURIComponent(courseId));
 	};
 
 	/**
@@ -98,7 +129,9 @@ const DbCom = new function() {
 	 * @return {Promise<Array<Question>>} Promise resolves to an array of Question objects
 	 */
 	this.getQuestions = function(courseId, moduleId) {
-		return this.ajaxPost(mainURL + "getquestions", encodeURI("courseID=" + courseId + "&moduleID=" + moduleId));
+		return this.ajaxPost(mainURL + "getquestions",
+			"courseID=" + encodeURIComponent(courseId) +
+			"&moduleID=" + encodeURIComponent(moduleId));
 	};
 
 	/**
@@ -107,7 +140,8 @@ const DbCom = new function() {
 	 * @return {Promise<Question>} Promise resolves to a Question object
 	 */
 	this.getQuestion = function(id) {
-		return this.ajaxPost(mainURL + "getquestion", encodeURI("questionID=" + id));
+		return this.ajaxPost(mainURL + "getquestion",
+			"questionID=" + encodeURIComponent(id));
 	};
 
 	/**
@@ -117,7 +151,9 @@ const DbCom = new function() {
 	 * @return {Promise<boolean>} Promise resolves to a boolean value depending on if the answer was an correct answer for the given question
 	 */
 	this.answerQuestion = function(id, answer) {
-		return this.ajaxPost(mainURL + "answer", encodeURI("questionID=" + id + "&answer=" + answer));
+		return this.ajaxPost(mainURL + "answer",
+			"questionID=" + encodeURIComponent(id) +
+			"&answer=" + encodeURIComponent(answer));
 	};
 
 	/**
