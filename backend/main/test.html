@@ -3,6 +3,14 @@
 		<meta charset="utf-8">
 	</head>
 	<body>
+		<h1>Is admin</h1>
+		<form action="http://127.0.0.1:80/isadmin" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Get XP</h1>
 		<form action="http://127.0.0.1:80/getxp" method="post">
 			User ID: <input type="text" name="userID"><br>
