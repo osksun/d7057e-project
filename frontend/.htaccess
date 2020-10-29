@@ -8,5 +8,5 @@ RewriteRule ^createquestion/([^/]+)/([^/]+)$ /src/question-editor/html/question-
 RewriteRule ^login$ /src/register/html/login.php [L]
 RewriteRule ^register$ /src/register/html/register.php [L]
 
-ErrorDocument 403 /src/404/html/404.php
-ErrorDocument 404 /src/404/html/404.php
+ErrorDocument 403 /src/404/404.php
+ErrorDocument 404 /src/404/404.php
