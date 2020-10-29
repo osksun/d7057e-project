@@ -36,8 +36,9 @@
 			rayCastSelectHelper = new RayCastSelectHelper();
 			let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
 			let renderer = new THREE.WebGLRenderer();
+			const canvas = renderer.domElement;
 			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
-			document.body.appendChild( renderer.domElement );
+			document.body.appendChild(canvas);
 			let controls = new OrbitControls(camera, renderer.domElement);
 
 			let geometry0 = new THREE.BoxGeometry();
@@ -66,8 +67,8 @@
 			//plane.rotateX( - Math.PI / 3);
 			camera.position.set(0,4,20);
 			camera.lookAt(0,0,0)
-			scene.add(helper);
-			scene.add(plane);
+			//scene.add(helper);
+			//scene.add(plane);
 			scene.add(cube);
 			scene.add(line);
 			let firstTime = true;
