@@ -47,7 +47,7 @@ window.addEventListener("load", () => {
 					coursesViewManager.toggleCardContainer();
 					break;
 				case courseViewContainers.EDITOR:
-					coursesViewManager.toggleCourseEditor();
+					coursesViewManager.toggleEditorContainer();
 					break;
 			}
 		};

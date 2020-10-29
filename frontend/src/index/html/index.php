@@ -29,7 +29,7 @@
 				<div id="view-container">
 					<div id="courses-view">
 						<script src="/src/index/js/courses-view.js" defer></script>
-						<div id="courses-view-card-container"></div>
+						<div id="course-cards-container"></div>
 						<?php include "../../course-editor/course-editor.html"; ?>
 					</div>
 					<div id="modules-view">

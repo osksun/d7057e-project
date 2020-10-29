@@ -1,14 +1,14 @@
 const coursesViewManager = new function() {
-	const cardContainer = document.getElementById("courses-view-card-container");
-	const courseEditorContainer = document.getElementById("course-editor-container");
+	const cardContainer = document.getElementById("course-cards-container");
+	const editorContainer = document.getElementById("course-editor-container");
 
-	this.toggleCourseEditor = function() {
+	this.toggleEditorContainer = function() {
 		cardContainer.classList.remove("visible");
-		courseEditorContainer.classList.add("visible");
+		editorContainer.classList.add("visible");
 	};
 
 	this.toggleCardContainer = function() {
-		courseEditorContainer.classList.remove("visible");
+		editorContainer.classList.remove("visible");
 		cardContainer.classList.add("visible");
 	};
 
