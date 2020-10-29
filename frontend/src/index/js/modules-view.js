@@ -65,6 +65,7 @@ const modulesViewManager = new function() {
 		DbCom.getModules(courseId).then((modules) => {
 			this.clear();
 			this.createCards(modules, color, courseId, courseName);
+			questionViewManager.updateButton(encodeURIComponent(courseName));
 			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
 			this.updateButton(courseId, courseName, color, true);
 			viewManager.toggleModulesView();

@@ -40,7 +40,7 @@
 			createCourseButton.disabled = true;
 
 			createCourse().then(() => {
-				window.location.href = "/courses/" + encodeURIComponent(courseName.value);
+				viewManager.loadCourse(courseName.value, true);
 				courseName.value = "";
 				courseColor.value = getRandomColor();
 				courseDescription.value = "";
