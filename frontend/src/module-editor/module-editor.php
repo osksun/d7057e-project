@@ -5,11 +5,11 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
-		<link rel="stylesheet" type="text/css" href="/src/module-editor/css/module-editor.css">
+		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
 		<script type="application/javascript" src="/src/shared/js/fixed-content.js" defer></script>
-		<script type="application/javascript" src="/src/module-editor/js/module-editor.js" defer></script>
+		<script type="application/javascript" src="/src/module-editor/module-editor.js" defer></script>
 	</head>
 	<body>
 		<?php include "../../shared/html/fixed-content.html"; ?>
