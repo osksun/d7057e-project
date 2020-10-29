@@ -31,6 +31,7 @@
 			planeConstantInput = document.getElementById("planeConstantInput");
 			const mouse = new THREE.Vector2();
 			const raycaster = new THREE.Raycaster();
+			let inCanvas = false;
 			let scene = new THREE.Scene();
 			let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
 			let renderer = new THREE.WebGLRenderer();
@@ -71,6 +72,14 @@
 			let firstTime = true;
 			animate();
 			window.addEventListener( 'mousemove', onMouseMove, false );
+			canvas.addEventListener('mouseenter', e => {
+				console.log("ENTERED WEBGL CANVAS");
+				inCanvas = true;
+			});
+			canvas.addEventListener( 'mouseleave', e => {
+				console.log("LEFT WEBGL CANVAS");
+				inCanvas = false;	
+			});
 			</script>
 	</body>
 	</html>
