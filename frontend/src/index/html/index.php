@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/index/css/courses-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/modules-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/question-view.css">
+		<link rel="stylesheet" type="text/css" href="/src/course-editor/course-editor.css">
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
@@ -25,17 +26,18 @@
 					<button id="modules-button" disabled><h2>Modules</h2></button>
 					<button id="question-button" disabled><h2>Question</h2></button>
 				</div>
-				<div id="view-container" class="view-container">
-					<ul id="courses-view">
+				<div id="view-container">
+					<div id="courses-view">
 						<script src="/src/index/js/courses-view.js" defer></script>
-					</ul>
-					<ul id="modules-view">
+						<div id="courses-view-card-container"></div>
+						<?php include "../../course-editor/course-editor.html"; ?>
+					</div>
+					<div id="modules-view">
 						<script src="/src/index/js/modules-view.js" defer></script>
-					</ul>
-					<ul id="question-view">
-						<script src="/src/index/js/question-view.js" defer></script>
+					</div>
+					<div id="question-view">
 						<?php include "./question-view.html"; ?>
-					</ul>
+					</div>
 				</div>
 			</div>
 		</div>

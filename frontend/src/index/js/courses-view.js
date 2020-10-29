@@ -1,8 +1,19 @@
 const coursesViewManager = new function() {
-	const coursesViewDiv = document.getElementById("courses-view");
+	const cardContainer = document.getElementById("courses-view-card-container");
+	const courseEditorContainer = document.getElementById("course-editor-container");
+
+	this.toggleCourseEditor = function() {
+		cardContainer.classList.remove("visible");
+		courseEditorContainer.classList.add("visible");
+	};
+
+	this.toggleCardContainer = function() {
+		courseEditorContainer.classList.remove("visible");
+		cardContainer.classList.add("visible");
+	};
 
 	function createCard(id, name, color) {
-		const card = document.createElement("li");
+		const card = document.createElement("div");
 		card.className = "course-card";
 		const a = document.createElement("a");
 		a.href = "#";
@@ -29,7 +40,7 @@ const coursesViewManager = new function() {
 		const card = document.createElement("li");
 		card.className = "course-card";
 		const a = document.createElement("a");
-		a.href = "/createcourse";
+		a.href = "#";
 		const header = document.createElement("div");
 		header.className = "course-card-header";
 		header.style.backgroundColor = "#fff";
@@ -40,24 +51,28 @@ const coursesViewManager = new function() {
 		a.appendChild(header);
 		a.appendChild(info);
 		card.appendChild(a);
+		card.addEventListener("click", (event) => {
+			coursesViewManager.toggleCourseEditor();
+			viewManager.updatePage("/createcourse", "Create course", true);
+			event.preventDefault();
+		});
 		return card;
 	}
 
 	this.createCards = function(courses) {
 		courses.forEach((course) => {
-			coursesViewDiv.appendChild(createCard(course.id, course.name, "#" + course.color));
+			cardContainer.appendChild(createCard(course.id, course.name, "#" + course.color));
 		});
 
 		DbCom.isAdmin().then((result) => {
 			if(result.isAdmin) {
-				coursesViewDiv.appendChild(createAdminCreateCard());
+				cardContainer.appendChild(createAdminCreateCard());
 			}
 		});
-
 	};
 
 	this.clear = function() {
-		coursesViewDiv.innerHTML = "";
+		cardContainer.innerHTML = "";
 	};
 
 	this.display = function(addToHistory = true) {
