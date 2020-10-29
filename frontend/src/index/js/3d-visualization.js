@@ -1,4 +1,25 @@
+class RayCastSelectHelper{
+    constructor(){
+        this.raycaster = new THREE.Raycaster();
+        this.selectedObject = null;
+        this.selectedObjectColor = 0;
+    }
+    select(scene, camera, mouse){
+        if (this.selectedObject){
+            this.selectedObject.material.color.set(this.selectedObjectColor);
+            this.selectedObject = null;
+        }
 
+        this.raycaster.setFromCamera(mouse, camera);
+        const intersects = raycaster.intersectObjects(scene.children);
+        if(intersects.length){
+            this.selectedObject = intersects[0].object;
+            this.selectedObjectColor = this.selectedObject.material.color;
+            intersects[0].object.material.color.set(0xfffff0);
+
+        }
+    }
+}
 function animate() {
     cube.rotation.x += 1;
     cube.rotation.y += 1;
@@ -12,7 +33,6 @@ function animate() {
     //camera.position.z = 0.2 + 5 * t
     plane.rotateY(0.01);
     plane.rotateX(0.01);
-    
     raycaster.setFromCamera(mouse, camera);
     const intersects = raycaster.intersectObjects(scene.children);
     if(firstTime == true){
@@ -54,21 +74,25 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
 
 function onMouseMove(event) {
 	// calculate mouse position in normalized device coordinates
-	// (-1 to +1) for both components
-	mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
-    mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
-    
-    console.log("mouse.x = ",mouse.x);
-    console.log("mouse.y =", mouse.y);
+    // (-1 to +1) for both components
+	//mouse.x = ( event.clientX / window.innerWidth/2 ) * 2 - 1;
+    //mouse.y = - ( event.clientY / window.innerHeight/2 ) * 2 + 1;
+    if(inCanvas == true){
+
+        const c = renderer.domElement;
+        mouse.x = (event.offsetX / c.clientWidth)*2-1;
+        mouse.y = ((c.clientHeight - event.offsetY) / c.clientHeight)*2-1;
+        console.log("mouse.x = ",mouse.x);
+        console.log("mouse.y =", mouse.y);
+    }
 
 }
 
 function onWindowResize() {
-    let aspect = window.innerWidth / window.innerHeight;
-    camera.left   = - frustumSize * aspect / 2;
-    camera.right  =   frustumSize * aspect / 2;
-    camera.top    =   frustumSize / 2;
-    camera.bottom = - frustumSize / 2;
+    // probably change window to renderer.domElement.clientHeight etc
+    //let aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 }
+
+
