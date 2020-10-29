@@ -20,7 +20,7 @@
                 <textarea id="latex-input"></textarea>
                 <p id="latex-output" class="tex2jax_process"></p>
             </div>
-            <button type="button" id="submit-button">Create question</button>
+            <button type="button" id="create-question-button"><p>Create question</p></button>
         </div>
     </body>
 </html>
