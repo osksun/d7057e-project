@@ -5,13 +5,13 @@ window.addEventListener("load", () => {
 		const coursesButton = document.getElementById("courses-button");
 		const modulesButton = document.getElementById("modules-button");
 		const questionButton = document.getElementById("question-button");
-		const coursesButtonView = document.getElementById("view-courses");
-		const modulesButtonView = document.getElementById("view-modules");
-		const questionButtonView = document.getElementById("view-question");
+		const coursesView = document.getElementById("courses-view");
+		const modulesView = document.getElementById("modules-view");
+		const questionView = document.getElementById("question-view");
 		// Setup category buttons
 		coursesButton.addEventListener("click", () => {
 			this.toggleCourseView();
-			coursesView.display(true);
+			coursesViewManager.display(true);
 		});
 		modulesButton.addEventListener("click", () => {
 			this.toggleModulesView();
@@ -28,12 +28,12 @@ window.addEventListener("load", () => {
 		};
 		
 		this.loadCourses = function (addToHistory) {
-			coursesView.display(addToHistory);
+			coursesViewManager.display(addToHistory);
 		};
 
 		this.loadCourse = function (courseName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
-				modulesView.display(course.id, course.name, "#" + course.color, addToHistory);
+				modulesViewManager.display(course.id, course.name, "#" + course.color, addToHistory);
 			}).catch(() => {
 				// 404 Course not found	
 				this.loadCourses(addToHistory);
@@ -43,8 +43,8 @@ window.addEventListener("load", () => {
 		this.loadModule = function (courseName, moduleName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
 				DbCom.getModuleByName(course.id, moduleName).then((module) => {
-					modulesView.updateButton(course.id, course.name, "#" + course.color);
-					questionView.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
+					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
+					questionViewManager.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
 				}).catch(() => {
 					// 404 Module not found
 					this.loadCourses(addToHistory);
@@ -83,15 +83,15 @@ window.addEventListener("load", () => {
 		}
 
 		this.toggleCourseView = function () {
-			toggleView(coursesButton, coursesButtonView, [modulesButton, questionButton], [modulesButtonView, questionButtonView]);
+			toggleView(coursesButton, coursesView, [modulesButton, questionButton], [modulesView, questionView]);
 		};
 
 		this.toggleModulesView = function () {
-			toggleView(modulesButton, modulesButtonView, [questionButton, coursesButton], [questionButtonView, coursesButtonView]);
+			toggleView(modulesButton, modulesView, [questionButton, coursesButton], [questionView, coursesView]);
 		};
 
 		this.toggleQuestionView = function () {
-			toggleView(questionButton, questionButtonView, [coursesButton, modulesButton], [coursesButtonView, modulesButtonView]);
+			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
 		};
 	}();
 });

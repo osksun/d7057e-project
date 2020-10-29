@@ -1,4 +1,4 @@
-const questionView = new function() {
+const questionViewManager = new function() {
     const submitButton = document.getElementById("submit-button");
     const answerInput = document.getElementById("answer-input");
     const loadingIcon = document.getElementById("loading-icon");

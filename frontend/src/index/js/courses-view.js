@@ -1,5 +1,5 @@
-const coursesView = new function() {
-	const coursesViewDiv = document.getElementById("view-courses");
+const coursesViewManager = new function() {
+	const coursesViewDiv = document.getElementById("courses-view");
 
 	function createCard(id, name, color) {
 		const card = document.createElement("li");
@@ -19,7 +19,7 @@ const coursesView = new function() {
 		a.appendChild(info);
 		card.appendChild(a);
 		a.addEventListener("click", (event) => {
-			modulesView.display(id, name, color);
+			modulesViewManager.display(id, name, color);
 			event.preventDefault();
 		});
 		return card;

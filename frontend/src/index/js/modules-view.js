@@ -1,5 +1,5 @@
-const modulesView = new function() {
-	const modulesViewDiv = document.getElementById("view-modules");
+const modulesViewManager = new function() {
+	const modulesViewDiv = document.getElementById("modules-view");
 	const coursebutton = document.getElementById("modules-button");
 	let displayHandler;
 
@@ -21,7 +21,7 @@ const modulesView = new function() {
 		a.appendChild(span);
 		card.appendChild(a);
 		card.addEventListener("click", (event) => {
-			questionView.displayRandom(courseId, courseName, id, name);
+			questionViewManager.displayRandom(courseId, courseName, id, name);
 			event.preventDefault();
 		});
 		return card;
