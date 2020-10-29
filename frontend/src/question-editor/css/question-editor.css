@@ -20,10 +20,27 @@
 	margin: 135px 0 0 0;
 }
 
-#create-question-button {
+#bottom-container {
 	margin:20px 0 0 125px;
-	padding:25px 0;
-	width:400px;
+}
+
+#answer-title {
+	margin:0 10px 0 0;
+	padding:0;
+	display:inline-block;
+	font-family:28px;
+	color:#fff;
+}
+#question-answer-regex {
+	width:250px;
+	font-size:28px;
+}
+
+#create-question-button {
+	margin:0 45px 0 10px;
+	padding:15px 35px;
+	float:right;
+	width:320px;
 	font-size:28px;
 	font-weight:bold;
 	cursor:pointer;
@@ -37,6 +54,18 @@
 	transform:skew(20deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
 	-webkit-transform:skew(20deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
 	-ms-transform:skew(20deg, 0deg); /* IE 9 */
+}
+
+#question-editor-message {
+	margin:50px 0 0 0;
+	padding:0;
+	text-align:center;
+	font-size:28px;
+	font-weight:bold;
+}
+#question-editor-message.error {
+	color:#f00;
+	text-decoration:underline;
 }
 
 textarea,
