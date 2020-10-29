@@ -29,7 +29,7 @@
 					<button id="question-button" disabled><h2>Question</h2></button>
 				</div>
 				<div id="view-container" class="view-container">
-					<ul id="courses-view" class="visible">
+					<ul id="courses-view">
 					</ul>
 					<ul id="modules-view">
 					</ul>
