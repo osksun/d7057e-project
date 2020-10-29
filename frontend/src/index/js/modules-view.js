@@ -66,8 +66,8 @@ const modulesViewManager = new function() {
 			this.clear();
 			this.createCards(modules, color, courseId, courseName);
 			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
-            this.updateButton(courseId, courseName, color, true);
-            viewManager.toggleModulesView();
+			this.updateButton(courseId, courseName, color, true);
+			viewManager.toggleModulesView();
 		});
 	};
 
