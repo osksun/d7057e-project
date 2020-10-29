@@ -22,7 +22,7 @@
 			</div>
 			<div id="bottom-container">
 				<h3 id="answer-title">Answer regular expression: </h3><input id="question-answer-regex" type="text" minlength=1 maxlength=255 required/>
-				<button type="button" id="create-question-button"><p>Create question</p></button>
+				<button type="button" id="create-question-button" disabled=true><p>. . .</p></button>
 				<div id="question-editor-message"></div>
 			</div>
 		</div>

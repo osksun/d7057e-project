@@ -7,6 +7,20 @@ window.addEventListener("load", function() {
 	const submitButton = document.getElementById("create-question-button");
 	const message = document.getElementById("question-editor-message");
 
+	const courseName = decodeURIComponent(window.location.pathname.substr(16).split("/")[0]);
+	const moduleName = decodeURIComponent(window.location.pathname.substr(16).split("/")[1]);
+
+	let courseID = null;
+	let moduleID = null;
+	DbCom.getCourseByName(courseName).then((result) => {
+		courseID = result.id;
+		DbCom.getModuleByName(courseID, moduleName).then((result) => {
+			moduleID = result.id;
+			submitButton.innerHTML = "<p>Create question</p>";
+			submitButton.disabled = false;
+		});
+	});
+
 	function refreshLatex() {
 		contentLatex.innerText = contentInput.value;
 		MathJax.texReset(0);
@@ -58,7 +72,6 @@ window.addEventListener("load", function() {
 		submitButton.innerHTML = "<p>. . .</p>";
 		submitButton.disabled = true;
 
-		const moduleID = 1;//TODO use correct moduleID
 		const content = contentInput.value;
 		const answer = answerRegexText.value;
 		DbCom.createQuestion(moduleID, content, answer).then(() => {
