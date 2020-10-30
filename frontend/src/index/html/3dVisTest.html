@@ -40,17 +40,13 @@
 			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 			document.body.appendChild(canvas);
 			let controls = new OrbitControls(camera, renderer.domElement);
-			let intersects = [];
 			let geometry0 = new THREE.BoxGeometry();
 			let materialgreen = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
 			let cube = new THREE.Mesh( geometry0, materialRed );
-
 			let geo = new THREE.PlaneBufferGeometry(10, 10, 4, 4);
 			let mat = new THREE.MeshBasicMaterial({ color: 0x000ff, side: THREE.DoubleSide });
 			let plane = new THREE.Mesh(geo, mat);
-
-			//let optionalNormalMatrix = new THREE.Matrix3().getNormalMatrix( matrix );
 			let points = [];
 			let myPlaneGeo = new THREE.PlaneBufferGeometry(10,10, 3,3);
 			let myPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
@@ -60,30 +56,21 @@
 			points.push( new THREE.Vector3(-10,0,-1));
 			let geometry1 = new THREE.BufferGeometry().setFromPoints( points );
 			let materialblue = new THREE.LineBasicMaterial( {color: 0x0000ff});
-			
 			let superPlane = new THREE.Plane(new THREE.Vector3( 1, -1, 1 ), 1 );
 			let helper = new THREE.PlaneHelper(myPlane, 30, 0xff0000 );
 			let line = new THREE.Line(geometry1, materialblue);
 			//plane.rotateX( - Math.PI / 3);
 			camera.position.set(0,5,10);
 			camera.lookAt(0,0,0)
-			//scene.add(helper);
-			//scene.add(plane);
+			scene.add(helper);
+			scene.add(plane);
 			cube.position.y = -10
 			scene.add(cube);
 			scene.add(line);
 			let firstTime = true;
 			animate();
-
-			canvas.addEventListener('mousemove', function(){onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper)}, false );
-			canvas.addEventListener('mouseenter', e => {
-				//console.log("ENTERED WEBGL CANVAS");
-				inCanvas = true;
-			});
-			canvas.addEventListener( 'mouseleave', e => {
-				//console.log("LEFT WEBGL CANVAS");
-				inCanvas = false;	
-			});
+			canvas.addEventListener('mousemove', function()
+			{onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper)}, false );
 			</script>
 	</body>
 	</html>
