@@ -2,22 +2,30 @@ class RayCastSelectHelper{
     constructor(){
         this.raycaster = new THREE.Raycaster();
         this.selectedObject = null;
-        this.selectedObjectColor = 0;
+        this.selectObjectColorFlag = true;
     }
     select(scene, camera, mouse){
-        if (this.selectedObject){
-            this.selectedObject.material.color.set(this.selectedObjectColor);
-            this.selectedObject = null;
-        }
-
-        this.raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObjects(scene.children);
+        raycaster.setFromCamera(mouse, camera);
+        intersects = raycaster.intersectObjects(scene.children);
         if(intersects.length){
-            this.selectedObject = intersects[0].object;
-            this.selectedObjectColor = this.selectedObject.material.color;
-            intersects[0].object.material.color.set(0xfffff0);
-
+            if (intersects[0].object != this.selectedObject)
+            {
+                if (this.selectedObject){
+                this.selectedObject.material.color.set(this.selectedObject.current);
+                }
+                this.selectedObject = intersects[0].object;
+                this.selectedObject.current = this.selectedObject.material.color.getHex();
+                this.selectedObject.material.color.set(0xffff00);
+            }
         }
+        else
+        {
+            if ( this.selectedObject ){
+            this.selectedObject.material.color.set(this.selectedObject.current);
+            this.selectedObject = null;
+            }
+        }
+
     }
 }
 function animate() {
