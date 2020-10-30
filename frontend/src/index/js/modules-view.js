@@ -96,7 +96,7 @@ const modulesViewManager = new function() {
 					this.createCards(modules, color, courseId, courseName);
 					toggleCardContainer();
 					viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
-					questionViewManager.updateButton(encodeURIComponent(courseName));
+					questionViewManager.updateButton(courseId);
 					this.updateButton(courseId, courseName, color);
 					viewManager.toggleModulesView();
 				}).catch((err) => {

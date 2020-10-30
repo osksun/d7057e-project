@@ -13,10 +13,6 @@ window.addEventListener("load", () => {
 			this.loadCourses(true);
 		});
 
-		questionButton.addEventListener("click", () => {
-			this.toggleQuestionView();
-		});
-
 		this.updatePage = function(url, title, addToHistory) {
 			document.title = title;
 			if (addToHistory) {
