@@ -21,7 +21,7 @@ class RayCastSelectHelper{
         }
         else
         {
-            if ( this.selectedObject ){
+            if (this.selectedObject){
             this.selectedObject.material.color.set(this.selectedObject.current);
             this.selectedObject = null;
             }
