@@ -1,3 +1,4 @@
+//Helper class for raycast selection
 class RayCastSelectHelper{
     constructor(){
         this.raycaster = new THREE.Raycaster();
@@ -6,7 +7,7 @@ class RayCastSelectHelper{
     }
     select(scene, camera, mouse){
         raycaster.setFromCamera(mouse, camera);
-        intersects = raycaster.intersectObjects(scene.children);
+        const intersects = raycaster.intersectObjects(scene.children);
         if(intersects.length){
             if (intersects[0].object != this.selectedObject)
             {
@@ -28,6 +29,7 @@ class RayCastSelectHelper{
 
     }
 }
+
 function animate() {
     cube.rotation.x += 1;
     cube.rotation.y += 1;
@@ -35,23 +37,11 @@ function animate() {
     if (cube.position.y > 3){
         cube.position.y = 0;
     }
-
-   //console.log(t)
-    //camera.position.z = 0.2 + 5 * t
     plane.rotateY(0.01);
     plane.rotateX(0.01);
-	// calculate objects intersecting the picking ray
-    //rayCastSelectHelper.select(scene, camera, mouse);
-
-
-
     requestAnimationFrame(animate);
     controls.update();
 	renderer.render(scene, camera);
-}
-
-function createPlane(x,y,z, constant){
-    return THREE.Plane(new THREE.Vector3(x,y,z), constant);
 }
 
 function userCreatePlane(scene,x,y,z ,constant, size, color){
@@ -60,29 +50,26 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
     let material = new THREE.MeshBasicMaterial( {color: color, side: THREE.DoubleSide});
     let normPlane = new THREE.Plane().copy(plane).normalize();
     let quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), normPlane.normal);
-
     let position = new THREE.Vector3(
         -normPlane.constant*normPlane.normal.x,
         -normPlane.constant*normPlane.normal.y,
         -normPlane.constant*normPlane.normal.z
     );
-
     let matrix = new THREE.Matrix4().compose(position, quaternion, new THREE.Vector3(1,1,1))
     planeBuffer.applyMatrix4(matrix);
-
     let planeMesh = new THREE.Mesh(planeBuffer, material)
     scene.add(planeMesh);
-
 }
 
 function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
+    console.log("hej");
 	// calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
-    if(inCanvas == true){
+    //if(inCanvas == true){
         mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
         mouse.y = ((canvas.clientHeight - event.offsetY) / canvas.clientHeight)*2-1;
         rayCastSelectHelper.select(scene, camera, mouse);
-    }
+    //}
 
 }
 
