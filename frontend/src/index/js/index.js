@@ -53,10 +53,16 @@ window.addEventListener("load", () => {
 
 		this.loadCourse = function (courseName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
-				modulesViewManager.display(course.id, course.name, "#" + course.color, addToHistory);
-			}).catch(() => {
-				// 404 Course not found	
+				modulesViewManager.display(modulesViewManager.containers.CARD, course.id, course.name, "#" + course.color, addToHistory);
+			}).catch((err) => {
+				console.log(err);
 			});
+		};
+
+		this.loadCreateModule = function (courseName, addToHistory) {
+			modulesViewManager.display(modulesViewManager.containers.EDITOR, null, courseName, null, addToHistory);
+			this.updatePage("/createmodule/" + encodeURIComponent(courseName.toLowerCase()), "Create module", addToHistory);
+			this.toggleModulesView();
 		};
 
 		this.loadModule = function (courseName, moduleName, addToHistory) {
@@ -64,11 +70,11 @@ window.addEventListener("load", () => {
 				DbCom.getModuleByName(course.id, moduleName).then((module) => {
 					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
 					questionViewManager.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
-				}).catch(() => {
-					// 404 Module not found
+				}).catch((err) => {
+					console.log(err);
 				});
-			}).catch(() => {
-				// 404 Course not found
+			}).catch((err) => {
+				console.log(err);
 			});
 		};
 
