@@ -75,18 +75,13 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
 
 }
 
-function onMouseMove(event) {
+function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
 	// calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
-	//mouse.x = ( event.clientX / window.innerWidth/2 ) * 2 - 1;
-    //mouse.y = - ( event.clientY / window.innerHeight/2 ) * 2 + 1;
     if(inCanvas == true){
-
-        const c = renderer.domElement;
-        mouse.x = (event.offsetX / c.clientWidth)*2-1;
-        mouse.y = ((c.clientHeight - event.offsetY) / c.clientHeight)*2-1;
-        console.log("mouse.x = ",mouse.x);
-        console.log("mouse.y =", mouse.y);
+        mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
+        mouse.y = ((canvas.clientHeight - event.offsetY) / canvas.clientHeight)*2-1;
+        rayCastSelectHelper.select(scene, camera, mouse);
     }
 
 }
