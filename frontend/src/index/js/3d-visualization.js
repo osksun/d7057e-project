@@ -62,7 +62,6 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
 }
 
 function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
-    console.log("hej");
 	// calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
         mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
