@@ -28,7 +28,6 @@ function animate() {
         cube.position.y = 0;
     }
 
-    let t = window.scrollY /(5000 - innerHeight);
    //console.log(t)
     //camera.position.z = 0.2 + 5 * t
     plane.rotateY(0.01);
