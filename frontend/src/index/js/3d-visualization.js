@@ -65,17 +65,13 @@ function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
     console.log("hej");
 	// calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
-    //if(inCanvas == true){
         mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
         mouse.y = ((canvas.clientHeight - event.offsetY) / canvas.clientHeight)*2-1;
         rayCastSelectHelper.select(scene, camera, mouse);
-    //}
-
 }
 
 function onWindowResize() {
     // probably change window to renderer.domElement.clientHeight etc
-    //let aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 }
