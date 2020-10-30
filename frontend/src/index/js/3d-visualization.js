@@ -40,16 +40,10 @@ function animate() {
     //camera.position.z = 0.2 + 5 * t
     plane.rotateY(0.01);
     plane.rotateX(0.01);
-    raycaster.setFromCamera( mouse, camera );
-
 	// calculate objects intersecting the picking ray
-	const intersects = raycaster.intersectObjects( scene.children );
     //rayCastSelectHelper.select(scene, camera, mouse);
-    for ( let i = 0; i < intersects.length; i ++ ) {
 
-		intersects[ i ].object.material.color.set( 0xff0000 );
 
-	}
 
     requestAnimationFrame(animate);
     controls.update();
