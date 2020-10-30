@@ -39,7 +39,8 @@
 			const canvas = renderer.domElement;
 			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
 			document.body.appendChild(canvas);
-			let controls = new OrbitControls(camera, renderer.domElement);
+			let controls = new OrbitControls(camera, canvas);
+
 			let geometry0 = new THREE.BoxGeometry();
 			let materialgreen = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
