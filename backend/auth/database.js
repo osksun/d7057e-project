@@ -44,6 +44,19 @@ function createUser(email, passwordHash) {
 }
 exports.createUser = createUser;
 
+function changeUserPassword(userID, passwordHash) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE users SET password=? WHERE id=?", [passwordHash, userID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.changeUserPassword = changeUserPassword;
+
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT id, password FROM users WHERE email = ?", [email], (error, result) => {
@@ -69,3 +82,29 @@ function loginUser(email, password) {
 	});
 }
 exports.loginUser = loginUser;
+
+function loginUserID(userID, password) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT password FROM users WHERE id = ?", [userID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				if(result.length != 1) {
+					reject();
+				} else {
+					const storedPasswordHash = result[0].password;
+					bcrypt.compare(password, storedPasswordHash).then((success) => {
+						if(success == true) {
+							resolve();
+						} else {
+							reject();
+						}
+					}).catch(() => {
+						reject();
+					})
+				}
+			}
+		});
+	});
+}
+exports.loginUserID = loginUserID;

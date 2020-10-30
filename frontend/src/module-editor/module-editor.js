@@ -1,23 +1,22 @@
-
-(function() {
-	const courseNameTitle = document.getElementById("courseName");
-	const courseName = decodeURIComponent(window.location.pathname.substr(14));//Remove "/createmodule/"
+const moduleEditor = new function() {
+	const courseNameTitle = document.getElementById("module-editor-course-name");
 	let courseID = null;
-	DbCom.getCourseByName(courseName).then((result) => {
-		if(result.hasOwnProperty("error")) {
-			//Error
-		} else {
-			courseID = result.id;
+
+	this.setup = function(courseName) {
+		DbCom.getCourseByName(courseName).then((course) => {
+			courseID = course.id;
 			createModuleButton.innerHTML = "<p>Create module</p>";
 			createModuleButton.disabled = false;
-		}
-	});
-	courseNameTitle.textContent = decodeURIComponent(courseName);
+		}).catch((err) => {
+			console.log(err);
+		});
+		courseNameTitle.textContent = decodeURIComponent(courseName);
+	};
 
-	const moduleName = document.getElementById("moduleName");
-	const moduleDescription = document.getElementById("moduleDescription");
-	const createModuleButton = document.getElementById("createModuleButton");
-	const message = document.getElementById("message");
+	const moduleName = document.getElementById("module-editor-module-name");
+	const moduleDescription = document.getElementById("module-editor-module-description");
+	const createModuleButton = document.getElementById("module-editor-create-module-button");
+	const message = document.getElementById("module-editor-message");
 
 	function createModule() {
 		return new Promise((resolve, reject) => {
@@ -57,4 +56,4 @@
 			});
 		}
 	});
-})();
+}();

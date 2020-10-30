@@ -54,17 +54,21 @@
 }
 
 /* views */
-.view-container>ul {
+#view-container {
+    margin: 0 0 0 96px;  /* 96px is the width of the sidebar */
+}
+
+#view-container>div, #view-container>div>div {
     display: none;
 }
 
-.view-container>ul.visible {
+#view-container>div.visible, #view-container>div>div.visible {
     display: block;
 }
 
-.view-container>ul {
+#view-container>div {
     position: relative;
-    margin: 64px 0 0 96px; /* 96px is the width of the sidebar */
+    margin: 64px 0 0 0;
     padding: 0;
     width: auto;
     list-style-type: none;

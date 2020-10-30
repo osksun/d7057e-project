@@ -5,17 +5,14 @@ window.addEventListener("load", () => {
 		const coursesButton = document.getElementById("courses-button");
 		const modulesButton = document.getElementById("modules-button");
 		const questionButton = document.getElementById("question-button");
-		const coursesButtonView = document.getElementById("view-courses");
-		const modulesButtonView = document.getElementById("view-modules");
-		const questionButtonView = document.getElementById("view-question");
-		// Setup category buttons
+		const coursesView = document.getElementById("courses-view");
+		const modulesView = document.getElementById("modules-view");
+		const questionView = document.getElementById("question-view");
+		
 		coursesButton.addEventListener("click", () => {
-			this.toggleCourseView();
-			coursesView.display(true);
+			this.loadCourses(true);
 		});
-		modulesButton.addEventListener("click", () => {
-			this.toggleModulesView();
-		});
+
 		questionButton.addEventListener("click", () => {
 			this.toggleQuestionView();
 		});
@@ -27,54 +24,6 @@ window.addEventListener("load", () => {
 			}
 		};
 		
-		this.loadCourses = function (addToHistory) {
-			coursesView.display(addToHistory);
-		};
-
-		this.loadCourse = function (courseName, addToHistory) {
-			DbCom.getCourseByName(courseName).then((course) => {
-				modulesView.display(course.id, course.name, "#" + course.color, addToHistory);
-			}).catch(() => {
-				// 404 Course not found	
-				this.loadCourses(addToHistory);
-			});
-		};
-
-		this.loadModule = function (courseName, moduleName, addToHistory) {
-			DbCom.getCourseByName(courseName).then((course) => {
-				DbCom.getModuleByName(course.id, moduleName).then((module) => {
-					modulesView.updateButton(course.id, course.name, "#" + course.color);
-					questionView.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
-				}).catch(() => {
-					// 404 Module not found
-					this.loadCourses(addToHistory);
-				});
-			}).catch(() => {
-				// 404 Course not found
-				this.loadCourses(addToHistory);
-			});
-		};
-
-		this.loadPath = function (pathname, addToHistory = true) {
-			const pathArray = pathname.split("/");
-			// /courses/course-name => ["", "courses", "course-name"] => length = 3
-			// /courses/course-name/module-name => ["", "courses", "course-name", "module-name"] => length = 4
-			switch (pathArray.length) {
-				case 3: {
-					const courseName = decodeURIComponent(pathArray[2]);
-					this.loadCourse(courseName, addToHistory);
-					break;
-				} case 4: {
-					const courseName = decodeURIComponent(pathArray[2]);
-					const moduleName = decodeURIComponent(pathArray[3]);
-					this.loadModule(courseName, moduleName, addToHistory);
-					break;
-				} default:
-					this.loadCourses(addToHistory);
-			}
-		};
-		this.loadPath(window.location.pathname, false);
-
 		function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
 			activeButton.classList.add("selected");
 			visibleView.classList.add("visible");
@@ -82,18 +31,95 @@ window.addEventListener("load", () => {
 			hiddenViews.forEach(view => view.classList.remove("visible"));
 		}
 
-		this.toggleCourseView = function () {
-			toggleView(coursesButton, coursesButtonView, [modulesButton, questionButton], [modulesButtonView, questionButtonView]);
+		this.toggleCoursesView = function () {
+			toggleView(coursesButton, coursesView, [modulesButton, questionButton], [modulesView, questionView]);
 		};
 
 		this.toggleModulesView = function () {
-			toggleView(modulesButton, modulesButtonView, [questionButton, coursesButton], [questionButtonView, coursesButtonView]);
+			toggleView(modulesButton, modulesView, [questionButton, coursesButton], [questionView, coursesView]);
 		};
 
 		this.toggleQuestionView = function () {
-			toggleView(questionButton, questionButtonView, [coursesButton, modulesButton], [coursesButtonView, modulesButtonView]);
+			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
+		};
+
+		this.loadCourses = function (addToHistory) {
+			coursesViewManager.display(coursesViewManager.containers.CARD, addToHistory);
+		};
+		
+		this.loadCreateCourse = function (addToHistory) {
+			coursesViewManager.display(coursesViewManager.containers.EDITOR, addToHistory);
+		};
+
+		this.loadCourse = function (courseName, addToHistory) {
+			DbCom.getCourseByName(courseName).then((course) => {
+				modulesViewManager.display(modulesViewManager.containers.CARD, course.id, course.name, "#" + course.color, addToHistory);
+			}).catch((err) => {
+				console.log(err);
+			});
+		};
+
+		this.loadCreateModule = function (courseName, addToHistory) {
+			modulesViewManager.display(modulesViewManager.containers.EDITOR, null, courseName, null, addToHistory);
+			this.updatePage("/createmodule/" + encodeURIComponent(courseName.toLowerCase()), "Create module", addToHistory);
+			this.toggleModulesView();
+		};
+
+		this.loadModule = function (courseName, moduleName, addToHistory) {
+			DbCom.getCourseByName(courseName).then((course) => {
+				DbCom.getModuleByName(course.id, moduleName).then((module) => {
+					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
+					questionViewManager.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
+				}).catch((err) => {
+					console.log(err);
+				});
+			}).catch((err) => {
+				console.log(err);
+			});
+		};
+
+		this.loadPath = function (pathname, addToHistory = true) {
+			const pathArray = pathname.substring(1).split("/");
+			switch (pathArray.length) {
+				case 1:
+					switch (pathArray[0]) {
+						case "":
+							// /
+							this.loadCourses(addToHistory);
+							break;
+						case "createcourse":
+							// /createcourse
+							this.loadCreateCourse(addToHistory);
+							break;
+						}
+						break;
+				case 2:
+					switch (pathArray[0]) {
+						case "courses": {
+							// /courses/course-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							this.loadCourse(courseName, addToHistory);
+							break;
+						}
+						case "createmodule": {
+							// /createmodule/course-name
+							const courseName = pathArray[1];
+							this.loadCreateModule(courseName);
+							break;
+						}
+					}
+					break;
+				case 3: {
+					// /courses/course-name/module-name
+					const courseName = decodeURIComponent(pathArray[1]);
+					const moduleName = decodeURIComponent(pathArray[2]);
+					this.loadModule(courseName, moduleName, addToHistory);
+					break;
+				}
+			}
 		};
 	}();
+	viewManager.loadPath(window.location.pathname, false);
 });
 
 window.onpopstate = function(e) {

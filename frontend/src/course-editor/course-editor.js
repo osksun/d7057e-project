@@ -1,10 +1,9 @@
-
 (function() {
-	const courseName = document.getElementById("courseName");
-	const courseColor = document.getElementById("courseColor");
-	const courseDescription = document.getElementById("courseDescription");
-	const createCourseButton = document.getElementById("createCourseButton");
-	const message = document.getElementById("message");
+	const courseName = document.getElementById("course-editor-course-name");
+	const courseColor = document.getElementById("course-editor-course-color");
+	const courseDescription = document.getElementById("course-editor-course-description");
+	const createCourseButton = document.getElementById("course-editor-create-course-button");
+	const message = document.getElementById("course-editor-message");
 
 	function getRandomColor() {
 		const values = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
@@ -41,6 +40,7 @@
 			createCourseButton.disabled = true;
 
 			createCourse().then(() => {
+				viewManager.loadCourse(courseName.value, true);
 				courseName.value = "";
 				courseColor.value = getRandomColor();
 				courseDescription.value = "";

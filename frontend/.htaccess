@@ -2,10 +2,12 @@ RewriteEngine On
 RewriteRule ^$ /src/index/html/index.php [L]
 RewriteRule ^courses/([^/]+)$ /src/index/html/index.php [L]
 RewriteRule ^courses/([^/]+)/([^/]+)$ /src/index/html/index.php [L]
-RewriteRule ^createcourse$ /src/course-editor/html/course-editor.php [L]
-RewriteRule ^createmodule/([^/]+)$ /src/module-editor/html/module-editor.php [L]
+RewriteRule ^createcourse$ /src/index/html/index.php [L]
+RewriteRule ^createmodule/([^/]+)$ /src/index/html/index.php [L]
+RewriteRule ^createquestion/([^/]+)/([^/]+)$ /src/question-editor/html/question-editor.php [L]
+RewriteRule ^settings$ /src/settings/settings.php [L]
 RewriteRule ^login$ /src/register/html/login.php [L]
 RewriteRule ^register$ /src/register/html/register.php [L]
 
-ErrorDocument 403 /src/404/html/404.php
-ErrorDocument 404 /src/404/html/404.php
+ErrorDocument 403 /src/404/404.php
+ErrorDocument 404 /src/404/404.php

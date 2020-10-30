@@ -1,8 +1,24 @@
-const coursesView = new function() {
-	const coursesViewDiv = document.getElementById("view-courses");
+const coursesViewManager = new function() {
+	const cardContainer = document.getElementById("course-cards-container");
+	const editorContainer = document.getElementById("course-editor-container");
+
+	this.containers =  {
+		CARD: 0,
+		EDITOR: 1
+	};
+
+	function toggleEditorContainer() {
+		cardContainer.classList.remove("visible");
+		editorContainer.classList.add("visible");
+	}
+
+	function toggleCardContainer() {
+		editorContainer.classList.remove("visible");
+		cardContainer.classList.add("visible");
+	}
 
 	function createCard(id, name, color) {
-		const card = document.createElement("li");
+		const card = document.createElement("div");
 		card.className = "course-card";
 		const a = document.createElement("a");
 		a.href = "#";
@@ -19,17 +35,17 @@ const coursesView = new function() {
 		a.appendChild(info);
 		card.appendChild(a);
 		a.addEventListener("click", (event) => {
-			modulesView.display(id, name, color);
+			modulesViewManager.display(modulesViewManager.containers.CARD, id, name, color, true);
 			event.preventDefault();
 		});
 		return card;
 	}
 
-	function createAdminCreateCard() {
+	const createAdminCreateCard = () => {
 		const card = document.createElement("li");
 		card.className = "course-card";
 		const a = document.createElement("a");
-		a.href = "/createcourse";
+		a.href = "#";
 		const header = document.createElement("div");
 		header.className = "course-card-header";
 		header.style.backgroundColor = "#fff";
@@ -40,32 +56,47 @@ const coursesView = new function() {
 		a.appendChild(header);
 		a.appendChild(info);
 		card.appendChild(a);
+		card.addEventListener("click", (event) => {
+			this.display(this.containers.EDITOR, true);
+			event.preventDefault();
+		});
 		return card;
-	}
+	};
 
 	this.createCards = function(courses) {
 		courses.forEach((course) => {
-			coursesViewDiv.appendChild(createCard(course.id, course.name, "#" + course.color));
+			cardContainer.appendChild(createCard(course.id, course.name, "#" + course.color));
 		});
 
 		DbCom.isAdmin().then((result) => {
 			if(result.isAdmin) {
-				coursesViewDiv.appendChild(createAdminCreateCard());
+				cardContainer.appendChild(createAdminCreateCard());
 			}
 		});
-
 	};
 
-	this.clear = function() {
-		coursesViewDiv.innerHTML = "";
+	this.clearCards = function() {
+		cardContainer.innerHTML = "";
 	};
 
-	this.display = function(addToHistory = true) {
-		DbCom.getCourses().then((courses) => {
-			this.clear();
-			this.createCards(courses);
-			viewManager.updatePage("/", "All courses", addToHistory);
-			viewManager.toggleCourseView();
-		});
+	this.display = function(container, addToHistory) {
+		switch (container) {
+			case this.containers.CARD:
+				this.clearCards();
+				DbCom.getCourses().then((courses) => {
+					this.createCards(courses);
+					toggleCardContainer();
+					viewManager.updatePage("/", "All courses", addToHistory);
+					viewManager.toggleCoursesView();
+				}).catch((err) => {
+					console.log(err);
+				});
+				break;
+			case this.containers.EDITOR:
+				toggleEditorContainer();
+				viewManager.updatePage("/createcourse", "Create course", addToHistory);
+				viewManager.toggleCoursesView();
+				break;
+		}
 	};
 }();

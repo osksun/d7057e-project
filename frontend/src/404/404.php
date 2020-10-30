@@ -8,7 +8,7 @@ http_response_code(404);
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
-		<link rel="stylesheet" type="text/css" href="/src/404/css/404.css">
+		<link rel="stylesheet" type="text/css" href="/src/404/404.css">
 	</head>
 	<body>
 		<div id="page-content">

@@ -1,25 +1,37 @@
-const questionView = new function() {
+const questionViewManager = new function() {
     const submitButton = document.getElementById("submit-button");
     const answerInput = document.getElementById("answer-input");
     const loadingIcon = document.getElementById("loading-icon");
+    const question = document.getElementById("question");
+    const questionButton = document.getElementById("question-button");
+
     submitButton.addEventListener("click", this.handleSubmit);
 
     let questionId;
     let submitHandler;
     let displayRandomHandler;
+    let activeEncodedCourseName = null;
 
     this.update = function(questionContent) {
-        document.getElementById("question").innerHTML = questionContent;
+        question.innerHTML = questionContent;
         MathJax.texReset(0);
 		MathJax.typesetClear();
 		MathJax.typesetPromise();
     };
 
+    this.updateButton = function(encodedCourseName) {
+        if (encodedCourseName !== activeEncodedCourseName) {
+            this.clear();
+        }
+    };
+
     this.clear = function() {
         document.getElementById("course-name").innerText = "";
         document.getElementById("module-name").innerText = "";
-        document.getElementById("question").innerHTML = "";
+        question.innerText = "";
         document.getElementById("question-button").disabled = true;
+        questionButton.children[0].innerText = "Question";
+        activeEncodedCourseName = null;
     };
 
     this.handleSubmit = function() {
@@ -40,6 +52,7 @@ const questionView = new function() {
     this.displayRandom = function(courseId, courseName, moduleId, moduleName, addToHistory = true) {
         DbCom.getQuestions(courseId, moduleId).then((questions) => {
             if (questions.length == 0) {
+                console.log("No questions found");
                 return;
             }
             let randomQuestion;
@@ -51,8 +64,8 @@ const questionView = new function() {
             questionId = randomQuestion.id;
             this.clear();
             this.update(randomQuestion.content);
+            activeEncodedCourseName = encodeURIComponent(courseName);
             viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-            const questionButton = document.getElementById("question-button");
             questionButton.disabled = false;
             questionButton.children[0].innerText = moduleName;
             questionButton.removeEventListener("click", displayRandomHandler);
@@ -60,7 +73,6 @@ const questionView = new function() {
             displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
             viewManager.toggleQuestionView();
             questionButton.addEventListener("click", displayRandomHandler);
-            const submitButton = document.getElementById("submit-button");
             submitButton.removeEventListener("click", submitHandler);
             submitHandler = this.handleSubmit.bind(null, randomQuestion.id);
             submitButton.addEventListener("click", submitHandler);
