@@ -76,7 +76,7 @@ const DbCom = new function() {
 	};
 
 	/**
-     * Ajax request to create a module for a course
+	 * Ajax request to create a module for a course
 	 * @param {string} name the name of the new module
 	 * @param {unsigned int} courseId the id of the course the module should belong to
 	 * @param {string} description the description of the new module

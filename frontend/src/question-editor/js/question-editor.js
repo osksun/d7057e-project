@@ -48,7 +48,7 @@ window.addEventListener("load", function() {
 				// prevent the focus lose
 				e.preventDefault();
 			}
-    });
+	});
 	}
 
 	function enableEscape(textarea) {
