@@ -25,7 +25,7 @@
 					<input type="password" class="inputContent" placeholder="Password" name="password">
 					<br><br>
 					<label class="uniLabel" for="rpw">Repeat Password:</label>
-					<input type="password" class="inputContent" placeholder="Repeat" name="repeatPassword">
+					<input type="password" class="inputContent" placeholder="Repeat password" name="repeatPassword">
 					<br><br>
 					<input type="submit">
 				</form>

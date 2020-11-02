@@ -18,10 +18,10 @@
 			<div id="contentContainer">
 				<form id="loginForm" method = "post" onsubmit="return loginAuthentication()">
 					<label class="uniLabel" for="uname">Username:</label>
-					<input type="text" class="inputContent" placeholder="username" name="uname">
+					<input type="text" class="inputContent" placeholder="Username" name="uname">
 					<br><br>
 					<label class="uniLabel" for="sname">Password:</label>
-					<input type="password" class="inputContent" placeholder="password" name="pw">
+					<input type="password" class="inputContent" placeholder="Password" name="pw">
 					<br><br>
 					<input type="submit" name="Register" value="Login">
 				</form>
