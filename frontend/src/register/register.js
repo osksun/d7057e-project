@@ -1,21 +1,29 @@
 
-function validateForm() {
-	const email = document.forms["regForm"]["email"].value;
-	const pw = document.forms["regForm"]["password"].value;
-	const rpw = document.forms["regForm"]["repeatPassword"].value;
+(function() {
+	const registerButton = document.getElementById("registerButton");
+	const emailField = document.getElementById("emailField");
+	const passwordField = document.getElementById("passwordField");
+	const repeatPasswordField = document.getElementById("repeatPasswordField");
 
-	if(email == "" || pw == "" || rpw == "") {
-		alert("Fill in all the required fields");
-		return false;
-	} else {
-		if(pw != rpw) {
-			alert("Passwords do not match!");
-		} else {
-			DbCom.registerUser(email, pw).then((r) => {
-				alert("Success: " + r);
-			}).catch((error) => {
-				alert("Error: " + error);
-			});
+	registerButton.addEventListener("click", () => {
+		if(emailField.reportValidity() && passwordField.reportValidity() && repeatPasswordField.reportValidity()) {
+			const email = emailField.value;
+			const password = passwordField.value;
+			const passwordRepeat = repeatPasswordField.value;
+
+			if(email == "" || password == "" || passwordRepeat == "") {
+				alert("Fill in all the required fields");
+			} else {
+				if(password != passwordRepeat) {
+					alert("Passwords do not match!");
+				} else {
+					DbCom.registerUser(email, password).then((r) => {
+						alert("Success: " + r);
+					}).catch((error) => {
+						alert("Error: " + error);
+					});
+				}
+			}
 		}
-	}
-}
+	});
+})();

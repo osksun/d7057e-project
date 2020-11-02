@@ -8,7 +8,6 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
-		<script src="/src/register/register.js"></script>
 	</head>
 	<body>
 		<!--LOGIN FORM SECTION -->
@@ -17,19 +16,18 @@
 				<h2>REGISTER USER</h2>
 			</div>
 			<div id="contentContainer">
-				<form id="regForm" method = "post" onsubmit="return validateForm()">
-					<label class="uniLabel" for="email">Email:</label>
-					<input type="text" class="inputContent" placeholder="Email" name="email">
-					<br><br>
-					<label class="uniLabel" for="password">Password:</label>
-					<input type="password" class="inputContent" placeholder="Password" name="password">
-					<br><br>
-					<label class="uniLabel" for="rpw">Repeat Password:</label>
-					<input type="password" class="inputContent" placeholder="Repeat password" name="repeatPassword">
-					<br><br>
-					<input type="submit">
-				</form>
+				<label>Email:</label>
+				<input id="emailField" type="text" required placeholder="Email">
+				<br><br>
+				<label>Password:</label>
+				<input id="passwordField" type="password" required placeholder="Password">
+				<br><br>
+				<label>Repeat Password:</label>
+				<input id="repeatPasswordField" type="password" required placeholder="Repeat password">
+				<br><br>
+				<button id="registerButton">Register</button>
 			</div>
 		</div>
+		<script src="/src/register/register.js"></script>
 	</body>
 </html>

@@ -7,7 +7,6 @@
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
-		<script src="/src/register/login.js"></script>
 	</head>
 	<body>
 		<!--LOGIN FORM SECTION -->
@@ -16,16 +15,16 @@
 				<h2>LOGIN</h2>
 			</div>
 			<div id="contentContainer">
-				<form id="loginForm" method = "post" onsubmit="return loginAuthentication()">
-					<label class="uniLabel" for="uname">Username:</label>
-					<input type="text" class="inputContent" placeholder="Username" name="uname">
-					<br><br>
-					<label class="uniLabel" for="sname">Password:</label>
-					<input type="password" class="inputContent" placeholder="Password" name="pw">
-					<br><br>
-					<input type="submit" name="Register" value="Login">
-				</form>
+				<label>Email:</label>
+				<input id="emailField" type="text" placeholder="Email" required>
+				<br><br>
+				<label>Password:</label>
+				<input id="passwordField" type="password" placeholder="Password" required>
+				<br><br>
+				<button id="loginButton">Login</button>
 			</div>
 		</div>
+
+		<script src="/src/register/login.js"></script>
 	</body>
 </html>
