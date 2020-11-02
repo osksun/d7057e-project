@@ -14,10 +14,11 @@ const DbCom = new function() {
 	}
 
 	this.registerUser = function(email, passwordHash) {
-		return this.ajaxPost(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+		return this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
 	};
+	
 	this.createRefreshToken = function(email, passwordHash) {
-		return this.ajaxPost(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+		return this.ajaxPostAuth(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
 	};
 
 	let accessToken = null;
