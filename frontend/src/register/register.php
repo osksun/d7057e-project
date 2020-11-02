@@ -23,7 +23,11 @@
 						alert("Passwords do not match!");
 					}
 					else{
-						DbCom.registerUser(email, pw).then((r) => {alert("Success: " + r;}).catch((error) => {alert("Error: " + error);});
+						DbCom.registerUser(email, pw).then((r) => {
+							alert("Success: " + r);
+						}).catch((error) => {
+							alert("Error: " + error);
+						});
 					}
 				}
 			}
