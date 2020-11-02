@@ -39,6 +39,7 @@ function animate() {
     }
     plane.rotateY(0.01);
     plane.rotateX(0.01);
+    rayCastSelectHelper.select(scene, camera, mouse);
     requestAnimationFrame(animate);
     controls.update();
 	renderer.render(scene, camera);
@@ -94,7 +95,7 @@ function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
     // (-1 to +1) for both components
         mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
         mouse.y = ((canvas.clientHeight - event.offsetY) / canvas.clientHeight)*2-1;
-        rayCastSelectHelper.select(scene, camera, mouse);
+        //rayCastSelectHelper.select(scene, camera, mouse);
 }
 
 function onWindowResize() {
