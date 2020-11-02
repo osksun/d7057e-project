@@ -22,10 +22,10 @@
 					<input type="text" class="inputContent" placeholder="Email" name="email">
 					<br><br>
 					<label class="uniLabel" for="password">Password:</label>
-					<input type="text" class="inputContent" placeholder="Password" name="password">
+					<input type="password" class="inputContent" placeholder="Password" name="password">
 					<br><br>
 					<label class="uniLabel" for="rpw">Repeat Password:</label>
-					<input type="text" class="inputContent" placeholder="Repeat" name="repeatPassword">
+					<input type="password" class="inputContent" placeholder="Repeat" name="repeatPassword">
 					<br><br>
 					<input type="submit">
 				</form>
