@@ -1,102 +1,123 @@
+let viewManager;
+
 window.addEventListener("load", () => {
-	setupCategoryButtons("button-container", "view-container");
-	loadPath(window.location.pathname);
-
-	function loadPath(pathname) {
-		const pathArray = pathname.split("/");
-		// /courses/course-name => ["", "courses", "course-name"] => length = 3
-		// /courses/course-name/module-name => ["", "courses", "course-name", "module-name"] => length = 4
-		switch (pathArray.length) {
-			case 3: {
-				const courseName = decodeURIComponent(pathArray[2]);
-				loadCourse(courseName);
-				break;
-			} case 4: {
-				const courseName = decodeURIComponent(pathArray[2]);
-				const moduleName = decodeURIComponent(pathArray[3]);
-				loadModule(courseName, moduleName);
-				break;
-			} default:
-				loadCourses();
-		}
-	}
-	
-	function loadCourse(courseName) {
-		DbCom.getCourseByName(courseName).then((course) => {
-			if (course.hasOwnProperty("error")) {
-				// 404 Course not found	
-				loadCourses();
-			} else {
-				modulesView.display(course.id, course.name, "#" + course.color);
-			}
+	viewManager = new function() {
+		const coursesButton = document.getElementById("courses-button");
+		const modulesButton = document.getElementById("modules-button");
+		const questionButton = document.getElementById("question-button");
+		const coursesView = document.getElementById("courses-view");
+		const modulesView = document.getElementById("modules-view");
+		const questionView = document.getElementById("question-view");
+		
+		coursesButton.addEventListener("click", () => {
+			this.loadCourses(true);
 		});
-	}
 
-	function loadModule(courseName, moduleName) {
-		DbCom.getCourseByName(courseName).then((course) => {
-			if (course.hasOwnProperty("error")) {
-				// 404 Course not found
-				loadCourses();
-			} else {
+		this.updatePage = function(url, title, addToHistory) {
+			document.title = title;
+			if (addToHistory) {
+				window.history.pushState({"pageTitle":title}, "", url);
+			}
+		};
+		
+		function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
+			activeButton.classList.add("selected");
+			visibleView.classList.add("visible");
+			unselectedButtons.forEach(button => button.classList.remove("selected"));
+			hiddenViews.forEach(view => view.classList.remove("visible"));
+		}
+
+		this.toggleCoursesView = function () {
+			toggleView(coursesButton, coursesView, [modulesButton, questionButton], [modulesView, questionView]);
+		};
+
+		this.toggleModulesView = function () {
+			toggleView(modulesButton, modulesView, [questionButton, coursesButton], [questionView, coursesView]);
+		};
+
+		this.toggleQuestionView = function () {
+			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
+		};
+
+		this.loadCourses = function (addToHistory) {
+			coursesViewManager.display(coursesViewManager.containers.CARD, addToHistory);
+		};
+		
+		this.loadCreateCourse = function (addToHistory) {
+			coursesViewManager.display(coursesViewManager.containers.EDITOR, addToHistory);
+		};
+
+		this.loadCourse = function (courseName, addToHistory) {
+			DbCom.getCourseByName(courseName).then((course) => {
+				modulesViewManager.display(modulesViewManager.containers.CARD, course.id, course.name, "#" + course.color, addToHistory);
+			}).catch((err) => {
+				console.log(err);
+			});
+		};
+
+		this.loadCreateModule = function (courseName, addToHistory) {
+			modulesViewManager.display(modulesViewManager.containers.EDITOR, null, courseName, null, addToHistory);
+			this.updatePage("/createmodule/" + encodeURIComponent(courseName.toLowerCase()), "Create module", addToHistory);
+			this.toggleModulesView();
+		};
+
+		this.loadModule = function (courseName, moduleName, addToHistory) {
+			DbCom.getCourseByName(courseName).then((course) => {
 				DbCom.getModuleByName(course.id, moduleName).then((module) => {
-					if (module.hasOwnProperty("error")) {
-						// 404 Module not found
-						loadCourses();
-					} else {
-						modulesView.updateButton(course.id, course.name, "#" + course.color);
-						questionView.displayRandom(course.id, course.name, module.id, module.name);
-					}
+					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
+					questionViewManager.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
+				}).catch((err) => {
+					console.log(err);
 				});
+			}).catch((err) => {
+				console.log(err);
+			});
+		};
+
+		this.loadPath = function (pathname, addToHistory = true) {
+			const pathArray = pathname.substring(1).split("/");
+			switch (pathArray.length) {
+				case 1:
+					switch (pathArray[0]) {
+						case "":
+							// /
+							this.loadCourses(addToHistory);
+							break;
+						case "createcourse":
+							// /createcourse
+							this.loadCreateCourse(addToHistory);
+							break;
+						}
+						break;
+				case 2:
+					switch (pathArray[0]) {
+						case "courses": {
+							// /courses/course-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							this.loadCourse(courseName, addToHistory);
+							break;
+						}
+						case "createmodule": {
+							// /createmodule/course-name
+							const courseName = pathArray[1];
+							this.loadCreateModule(courseName);
+							break;
+						}
+					}
+					break;
+				case 3: {
+					// /courses/course-name/module-name
+					const courseName = decodeURIComponent(pathArray[1]);
+					const moduleName = decodeURIComponent(pathArray[2]);
+					this.loadModule(courseName, moduleName, addToHistory);
+					break;
+				}
 			}
-		});
-	}
-
-	function loadCourses() {
-		DbCom.getCourses().then((courses) => {
-			coursesView.createCards(courses);
-		});
-	}
-
-	function setupCategoryButtons(buttonContainerID, viewContainerID) {
-		const allCoursesButton = document.getElementById("courses-button");
-		const categoryButtons = document.getElementById(buttonContainerID).children;
-		const categoryViews = document.getElementById(viewContainerID).children;
-		for (let i = 0; i < categoryButtons.length; i++) {
-			let btns = [...categoryButtons];
-			let views = [...categoryViews];
-			btns.splice(i, 1);
-			views.splice(i, 1);
-			categoryButtons[i].addEventListener("click", () => {
-				toggleView(categoryButtons[i], categoryViews[i], btns, views);
-			});
-		}
-		allCoursesButton.addEventListener("click", () => {
-			DbCom.getCourses().then((courses) => {
-				coursesView.clear();
-				coursesView.createCards(courses);
-				updatePage("/", "All courses", null);
-			});
-		});
-	}
-
-	function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
-		activeButton.classList.add("selected");
-		visibleView.classList.add("visible");
-		unselectedButtons.forEach(button => button.classList.remove("selected"));
-		hiddenViews.forEach(view => view.classList.remove("visible"));
-	}
+		};
+	}();
+	viewManager.loadPath(window.location.pathname, false);
 });
 
-function updatePage(url, title, html) {
-	document.title = title;
-	window.history.pushState({"html":html, "pageTitle":title}, "", url);
-}
-
-/*
 window.onpopstate = function(e) {
-	if(e.state) {
-		document.getElementById("content").innerHTML = e.state.html;
-		document.title = e.state.pageTitle;
-	}
+	viewManager.loadPath(window.location.pathname, false);
 };
-*/

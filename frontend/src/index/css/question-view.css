@@ -8,7 +8,7 @@
     animation: rotation 2s infinite linear; /* IE >9, Fx >15, Op >12.0 */
 }
 
-#view-question {
+#question-view {
     color: #ffffff;
 }
 

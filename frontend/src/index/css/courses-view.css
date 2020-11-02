@@ -1,45 +1,61 @@
 .course-card {
-    display: inline-block;
-    margin: 0 25px 65px 25px;
-    width: 389.75px;
-    vertical-align: top;
-    text-align: left;
-    background-color: #ffffff;
-    box-shadow: 15px 15px 0 0 #323232;
-    cursor: pointer;
+	display: inline-block;
+	margin: 0 25px 65px 25px;
+	width: 390px;
+	vertical-align: top;
+	text-align: left;
+	background-color: #ffffff;
+	box-shadow: 15px 15px 0 0 #323232;
+	cursor: pointer;
 }
 
 .course-card>a {
-    display: inline-block;
-    height: 100%;
-    width: 100%;
-    text-decoration: none;
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	text-decoration: none;
 }
 
 .course-card>a>ul {
-    color: #000000;
-    font-size: 25px;
-    padding: 10px 30px;
-    list-style-type: square;
-    list-style-position: inside;
+	color: #000000;
+	font-size: 25px;
+	padding: 10px 30px;
+	margin: 0;
+	list-style-type: square;
+	list-style-position: inside;
 }
 
 .course-card>a>ul>li {
-    padding: 10px 0;
+	padding: 10px 0;
 }
 
 .course-card-header {
-    width: 100%;
-    padding: 10px 0;
-    margin: 0;
-    font-size: 30px;
-    line-height: 35px;
-    background-color: #46bbfe;
-    color: #ffffff;
-    text-align: center;
+	display:table;
+	width:100%;
+	height:200px;
+	padding: 10px 0;
+	margin: 0;
+	font-size: 30px;
+	line-height: 35px;
+	background-color: #46bbfe;
+	color: #ffffff;
+	text-align: center;
 }
 
-.course-card-header>h3 {
-    padding: 0;
-    margin: 0;
+.course-card-header > div {
+	display:table-cell;
+	padding:20px;
+	margin:0;
+	vertical-align:middle;
+	width:100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+.course-card-header > div > h3 {
+	margin:0;
+	padding:0;
+	width:calc(390px - 20px * 2);
+	max-height:195px;
+	overflow-wrap:break-word;
 }

@@ -16,7 +16,11 @@ const DbCom = new function() {
 	this.registerUser = function(email, passwordHash) {
 		return this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
 	};
-	
+
+	this.changeUserPassword = function(currentPasswordHash, newPasswordHash) {
+		return this.ajaxPostAuth(authURL + "changepassword", "userID=" + userID + "&currentPassword=" + encodeURIComponent(currentPasswordHash) + "&newPassword=" + encodeURIComponent(newPasswordHash));
+	};
+
 	this.createRefreshToken = function(email, passwordHash) {
 		return this.ajaxPostAuth(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
 	};

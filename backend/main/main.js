@@ -11,6 +11,7 @@ const readline = require("readline").createInterface({
 
 const config = require("./config.json");
 const database = require("./database.js");
+const errorCode = require("../error_code.js");
 const token = require("./token.js");
 const validation = require("../validation.js");
 require("../replaceAll_polyfill.js");
@@ -35,10 +36,16 @@ function init() {
 				if(token.validateAccessToken(userID, tokenExpireTime, accessToken)) {
 					resolve(userID);
 				} else {
-					reject("Invalid token");
+					reject({
+						error:"Invalid token",
+						errorCode:errorCode.invalidToken
+					});
 				}
 			} else {
-				reject("Malformed input");
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
 			}
 		});
 	}
@@ -52,13 +59,12 @@ function init() {
 				});
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -74,13 +80,12 @@ function init() {
 				});
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -92,13 +97,12 @@ function init() {
 				});
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -112,29 +116,27 @@ function init() {
 				response.json(course);
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
 	app.post("/getcourses", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			database.getCourses().then((courses) => {
+			database.getCourses(userID).then((courses) => {
 				response.json(courses);
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -149,13 +151,12 @@ function init() {
 				response.json(module);
 			}).catch((e) => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -169,13 +170,12 @@ function init() {
 				response.json(modules);
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -189,13 +189,12 @@ function init() {
 				response.json(questions);
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -209,13 +208,12 @@ function init() {
 				response.json(question);
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -229,14 +227,23 @@ function init() {
 			database.getQuestionAnswer(questionID).then((answerRegex) => {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
-					const xpReward = 100;
-					database.addUserXP(userID, xpReward).then(() => {
-						response.json({
-							correct:true
+					//TODO do answer and add XP in transaction
+					database.addAnswer(userID, questionID).then(() => {
+						const xpReward = 100;
+						database.addUserXP(userID, xpReward).then(() => {
+							response.json({
+								correct:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
 					}).catch(() => {
 						response.json({
-							error:"Database error"
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
 					});
 				} else {
@@ -246,13 +253,12 @@ function init() {
 				}
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -273,23 +279,24 @@ function init() {
 						});
 					}).catch(() => {
 						response.json({
-							error:"Database error"
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
 					});
 				} else {
 					response.json({
-						error:"Permission denied"
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
 					});
 				}
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -311,23 +318,24 @@ function init() {
 						});
 					}).catch(() => {
 						response.json({
-							error:"Database error"
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
 					});
 				} else {
 					response.json({
-						error:"Permission denied"
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
 					});
 				}
 			}).catch((error) => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 
@@ -347,23 +355,24 @@ function init() {
 						});
 					}).catch(() => {
 						response.json({
-							error:"Database error"
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
 					});
 				} else {
 					response.json({
-						error:"Permission denied"
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
 					});
 				}
 			}).catch((error) => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		}).catch((error) => {
-			response.json({
-				error:error
-			});
+			response.json(error);
 		});
 	});
 

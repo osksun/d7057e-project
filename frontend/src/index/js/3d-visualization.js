@@ -1,4 +1,33 @@
+class RayCastSelectHelper{
+    constructor(){
+        this.raycaster = new THREE.Raycaster();
+        this.selectedObject = null;
+        this.selectObjectColorFlag = true;
+    }
+    select(scene, camera, mouse){
+        raycaster.setFromCamera(mouse, camera);
+        intersects = raycaster.intersectObjects(scene.children);
+        if(intersects.length){
+            if (intersects[0].object != this.selectedObject)
+            {
+                if (this.selectedObject){
+                this.selectedObject.material.color.set(this.selectedObject.current);
+                }
+                this.selectedObject = intersects[0].object;
+                this.selectedObject.current = this.selectedObject.material.color.getHex();
+                this.selectedObject.material.color.set(0xffff00);
+            }
+        }
+        else
+        {
+            if ( this.selectedObject ){
+            this.selectedObject.material.color.set(this.selectedObject.current);
+            this.selectedObject = null;
+            }
+        }
 
+    }
+}
 function animate() {
     cube.rotation.x += 1;
     cube.rotation.y += 1;
@@ -7,14 +36,18 @@ function animate() {
         cube.position.y = 0;
     }
 
-    let t = window.scrollY /(5000 - innerHeight);
    //console.log(t)
     //camera.position.z = 0.2 + 5 * t
     plane.rotateY(0.01);
     plane.rotateX(0.01);
-    
-	requestAnimationFrame( animate )
-	renderer.render( scene, camera );
+	// calculate objects intersecting the picking ray
+    //rayCastSelectHelper.select(scene, camera, mouse);
+
+
+
+    requestAnimationFrame(animate);
+    controls.update();
+	renderer.render(scene, camera);
 }
 
 function createPlane(x,y,z, constant){
@@ -22,20 +55,42 @@ function createPlane(x,y,z, constant){
 }
 
 function userCreatePlane(scene,x,y,z ,constant, size, color){
-    plane = createPlane(x,y,z,constant);
-    planeHelper = new THREE.PlaneHelper(plane, size, color);
-    scene.add(planeHelper);
+    let plane = new THREE.Plane(new THREE.Vector3(x,y,z), constant);
+    let planeBuffer = new THREE.PlaneBufferGeometry(size,size, 10,10);
+    let material = new THREE.MeshBasicMaterial( {color: color, side: THREE.DoubleSide});
+    let normPlane = new THREE.Plane().copy(plane).normalize();
+    let quaternion = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,0,1), normPlane.normal);
+
+    let position = new THREE.Vector3(
+        -normPlane.constant*normPlane.normal.x,
+        -normPlane.constant*normPlane.normal.y,
+        -normPlane.constant*normPlane.normal.z
+    );
+
+    let matrix = new THREE.Matrix4().compose(position, quaternion, new THREE.Vector3(1,1,1))
+    planeBuffer.applyMatrix4(matrix);
+
+    let planeMesh = new THREE.Mesh(planeBuffer, material)
+    scene.add(planeMesh);
+
 }
 
-function zoom( event ) {
-    console.log("event.deltaY " ,event.deltaY);
-    camera.position.z += event.deltaY * 0.1;
-
-   /* var fovMAX = 160;
-    var fovMIN = 1;
-
-    camera.fov -= event.wheelDeltaY * 0.05;
-    camera.fov = Math.max( Math.min( camera.fov, fovMAX ), fovMIN );
-    camera.projectionMatrix = new THREE.Matrix4().makePerspective(camera.fov, window.innerWidth / window.innerHeight, camera.near, camera.far);*/
+function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
+	// calculate mouse position in normalized device coordinates
+    // (-1 to +1) for both components
+    if(inCanvas == true){
+        mouse.x = (event.offsetX / canvas.clientWidth)*2-1;
+        mouse.y = ((canvas.clientHeight - event.offsetY) / canvas.clientHeight)*2-1;
+        rayCastSelectHelper.select(scene, camera, mouse);
+    }
 
 }
+
+function onWindowResize() {
+    // probably change window to renderer.domElement.clientHeight etc
+    //let aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
+}
+
+

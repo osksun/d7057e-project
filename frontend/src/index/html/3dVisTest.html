@@ -2,13 +2,17 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>My first three.js app</title>
+		<title>3d-visualization</title>
 		<style>
 			body { margin: 0; }
 			canvas { display: block; }
 		</style>
 		<script src="../js/3d-visualization.js"></script>
 		<script src="../../../res/lib/three/three.js"></script>
+		<script src="../../../res/lib/three/OrbitControls.js"></script>
+		<script src="../../../res/lib/three/Layers.js"></script>
+		<script src="../../../res/lib/three/Ray.js"></script>
+		<script src="../../../res/lib/three/Raycaster.js"></script>
 
 	</head>
 	<body>
@@ -16,30 +20,35 @@
 			<input type="text" id="xInput" name="xInput">x
 			<input type="test" id="yInput" name="yInput">y
 			<input type="test" id="zInput" name="zInput">z
-			<input type="test" id="planeConstantInput" name="planeConstantInput">constant
-			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstant.value, 20, 0x00ff00)"> Add plane</button>
+			<input type="test" id="planeConstantInput" name="planeConstantInput">plane constant
+			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstantInput.value, 20, 0xf00ff0)"> Add plane</button>
 		</div>
 
 		<script>
-			document.addEventListener( 'wheel', zoom, false );
 			xInput = document.getElementById("xInput");
 			yInput = document.getElementById("yInput");
 			zInput = document.getElementById("zInput");
 			planeConstantInput = document.getElementById("planeConstantInput");
+			const mouse = new THREE.Vector2();
+			const raycaster = new THREE.Raycaster();
+			let inCanvas = true;
 			let scene = new THREE.Scene();
+			rayCastSelectHelper = new RayCastSelectHelper();
 			let camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 500 );
 			let renderer = new THREE.WebGLRenderer();
+			const canvas = renderer.domElement;
 			renderer.setSize( window.innerWidth/2, window.innerHeight/2 );
-			document.body.appendChild( renderer.domElement );
-
+			document.body.appendChild(canvas);
+			let controls = new OrbitControls(camera, renderer.domElement);
+			let intersects = [];
 			let geometry0 = new THREE.BoxGeometry();
 			let materialgreen = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000})
-			let cube = new THREE.Mesh( geometry0, materialgreen );
+			let materialRed = new THREE.MeshBasicMaterial({color: 0xff0000, side: THREE.DoubleSide})
+			let cube = new THREE.Mesh( geometry0, materialRed );
 
-			var geo = new THREE.PlaneBufferGeometry(10, 10, 4, 4);
-			var mat = new THREE.MeshBasicMaterial({ color: 0xff00ff, side: THREE.DoubleSide });
-			var plane = new THREE.Mesh(geo, mat);
+			let geo = new THREE.PlaneBufferGeometry(10, 10, 4, 4);
+			let mat = new THREE.MeshBasicMaterial({ color: 0x000ff, side: THREE.DoubleSide });
+			let plane = new THREE.Mesh(geo, mat);
 
 			//let optionalNormalMatrix = new THREE.Matrix3().getNormalMatrix( matrix );
 			let points = [];
@@ -51,18 +60,30 @@
 			points.push( new THREE.Vector3(-10,0,-1));
 			let geometry1 = new THREE.BufferGeometry().setFromPoints( points );
 			let materialblue = new THREE.LineBasicMaterial( {color: 0x0000ff});
-
-			var superPlane = new THREE.Plane( new THREE.Vector3( 1, -1, 1 ), 1 );
-			var helper = new THREE.PlaneHelper( myPlane, 30, 0xff0000 );
-			scene.add( helper );
-			let line = new THREE.Line( geometry1, materialblue );
-			plane.rotateX( - Math.PI / 3);
-			camera.position.set(0,4,20);
+			
+			let superPlane = new THREE.Plane(new THREE.Vector3( 1, -1, 1 ), 1 );
+			let helper = new THREE.PlaneHelper(myPlane, 30, 0xff0000 );
+			let line = new THREE.Line(geometry1, materialblue);
+			//plane.rotateX( - Math.PI / 3);
+			camera.position.set(0,5,10);
 			camera.lookAt(0,0,0)
-			scene.add(plane);
-			scene.add( cube );
-			scene.add( line );
+			//scene.add(helper);
+			//scene.add(plane);
+			cube.position.y = -10
+			scene.add(cube);
+			scene.add(line);
+			let firstTime = true;
 			animate();
-		</script>
+
+			canvas.addEventListener('mousemove', function(){onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper)}, false );
+			canvas.addEventListener('mouseenter', e => {
+				//console.log("ENTERED WEBGL CANVAS");
+				inCanvas = true;
+			});
+			canvas.addEventListener( 'mouseleave', e => {
+				//console.log("LEFT WEBGL CANVAS");
+				inCanvas = false;	
+			});
+			</script>
 	</body>
-</html>
+	</html>

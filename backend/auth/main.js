@@ -29,6 +29,23 @@ function registerUser(email, password) {
 	});
 }
 
+function changeUserPassword(userID, password) {
+	return new Promise((resolve, reject) => {
+		const passwordSaltRounds = 10;
+		bcrypt.hash(password, passwordSaltRounds, (error, hash) => {
+			if(error) {
+				reject();
+			} else {
+				database.changeUserPassword(userID, hash).then(() => {
+					resolve();
+				}).catch(() => {
+					reject();
+				});
+			}
+		});
+	});
+}
+
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
 			database.loginUser(email, password).then((userID) => {
@@ -67,6 +84,34 @@ function init() {
 		} else {
 			response.json({
 				success:false
+			});
+		}
+	});
+
+	app.post("/changepassword", (request, response) => {
+		const userID = parseInt(request.body.userID, 10);
+		const currentPassword = request.body.currentPassword;
+		const newPassword = request.body.newPassword;
+
+		if(validation.validateUnsignedInt(userID) && validation.validatePassword(currentPassword) && validation.validatePassword(newPassword)) {
+			database.loginUserID(userID, currentPassword).then(() => {
+				changeUserPassword(userID, newPassword).then(() => {
+					response.json({
+						success:true
+					});
+				}).catch((e) => {
+					response.json({
+						error:"Failed to change password"
+					});
+				});
+			}).catch(() => {
+				response.json({
+					error:"Failed to verify current password"
+				});
+			});
+		} else {
+			response.json({
+				error:"Malformed input"
 			});
 		}
 	});
