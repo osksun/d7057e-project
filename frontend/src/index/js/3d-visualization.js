@@ -61,6 +61,34 @@ function userCreatePlane(scene,x,y,z ,constant, size, color){
     scene.add(planeMesh);
 }
 
+function createAxises(scene){
+    let xAxisPoints = [];
+    xAxisPoints.push(new THREE.Vector3(-100, 0, 0));
+    xAxisPoints.push(new THREE.Vector3(100, 0, 0));
+    xMat = new THREE.MeshBasicMaterial({color: 0xff0000, visible: false});
+    let xAxisLine = new THREE.PlaneBufferGeometry().setFromPoints(xAxisPoints);
+    let xAxis = new THREE.Line(xAxisLine, xMat);
+
+    let yAxisPoints = [];
+    yAxisPoints.push(new THREE.Vector3(0, -100, 0));
+    yAxisPoints.push(new THREE.Vector3(0, 100, 0));
+    yMat = new THREE.MeshBasicMaterial({color: 0x00ff00, visible: false});
+    let yAxisLine = new THREE.PlaneBufferGeometry().setFromPoints(yAxisPoints);
+    let yAxis = new THREE.Line(yAxisLine, yMat);
+    console.log(yMat);
+    let zAxisPoints = [];
+    zAxisPoints.push(new THREE.Vector3(0, 0, -100));
+    zAxisPoints.push(new THREE.Vector3(0, 0, 100));
+    zMat = new THREE.MeshBasicMaterial({color: 0x0000ff, visble: false});
+    let zAxisLine = new THREE.PlaneBufferGeometry().setFromPoints(zAxisPoints);
+    let zAxis = new THREE.Line(zAxisLine, zMat);
+    scene.add(zAxis);
+    scene.add(yAxis);
+    scene.add(xAxis);
+
+
+}
+
 function onMouseMove(event, scene, canvas, mouse, rayCastSelectHelper) {
 	// calculate mouse position in normalized device coordinates
     // (-1 to +1) for both components
