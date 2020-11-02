@@ -49,7 +49,7 @@
 			let mat = new THREE.MeshBasicMaterial({ color: 0x000ff, side: THREE.DoubleSide });
 			let plane = new THREE.Mesh(geo, mat);
 			let points = [];
-			let myPlaneGeo = new THREE.PlaneBufferGeometry(10,10, 3,3);
+			let myPlaneGeo = new THREE.PlaneBufferGeometry(10, 10, 3, 3);
 			let myPlane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
 			points.push( new THREE.Vector3(-10,0,-1));
 			points.push( new THREE.Vector3(0,10,-1));
@@ -58,7 +58,7 @@
 			let geometry1 = new THREE.BufferGeometry().setFromPoints( points );
 			let materialblue = new THREE.LineBasicMaterial( {color: 0x0000ff});
 			let superPlane = new THREE.Plane(new THREE.Vector3( 1, -1, 1 ), 1 );
-			let helper = new THREE.PlaneHelper(myPlane, 30, 0xff0000 );
+			let helper = new THREE.PlaneHelper(myPlane, 30, 0xf00ff0);
 			let line = new THREE.Line(geometry1, materialblue);
 			//plane.rotateX( - Math.PI / 3);
 			camera.position.set(0,5,10);
@@ -68,6 +68,7 @@
 			cube.position.y = -10
 			scene.add(cube);
 			scene.add(line);
+			createAxises(scene);
 			let firstTime = true;
 			animate();
 			canvas.addEventListener('mousemove', function()
