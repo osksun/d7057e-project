@@ -8,7 +8,7 @@ function loginAuthentication() {
 	} else {
 		var id = DbCom.createRefreshToken(username, password).then((r) => {
 			localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
-			window.location = "../index/html";
+			window.location = "/";
 		}).catch((error) => {
 			alert("Error: " + error);
 		});
