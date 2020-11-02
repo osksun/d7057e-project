@@ -4,10 +4,10 @@
 		<title>D7057E</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="../../shared/css/body.css">
-		<link rel="stylesheet" type="text/css" href="../../shared/css/fixed-content.css">
-		<link rel="stylesheet" type="text/css" href="../register.css">
-		<script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
+		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
+		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/register/register.js"></script>
 	</head>
 	<body>
