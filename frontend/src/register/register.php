@@ -9,29 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="../register.css">
 		<script type="application/javascript" src="../../shared/js/fixed-content.js" defer></script>
 		<script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
-		<script>
-			function validateForm() {
-				var email = document.forms["regForm"]["email"].value;
-				var pw = document.forms["regForm"]["password"].value;
-				var rpw = document.forms["regForm"]["repeatPassword"].value;
-
-				if (email == "" || pw == "" || rpw == "") {
-					alert("Fill in all the required fields");
-					return false;
-				}else{
-					if(pw != rpw){
-						alert("Passwords do not match!");
-					}
-					else{
-						DbCom.registerUser(email, pw).then((r) => {
-							alert("Success: " + r);
-						}).catch((error) => {
-							alert("Error: " + error);
-						});
-					}
-				}
-			}
-		</script>
+		<script src="/src/register/register.js"></script>
 	</head>
 	<body>
 		<!--LOGIN FORM SECTION -->

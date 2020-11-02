@@ -7,24 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
-		<script>
-			function loginAuthentication(){
-				var username = document.forms["loginForm"]["uname"].value;
-				var password = document.forms["loginForm"]["pw"].value;
-
-				if(username == ""){
-					alert("Enter username!");
-				}else{
-					var id = DbCom.createRefreshToken(username, password).then((r) => {
-						localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
-						window.location = "../index/html";
-					}).catch((error) => {alert("Error: " + error);});
-
-					// Keep form from refreshing current page.
-					return false;
-				}
-			}
-		</script>
+		<script src="/src/register/login.js"></script>
 	</head>
 	<body>
 		<!--LOGIN FORM SECTION -->
