@@ -104,9 +104,9 @@ const modulesViewManager = new function() {
 				});
 				break;
 			case this.containers.EDITOR:
-				moduleEditor.setup(courseName);
+				moduleEditor.setup(courseId, courseName);
 				toggleEditorContainer();
-				viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", true);
+				viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", addToHistory);
 				this.updateButton(courseId, courseName, color);
 				viewManager.toggleModulesView();
 				break;

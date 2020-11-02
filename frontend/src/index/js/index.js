@@ -56,9 +56,11 @@ window.addEventListener("load", () => {
 		};
 
 		this.loadCreateModule = function (courseName, addToHistory) {
-			modulesViewManager.display(modulesViewManager.containers.EDITOR, null, courseName, null, addToHistory);
-			this.updatePage("/createmodule/" + encodeURIComponent(courseName.toLowerCase()), "Create module", addToHistory);
-			this.toggleModulesView();
+			DbCom.getCourseByName(courseName).then((course) => {
+				modulesViewManager.display(modulesViewManager.containers.EDITOR, course.id, courseName, "#" + course.color, addToHistory);
+			}).catch((err) => {
+				console.log(err);
+			});
 		};
 
 		this.loadModule = function (courseName, moduleName, addToHistory) {
@@ -99,7 +101,7 @@ window.addEventListener("load", () => {
 						}
 						case "createmodule": {
 							// /createmodule/course-name
-							const courseName = pathArray[1];
+							const courseName = decodeURIComponent(pathArray[1]);
 							this.loadCreateModule(courseName);
 							break;
 						}
