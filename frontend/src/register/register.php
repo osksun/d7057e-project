@@ -7,7 +7,6 @@
 		<link rel="stylesheet" type="text/css" href="../../shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="../../shared/css/fixed-content.css">
 		<link rel="stylesheet" type="text/css" href="../register.css">
-		<script type="application/javascript" src="../../shared/js/fixed-content.js" defer></script>
 		<script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
 		<script src="/src/register/register.js"></script>
 	</head>
