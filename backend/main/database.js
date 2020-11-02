@@ -19,6 +19,7 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id), CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID int NOT NULL, content TEXT NOT NULL, answer TEXT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id))",
+					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id))",
 					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))"
 				];
 
@@ -146,16 +147,29 @@ function getCourseByName(name) {
 }
 exports.getCourseByName = getCourseByName;
 
-function getCourses() {
+function getCourses(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, name, description, color FROM courses", (error, result) => {
+		connection.query(`
+			SELECT courses.id, courses.name, courses.description, courses.color, COUNT(courseID) AS questionCount, COUNT(userID) AS answerCount FROM answers
+			RIGHT JOIN questions ON questions.id = answers.questionID AND userID=?
+			INNER JOIN modules ON modules.id = questions.moduleID
+			RIGHT JOIN courses ON courses.id = modules.courseID
+			GROUP BY courses.id
+			`, [userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
 				const courses = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					courses.push({id:row.id, name:row.name, description:row.description, color:row.color});
+					courses.push({
+						id:row.id,
+						name:row.name,
+						description:row.description,
+						color:row.color,
+						questionCount:row.questionCount,
+						answerCount:row.answerCount
+					});
 				}
 				resolve(courses);
 			}
@@ -278,6 +292,23 @@ function getQuestionAnswer(questionID) {
 	});
 }
 exports.getQuestionAnswer = getQuestionAnswer;
+
+function addAnswer(userID, questionID) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("INSERT INTO answers (userID, questionID) VALUES (?, ?)", [userID, questionID], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					resolve();
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.addAnswer = addAnswer;
 
 //Also returns true if the user is an admin
 function isUserModeratorOfCourse(userID, courseID) {

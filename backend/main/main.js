@@ -127,7 +127,7 @@ function init() {
 
 	app.post("/getcourses", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			database.getCourses().then((courses) => {
+			database.getCourses(userID).then((courses) => {
 				response.json(courses);
 			}).catch(() => {
 				response.json({
@@ -227,10 +227,18 @@ function init() {
 			database.getQuestionAnswer(questionID).then((answerRegex) => {
 				const regex = new RegExp(answerRegex);
 				if(regex.test(answer)) {
-					const xpReward = 100;
-					database.addUserXP(userID, xpReward).then(() => {
-						response.json({
-							correct:true
+					//TODO do answer and add XP in transaction
+					database.addAnswer(userID, questionID).then(() => {
+						const xpReward = 100;
+						database.addUserXP(userID, xpReward).then(() => {
+							response.json({
+								correct:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
 					}).catch(() => {
 						response.json({

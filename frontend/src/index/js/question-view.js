@@ -2,25 +2,26 @@ const questionViewManager = new function() {
     const submitButton = document.getElementById("submit-button");
     const answerInput = document.getElementById("answer-input");
     const loadingIcon = document.getElementById("loading-icon");
-    const question = document.getElementById("question");
+    const questionField = document.getElementById("question");
     const questionButton = document.getElementById("question-button");
 
     submitButton.addEventListener("click", this.handleSubmit);
 
-    let questionId;
     let submitHandler;
     let displayRandomHandler;
-    let activeEncodedCourseName = null;
+    let currentCourseId = null;
+    let currentModuleId = null;
+    let currentQuestion = null;
 
     this.update = function(questionContent) {
-        question.innerHTML = questionContent;
+        questionField.innerText = questionContent;
         MathJax.texReset(0);
 		MathJax.typesetClear();
 		MathJax.typesetPromise();
     };
 
-    this.updateButton = function(encodedCourseName) {
-        if (encodedCourseName !== activeEncodedCourseName) {
+    this.updateButton = function(courseId) {
+        if (courseId !== currentCourseId) {
             this.clear();
         }
     };
@@ -28,13 +29,14 @@ const questionViewManager = new function() {
     this.clear = function() {
         document.getElementById("course-name").innerText = "";
         document.getElementById("module-name").innerText = "";
-        question.innerText = "";
+        questionField.innerText = "";
         document.getElementById("question-button").disabled = true;
         questionButton.children[0].innerText = "Question";
-        activeEncodedCourseName = null;
+        currentCourseId = null;
+        currentQuestion = null;
     };
 
-    this.handleSubmit = function() {
+    this.handleSubmit = function(questionId) {
         submitButton.style.display = "none";
         loadingIcon.style.display = "inline-block";
         DbCom.answerQuestion(questionId, answerInput.value).then((result) => {
@@ -49,33 +51,51 @@ const questionViewManager = new function() {
         });
     };
 
+    const setupQuestion = (question, courseId, courseName, moduleId, moduleName, addToHistory) => {
+        // Update the page with the content of the question
+        this.update(question.content);
+        // Note current course and module ids
+        currentCourseId = courseId;
+        currentModuleId = moduleId;
+        // Setup Page URL, title and history
+        viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
+        // Setup question button
+        questionButton.disabled = false;
+        questionButton.children[0].innerText = moduleName;
+        questionButton.removeEventListener("click", displayRandomHandler);
+        displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
+        questionButton.addEventListener("click", displayRandomHandler);
+        // Setup submit button
+        submitButton.removeEventListener("click", submitHandler);
+        submitHandler = this.handleSubmit.bind(null, currentQuestion.id);
+        submitButton.addEventListener("click", submitHandler);
+        // Toggle view
+        viewManager.toggleQuestionView();
+    };
+
     this.displayRandom = function(courseId, courseName, moduleId, moduleName, addToHistory = true) {
-        DbCom.getQuestions(courseId, moduleId).then((questions) => {
-            if (questions.length == 0) {
-                console.log("No questions found");
-                return;
-            }
-            let randomQuestion;
-            if (!this.hasOwnProperty("randomQuestion")) {
-                randomQuestion = questions[Math.floor(Math.random() * questions.length)];
-            } else {
-                randomQuestion = this.randomQuestion;
-            }
-            questionId = randomQuestion.id;
-            this.clear();
-            this.update(randomQuestion.content);
-            activeEncodedCourseName = encodeURIComponent(courseName);
-            viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-            questionButton.disabled = false;
-            questionButton.children[0].innerText = moduleName;
-            questionButton.removeEventListener("click", displayRandomHandler);
-            this.randomQuestion = randomQuestion;
-            displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
-            viewManager.toggleQuestionView();
-            questionButton.addEventListener("click", displayRandomHandler);
-            submitButton.removeEventListener("click", submitHandler);
-            submitHandler = this.handleSubmit.bind(null, randomQuestion.id);
-            submitButton.addEventListener("click", submitHandler);
-        });
+        if (moduleId != currentModuleId) {
+            currentQuestion = null;
+        }
+        if (currentQuestion === null) {
+            // Get all questions of the module
+            DbCom.getQuestions(courseId, moduleId).then((questions) => {
+                if (questions.length == 0) {
+                    console.log("No questions found");
+                    return;
+                }
+                currentQuestion = questions[Math.floor(Math.random() * questions.length)];
+                setupQuestion(currentQuestion, courseId, courseName, moduleId, moduleName, addToHistory);
+            }).catch((err) => {
+                console.log(err);
+            });
+        } else {
+            // Get a specific question
+            DbCom.getQuestion(currentQuestion.id).then((question) => {
+                setupQuestion(question, courseId, courseName, moduleId, moduleName, addToHistory);
+            }).catch((err) => {
+                console.log(err);
+            });
+        }
     };
 }();

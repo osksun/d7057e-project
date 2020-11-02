@@ -27,9 +27,11 @@ const modulesViewManager = new function() {
 		const header = document.createElement("div");
 		header.className = "module-card-header";
 		header.style.backgroundColor = color;
+		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
 		title.innerText = name;
-		header.appendChild(title);
+		titleWrapper.appendChild(title);
+		header.appendChild(titleWrapper);
 		const span = document.createElement("span");
 		span.style.color = color;
 		span.innerText = description;
@@ -48,13 +50,18 @@ const modulesViewManager = new function() {
 		card.className = "module-card";
 		const a = document.createElement("a");
 		a.href = "#";
+		const titleWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "module-card-header";
-		header.style.backgroundColor = "#fff";
+		header.style.backgroundColor = "#888";
+		const title = document.createElement("h3");
+		title.innerHTML = "<img style=\"display:block;margin:10px auto 0 auto;width:64px;\" src=\"/src/index/svg/add.svg\">";
+		titleWrapper.appendChild(title);
+		header.appendChild(titleWrapper);
 		const span = document.createElement("span");
 		span.style.float = "none";
 		span.style.display = "block";
-		span.innerHTML = "<img style=\"display:block;margin:20px auto 35px auto;width:64px;\" src=\"/src/index/svg/add.svg\">";
+		span.innerHTML = "<br><br>";
 		a.appendChild(header);
 		a.appendChild(span);
 		card.appendChild(a);
@@ -89,7 +96,7 @@ const modulesViewManager = new function() {
 					this.createCards(modules, color, courseId, courseName);
 					toggleCardContainer();
 					viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
-					questionViewManager.updateButton(encodeURIComponent(courseName));
+					questionViewManager.updateButton(courseId);
 					this.updateButton(courseId, courseName, color);
 					viewManager.toggleModulesView();
 				}).catch((err) => {
@@ -97,9 +104,9 @@ const modulesViewManager = new function() {
 				});
 				break;
 			case this.containers.EDITOR:
-				moduleEditor.setup(courseName);
+				moduleEditor.setup(courseId, courseName);
 				toggleEditorContainer();
-				viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", true);
+				viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", addToHistory);
 				this.updateButton(courseId, courseName, color);
 				viewManager.toggleModulesView();
 				break;

@@ -1,15 +1,11 @@
 const moduleEditor = new function() {
 	const courseNameTitle = document.getElementById("module-editor-course-name");
-	let courseID = null;
+	let courseId = null;
 
-	this.setup = function(courseName) {
-		DbCom.getCourseByName(courseName).then((course) => {
-			courseID = course.id;
-			createModuleButton.innerHTML = "<p>Create module</p>";
-			createModuleButton.disabled = false;
-		}).catch((err) => {
-			console.log(err);
-		});
+	this.setup = function(_courseId, courseName) {
+		courseId = _courseId;
+		createModuleButton.innerHTML = "<p>Create module</p>";
+		createModuleButton.disabled = false;
 		courseNameTitle.textContent = decodeURIComponent(courseName);
 	};
 
@@ -20,7 +16,7 @@ const moduleEditor = new function() {
 
 	function createModule() {
 		return new Promise((resolve, reject) => {
-			DbCom.createModule(moduleName.value, courseID, moduleDescription.value).then(() => {
+			DbCom.createModule(moduleName.value, courseId, moduleDescription.value).then(() => {
 				resolve();
 			}).catch((result) => {
 				reject(result);
@@ -38,7 +34,7 @@ const moduleEditor = new function() {
 	}
 
 	createModuleButton.addEventListener("click", () => {
-		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseID != null) {
+		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
 			createModuleButton.innerHTML = "<p>. . .</p>";
 			createModuleButton.disabled = true;
 

@@ -1,48 +1,33 @@
-<?php
-    // Define variables
-    $email = $pw = $rpw = $sid = $err = "";
-    $emailErr = $pwErr = $rpwErr = $sidErr = "";
-    if($_SERVER["REQUEST_METHOD"] == "POST")
-    {
-        if(empty($_POST["email"])){
-            $emailErr = "Please Enter a Valid Email-Address.";
-        }else{
-            $email = test_input($_POST["email"]);
-        }
-        if(empty($_POST["pw"])){
-            $pwErr = "Please Enter a Password.";
-        }else{
-            $pw = test_input($_POST["pw"]);
-        }
-        if(empty($_POST["rpw"])){
-            $rpwErr = "Please Repeat the Password.";
-        }else{
-            $rpw = test_input($_POST["rpw"]);
-        }
-        if(empty($_POST["pw"])){
-            $sidErr = "Please Enter a Valid Student-ID.";
-        }else{
-            $sid = test_input($_POST["sid"]);
-        }
-    }
-
-    function test_input($data)
-    {
-        $data = trim($data);
-        $data = stripslashes($data);
-        $data = htmlspecialchars($data);
-        return $data;
-    }
-?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <title>D7057E</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
-        <link rel="stylesheet" type="text/css" href="/src/register/css/register.css">
-        <script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../shared/css/body.css">
+        <link rel="stylesheet" type="text/css" href="../../shared/css/fixed-content.css">
+        <link rel="stylesheet" type="text/css" href="../css/register.css">
+        <script type="application/javascript" src="../../shared/js/fixed-content.js" defer></script>
+        <script type="application/javascript" src="../../shared/js/backend-communication.js"></script>
+        <script>
+            function validateForm() {
+                var email = document.forms["regForm"]["email"].value;
+                var pw = document.forms["regForm"]["password"].value;
+                var rpw = document.forms["regForm"]["repeatPassword"].value;
+
+                if (email == "" || pw == "" || rpw == "") {
+                    alert("Fill in all the required fields");
+                    return false;
+                }else{
+                    if(pw != rpw){
+                        alert("Passwords do not match!");
+                    }
+                    else{
+                        DbCom.registerUser(email, pw).then((r) => {alert("Success: " + r;}).catch((error) => {alert("Error: " + error);});
+                    }
+                }
+            }
+        </script>
     </head>
     <body>
         <!--LOGIN FORM SECTION -->
@@ -51,24 +36,17 @@
                 <h2>REGISTER USER</h2>
             </div>
             <div id="contentContainer">
-                <form method = "post" action = "<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+                <form id="regForm" method = "post" onsubmit="return validateForm()">
                     <label class="uniLabel" for="email">Email:</label>
                     <input type="text" class="inputContent" placeholder="Email" name="email">
-                    <span class="error">* <?php echo $emailErr;?></span>
                     <br><br>
                     <label class="uniLabel" for="password">Password:</label>
-                    <input type="text" class="inputContent" placeholder="Password" name="pw">
-                    <span class="error">* <?php echo $pwErr;?></span>
+                    <input type="text" class="inputContent" placeholder="Password" name="password">
                     <br><br>
                     <label class="uniLabel" for="rpw">Repeat Password:</label>
-                    <input type="text" class="inputContent" placeholder="Repeat" name="rpw">
-                    <span class="error">* <?php echo $rpwErr;?></span>
+                    <input type="text" class="inputContent" placeholder="Repeat" name="repeatPassword">
                     <br><br>
-                    <label class="uniLabel" for="school_id">School-ID:</label>
-                    <input type="text" class="inputContent" placeholder="School-ID" name="sid">
-                    <span class="error">* <?php echo $sidErr;?></span>
-                    <br><br>
-                    <input type="submit" name="Register" value="Register">
+                    <input type="submit">
                 </form>
             </div>
         </div>
