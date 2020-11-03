@@ -21,4 +21,12 @@
 			}
 		}
 	});
+	function loginClick(event) {
+		//key 13 is enter 
+		if(event.repeat) {return};
+		if(event.keyCode === 13 || event.key === "Enter") {
+			event.preventDefault();
+			loginButton.click();
+		}
+	}
 })();
