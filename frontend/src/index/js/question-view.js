@@ -1,3 +1,4 @@
+
 const questionViewManager = new function() {
 	const submitButton = document.getElementById("submit-button");
 	const answerInput = document.getElementById("answer-input");
@@ -11,6 +12,11 @@ const questionViewManager = new function() {
 	let currentModuleId = null;
 	let currentQuestionID = null;
 	let segmentInputBoxes = [];
+
+	const segmentTypes = new Map();
+	this.addSegmentType = function(type, creationFunction) {
+		segmentTypes.set(type, creationFunction);
+	};
 
 	this.updateButton = function(courseId) {
 		if (courseId !== currentCourseId) {
@@ -71,24 +77,10 @@ const questionViewManager = new function() {
 		for(let i = 0; i < segments.length; ++i) {
 			const segment = segments[i];
 
-			if(segment.type == "MATHJAX_LATEX") {
-				const div = document.createElement("div");
-				div.className = "tex2jax_process";
-				div.innerText = segment.content;
-				questionSegments.appendChild(div);
-
-				segmentInputBoxes.push(null);
-			} else if(segment.type == "MATHJAX_LATEX_ANSWER") {
-				const div = document.createElement("div");
-				div.className = "tex2jax_process";
-				div.innerText = segment.content;
-
-				const input = document.createElement("input");
-				input.type = "text";
-				div.appendChild(input);
-				segmentInputBoxes.push(input);
-
-				questionSegments.appendChild(div);
+			if(segmentTypes.has(segment.type)) {
+				const result = segmentTypes.get(segment.type)(segment.content);
+				questionSegments.appendChild(result.div);
+				segmentInputBoxes.push(result.input);
 			} else {
 				const div = document.createElement("div");
 				div.innerText = "Error: Unknown segment! Content: " + segment.content;
