@@ -24,8 +24,8 @@
 	emailField.addEventListener("keydown", loginClick);
 	passwordField.addEventListener("keydown", loginClick);
 	function loginClick(event) {
-		//key 13 is enter 
 		if(event.repeat) {return};
+		//key 13 is enter 
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
 			loginButton.click();
