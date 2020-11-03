@@ -18,7 +18,8 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id), CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
-					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID int NOT NULL, content TEXT NOT NULL, answer TEXT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id))",
+					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id))",
+					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id))",
 					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id))",
 					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))"
 				];
@@ -228,9 +229,9 @@ function getModules(courseID) {
 }
 exports.getModules = getModules;
 
-function createQuestion(moduleID, content, answer) {
+function createQuestion(moduleID) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT INTO questions (moduleID, content, answer) VALUES (?, ?, ?)", [moduleID, content, answer], (error, result) => {
+		connection.query("INSERT INTO questions (moduleID) VALUES (?)", [moduleID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -243,14 +244,14 @@ exports.createQuestion = createQuestion;
 
 function getQuestions(moduleID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, content FROM questions WHERE moduleID = ?", [moduleID], (error, result) => {
+		connection.query("SELECT id FROM questions WHERE moduleID = ?", [moduleID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
 				const questions = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					questions.push({id:row.id, content:row.content});
+					questions.push(row.id);
 				}
 				resolve(questions);
 			}
@@ -259,39 +260,45 @@ function getQuestions(moduleID) {
 }
 exports.getQuestions = getQuestions;
 
-function getQuestion(questionID) {
+function getQuestionSegments(questionID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, content, moduleID FROM questions WHERE id = ?", [questionID], (error, result) => {
+		connection.query("SELECT segmentOrder, type, content FROM questionsegments WHERE questionID = ? ORDER BY segmentOrder", [questionID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
-				if(result.length == 1) {
-					resolve({id:result[0].id, content:result[0].content, moduleID:result[0].moduleID});
-				} else {
-					reject();
+				const segments = [];
+				for(let i = 0; i < result.length; ++i) {
+					const row = result[i];
+					segments.push({
+						order:row.order,
+						type:row.type,
+						content:row.content
+					});
 				}
+				resolve(segments);
 			}
 		});
 	});
 }
-exports.getQuestion = getQuestion;
+exports.getQuestionSegments = getQuestionSegments;
 
-function getQuestionAnswer(questionID) {
+function getQuestionAnswers(questionID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT answer FROM questions WHERE id = ?", [questionID], (error, result) => {
+		connection.query("SELECT answer FROM questionsegments WHERE questionID = ? ORDER BY segmentOrder", [questionID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
-				if(result.length == 1) {
-					resolve(result[0].answer);
-				} else {
-					reject();
+				const answers = [];
+				for(let i = 0; i < result.length; ++i) {
+					const row = result[i];
+					answers.push(row.answer);
 				}
+				resolve(answers);
 			}
 		});
 	});
 }
-exports.getQuestionAnswer = getQuestionAnswer;
+exports.getQuestionAnswers = getQuestionAnswers;
 
 function addAnswer(userID, questionID) {
 	return new Promise((resolve, reject) => {

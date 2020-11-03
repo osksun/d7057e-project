@@ -155,25 +155,25 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get a specific question by its id
+	 * Ajax request to get all the segments of a question with the specific id
 	 * @param {unsigned int} id the id of the question
-	 * @return {Promise<Question>} Promise resolves to a Question object
+	 * @return {Promise<[QuestionSegment]>} Promise resolves to a list of questionn segment objects
 	 */
-	this.getQuestion = function(id) {
-		return this.ajaxPost(mainURL + "getquestion",
+	this.getQuestionSegments = function(id) {
+		return this.ajaxPost(mainURL + "getquestionsegments",
 			"questionID=" + encodeURIComponent(id));
 	};
 
 	/**
-	 * Ajax request to post an answer to a question given answer and the id of the question
+	 * Ajax request to post answers to a question given answers and the id of the question
 	 * @param {unsigned int} id the id of the question
-	 * @param {string} answer the answer to be provided for the question
+	 * @param {string[]} answers the answers to be provided for the question
 	 * @return {Promise<boolean>} Promise resolves to a boolean value depending on if the answer was an correct answer for the given question
 	 */
-	this.answerQuestion = function(id, answer) {
+	this.answerQuestion = function(id, answers) {
 		return this.ajaxPost(mainURL + "answer",
 			"questionID=" + encodeURIComponent(id) +
-			"&answer=" + encodeURIComponent(answer));
+			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
 	/**

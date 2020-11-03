@@ -198,13 +198,13 @@ function init() {
 		});
 	});
 
-	app.post("/getquestion", (request, response) => {
+	app.post("/getquestionsegments", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const questionID = parseInt(request.body.questionID, 10);
 
 			//TODO validate input
 
-			database.getQuestion(questionID).then((question) => {
+			database.getQuestionSegments(questionID).then((question) => {
 				response.json(question);
 			}).catch(() => {
 				response.json({
@@ -220,43 +220,73 @@ function init() {
 	app.post("/answer", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const questionID = parseInt(request.body.questionID, 10);
-			const answer = request.body.answer;
+			let answers = null;
+
+			try {
+				answers = JSON.parse(request.body.answers);
+			} catch {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 
 			//TODO validate input
 
-			database.getQuestionAnswer(questionID).then((answerRegex) => {
-				const regex = new RegExp(answerRegex);
-				if(regex.test(answer)) {
-					//TODO do answer and add XP in transaction
-					database.addAnswer(userID, questionID).then(() => {
-						const xpReward = 100;
-						database.addUserXP(userID, xpReward).then(() => {
-							response.json({
-								correct:true
-							});
-						}).catch(() => {
-							response.json({
-								error:"Database error",
-								errorCode:errorCode.unknownDatabaseError
-							});
-						});
-					}).catch(() => {
+			if(answers != null) {
+				database.getQuestionAnswers(questionID).then((answersRegex) => {
+					if(answers.length != answersRegex.length) {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Malformed input",
+							errorCode:errorCode.malformedInput
 						});
-					});
-				} else {
+					} else {
+						let correct = true;
+
+						for(let i = 0; i < answersRegex.length; ++i) {
+							if(answersRegex[i] != null) {
+								const regex = new RegExp(answersRegex[i]);
+								if(regex.test(answers[i])) {
+									//Correct
+								} else {
+									correct = false;
+								}
+							}
+						}
+
+						if(correct) {
+							//TODO do answer and add XP in transaction
+							database.addAnswer(userID, questionID).then(() => {
+								const xpReward = 100;
+								database.addUserXP(userID, xpReward).then(() => {
+									response.json({
+										correct:true
+									});
+								}).catch(() => {
+									response.json({
+										error:"Database error",
+										errorCode:errorCode.unknownDatabaseError
+									});
+								});
+							}).catch(() => {
+								response.json({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
+							});
+						} else {
+							response.json({
+								correct:false
+							});
+						}
+					}
+				}).catch((error) => {
 					response.json({
-						correct:false
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -342,14 +372,12 @@ function init() {
 	app.post("/createquestion", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
-			const content = request.body.content;
-			const answer = request.body.answer;
 
 			//TODO validate input
 
 			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
 				if(isModerator) {
-					database.createQuestion(moduleID, content, answer).then(() => {
+					database.createQuestion(moduleID).then(() => {
 						response.json({
 							success:true
 						});

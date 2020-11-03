@@ -1,8 +1,8 @@
 #loading-icon {
 	vertical-align: middle;
 	width: 25px;
+	margin:100px 0 0 0;
 	padding: 15px;
-	margin: -20px 0;
 	display: none;
 	-webkit-animation: rotation 2s infinite linear; /* Chr, Saf */
 	animation: rotation 2s infinite linear; /* IE >9, Fx >15, Op >12.0 */
@@ -23,4 +23,33 @@
 		-ms-transform: rotate(360deg); /* IE 9 */
 		transform: rotate(360deg); /* IE 10, Fx 16+, Op 12.1+ */
 	}
+}
+
+#question-segments {
+	display:block !important;
+	margin:0;
+	padding:0;
+	color:#fff;
+}
+
+#question-segments > div > input {
+	margin:8px;
+}
+
+#submit-button {
+	margin:100px 0 0 0;
+	padding:20px 80px;
+	font-size:28px;
+	font-weight:bold;
+	cursor:pointer;
+	transform:skew(-20deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
+	-webkit-transform:skew(-20deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+	-ms-transform:skew(-20deg, 0deg); /* IE 9 */
+}
+#submit-button > p {
+	margin:0;
+	padding:0;
+	transform:skew(20deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
+	-webkit-transform:skew(20deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
+	-ms-transform:skew(20deg, 0deg); /* IE 9 */
 }
