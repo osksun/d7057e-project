@@ -16,7 +16,7 @@
 			</div>
 			<div id="contentContainer">
 				<label>Email:</label>
-				<input id="emailField" type="text" placeholder="Email" required>
+				<input id="emailField" type="text" placeholder="Email" required autofocus>
 				<br><br>
 				<label>Password:</label>
 				<input id="passwordField" type="password" placeholder="Password" required>
