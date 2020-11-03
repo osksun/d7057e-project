@@ -14,13 +14,17 @@
 
 /* Header */
 #header-container {
-	display: inline-block;
-	width: calc(100% - 350px); /* 350px is the width of the #page-name-container */
-	margin: 0;
-	padding: 2px 0;
-	text-align: right;
+	position:absolute;
+	/*width: calc(100% - 350px); /* 350px is the width of the #page-name-container */
+	width:356px;
+	border-bottom-left-radius:8px;
+	border-bottom-right-radius:8px;
+	margin-left: auto;
+	margin-right:auto;
+	left: 35px;
+	right: 0;
+	padding: 8px 0;
 	vertical-align: top;
-	font-size: 0;
 	background-color:  #323232;
 	white-space: nowrap;
 }
@@ -29,7 +33,7 @@
 	margin: 0;
 	padding: 0 20px;
 	vertical-align: middle;
-	font-size: 40px;
+	font-size: 1.5em;
 	color: white;
 }
 
@@ -43,6 +47,7 @@
 }
 
 #header-xp-progress-bar-back {
+	border-radius:6px;
 	position: relative;
 	width: 256px;
 	height: 16px;
@@ -104,8 +109,9 @@
 
 /* Sidebar */
 #sidebar {
-	display: inline-block;
+	float: left;
 	margin: 0;
+	width:55px;
 	padding: 0;
 	height: 100%;
 	background-color: #323232;
@@ -118,23 +124,16 @@
 	font-size:0;
 }
 
-#sidebar > li:first-of-type {
-	margin-top:32px;
-}
-
 #sidebar > li > a {
 	display:block;
-	margin:0;
-	padding:16px;
-	width:64px;
-	height:64px;
+	margin-left:15%;
+	margin-top:32px;
+	width:70%;
+	color:grey;
 }
 
 #sidebar > li:hover {
-	border:2px solid #777;
-}
-#sidebar > li:hover > a {
-	padding:14px;
+	color: black;
 }
 
 #sidebar>li>a>img {
