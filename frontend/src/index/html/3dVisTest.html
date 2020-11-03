@@ -13,8 +13,11 @@
 		<script src="../../../res/lib/three/Layers.js"></script>
 		<script src="../../../res/lib/three/Ray.js"></script>
 		<script src="../../../res/lib/three/Raycaster.js"></script>
+		<script src="../../../res/lib/geogebra/deployggb.js"></script>
 
 	</head>
+	<meta name=viewport content="width=device-width,initial-scale=1">  
+	<meta charset="utf-8"/>
 	<body>
 		<div>
 			<input type="text" id="xInput" name="xInput">x
@@ -23,6 +26,14 @@
 			<input type="test" id="planeConstantInput" name="planeConstantInput">plane constant
 			<button type="button" id="addPlaneButton" onclick="userCreatePlane(scene, xInput.value, yInput.value, zInput.value, planeConstantInput.value, 20, 0xf00ff0)"> Add plane</button>
 		</div>
+		<div id="ggb-element"></div> 
+
+		<script>  
+			var ggbApp = new GGBApplet({"appName": "3d", "width": 800, "height": 600, "showToolBar": true, "showAlgebraInput": true, "showMenuBar": true }, true);
+			window.addEventListener("load", function() { 
+				ggbApp.inject('ggb-element');
+			});
+		</script>
 
 		<script>
 			xInput = document.getElementById("xInput");
