@@ -6,8 +6,8 @@ RewriteRule ^createcourse$ /src/index/html/index.php [L]
 RewriteRule ^createmodule/([^/]+)$ /src/index/html/index.php [L]
 RewriteRule ^createquestion/([^/]+)/([^/]+)$ /src/question-editor/html/question-editor.php [L]
 RewriteRule ^settings$ /src/settings/settings.php [L]
-RewriteRule ^login$ /src/register/html/login.php [L]
-RewriteRule ^register$ /src/register/html/register.php [L]
+RewriteRule ^login$ /src/register/login.php [L]
+RewriteRule ^register$ /src/register/register.php [L]
 
 ErrorDocument 403 /src/404/404.php
 ErrorDocument 404 /src/404/404.php
