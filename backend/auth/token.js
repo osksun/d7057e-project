@@ -49,6 +49,11 @@ function createRefreshToken(userID) {
 }
 exports.createRefreshToken = createRefreshToken;
 
+function clearRefreshTokens(userID) {
+	refreshTokens.set(userID, []);
+}
+exports.clearRefreshTokens = clearRefreshTokens;
+
 const {privateKey, publicKey} = crypto.generateKeyPairSync("rsa", {
   modulusLength:2048
 });

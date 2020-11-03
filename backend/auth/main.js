@@ -96,6 +96,7 @@ function init() {
 		if(validation.validateUnsignedInt(userID) && validation.validatePassword(currentPassword) && validation.validatePassword(newPassword)) {
 			database.loginUserID(userID, currentPassword).then(() => {
 				changeUserPassword(userID, newPassword).then(() => {
+					token.clearRefreshTokens(userID);
 					response.json({
 						success:true
 					});
