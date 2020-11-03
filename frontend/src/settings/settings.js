@@ -25,7 +25,13 @@
 			} else {
 				changePasswordButton.innerHTML = "<p>. . .</p>";
 				changePasswordButton.disabled = true;
-				DbCom.changeUserPassword(currentPassword.value, newPassword.value).then(() => {
+				DbCom.changeUserPassword(currentPassword.value, newPassword.value).then((result) => {
+					//Change login data
+					localStorage.setItem("login_data", JSON.stringify({
+						"userID":result["userID"],
+						"refreshToken":result["refreshToken"]
+					}));
+
 					showMessage("Password changed successfully", false);
 				}).catch((result) => {
 					if(result.hasOwnProperty("error")) {

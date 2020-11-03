@@ -97,8 +97,16 @@ function init() {
 			database.loginUserID(userID, currentPassword).then(() => {
 				changeUserPassword(userID, newPassword).then(() => {
 					token.clearRefreshTokens(userID);
-					response.json({
-						success:true
+
+					token.createRefreshToken(userID).then((refreshToken) => {
+						response.json({
+							userID:userID,
+							refreshToken:refreshToken
+						});
+					}).catch(() => {
+						response.json({
+							error:"Failed to create refresh token"
+						});
 					});
 				}).catch((e) => {
 					response.json({
