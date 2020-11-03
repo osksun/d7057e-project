@@ -37,7 +37,7 @@ function createUser(email, passwordHash) {
 			if(error) {
 				reject();
 			} else {
-				resolve();
+				resolve(result.insertId);
 			}
 		});
 	});

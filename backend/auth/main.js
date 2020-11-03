@@ -19,8 +19,8 @@ function registerUser(email, password) {
 			if(error) {
 				reject();
 			} else {
-				database.createUser(email, hash).then(() => {
-					resolve();
+				database.createUser(email, hash).then((userID) => {
+					resolve(userID);
 				}).catch(() => {
 					reject();
 				});
@@ -71,19 +71,27 @@ function init() {
 		const password = request.body.password;
 
 		if(validation.validateEmail(email) && validation.validatePassword(password)) {
-			registerUser(email, password).then(() => {
+			registerUser(email, password).then((userID) => {
 				console.log("Registered user \"" + email + "\"");
-				response.json({
-					success:true
+
+				token.createRefreshToken(userID).then((refreshToken) => {
+					response.json({
+						userID:userID,
+						refreshToken:refreshToken
+					});
+				}).catch(() => {
+					response.json({
+						error:"Failed to create refresh token"
+					});
 				});
 			}).catch(() => {
 				response.json({
-					success:false
+					error:"Database error"
 				});
 			});
 		} else {
 			response.json({
-				success:false
+				error:"Malformed input"
 			});
 		}
 	});
@@ -143,7 +151,6 @@ function init() {
 						error:"Failed to create refresh token"
 					});
 				});
-
 			}).catch(() => {
 				response.json({
 					error:"Login failed"

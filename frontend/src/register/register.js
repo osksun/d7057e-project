@@ -17,8 +17,13 @@
 				if(password != passwordRepeat) {
 					alert("Passwords do not match!");
 				} else {
-					DbCom.registerUser(email, password).then((r) => {
-						alert("Success: " + r);
+					DbCom.registerUser(email, password).then((result) => {
+						console.log(result);
+						localStorage.setItem("login_data", JSON.stringify({
+							"userID":result["userID"],
+							"refreshToken":result["refreshToken"]
+						}));
+						window.location = "/";
 					}).catch((error) => {
 						alert("Error: " + error);
 					});
