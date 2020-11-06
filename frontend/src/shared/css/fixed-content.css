@@ -15,7 +15,6 @@
 /* Header */
 #header-container {
 	position:absolute;
-	/*width: calc(100% - 350px); /* 350px is the width of the #page-name-container */
 	width:356px;
 	border-bottom-left-radius:8px;
 	border-bottom-right-radius:8px;
