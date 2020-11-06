@@ -1,6 +1,6 @@
 
 const questionEditor = new function(){
-	MathJax.startup.document.getMathItemsWithin(document.body); // TODO
+	MathJax.startup.document.getMathItemsWithin(document.body);
 	const contentInput = document.getElementById("question-editor-latex-input");
 	const contentLatex = document.getElementById("question-editor-latex-output");
 	const answerRegexText = document.getElementById("question-editor-question-answer-regex");
