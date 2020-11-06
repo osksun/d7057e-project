@@ -144,14 +144,12 @@ const DbCom = new function() {
 
 	/**
 	 * Ajax request to get all questions in a module of a course given the courseName and moduleName
-	 * @param {unsigned int} courseId the id of the course
 	 * @param {unsigned int} moduleId the id of the module
 	 * @return {Promise<Array<Question>>} Promise resolves to an array of Question objects
 	 */
-	this.getQuestions = function(courseId, moduleId) {
+	this.getQuestions = function(moduleId) {
 		return this.ajaxPost(mainURL + "getquestions",
-			"courseID=" + encodeURIComponent(courseId) +
-			"&moduleID=" + encodeURIComponent(moduleId));
+			"moduleID=" + encodeURIComponent(moduleId));
 	};
 
 	/**

@@ -10,7 +10,7 @@ window.addEventListener("load", () => {
 		const questionView = document.getElementById("question-view");
 		
 		coursesButton.addEventListener("click", () => {
-			this.loadCourses(true);
+			this.loadCoursesView(coursesViewManager.containers.CARD, true);
 		});
 
 		this.updatePage = function(url, title, addToHistory) {
@@ -83,7 +83,7 @@ window.addEventListener("load", () => {
 					switch (pathArray[0]) {
 						case "":
 							// /
-							this.loadCourses(addToHistory);
+							this.loadCoursesView(coursesViewManager.containers.CARD, addToHistory);
 							break;
 						case "createcourse":
 							// /createcourse
