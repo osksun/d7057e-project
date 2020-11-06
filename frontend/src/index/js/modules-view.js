@@ -20,12 +20,11 @@ const modulesViewManager = new function() {
 	}
 
 	function createCard(id, name, description, color, courseId, courseName) {
-		const card = document.createElement("li");
-		card.className = "module-card";
-		const a = document.createElement("a");
-		a.href = "#";
+		const card = document.createElement("button");
+		card.className = "card";
+		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
-		header.className = "module-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = color;
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
@@ -35,9 +34,9 @@ const modulesViewManager = new function() {
 		const span = document.createElement("span");
 		span.style.color = color;
 		span.innerText = description;
-		a.appendChild(header);
-		a.appendChild(span);
-		card.appendChild(a);
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(span);
+		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
 			event.preventDefault();
@@ -47,12 +46,11 @@ const modulesViewManager = new function() {
 
 	const createAdminCreateCard = (courseId, courseName, color) => {
 		const card = document.createElement("li");
-		card.className = "module-card";
-		const a = document.createElement("a");
-		a.href = "#";
+		card.className = "card";
+		const cardWrapper = document.createElement("div");
 		const titleWrapper = document.createElement("div");
 		const header = document.createElement("div");
-		header.className = "module-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = "#888";
 		const title = document.createElement("h3");
 		title.innerHTML = "<img style=\"display:block;margin:10px auto 0 auto;width:64px;\" src=\"/src/index/svg/add.svg\">";
@@ -62,9 +60,9 @@ const modulesViewManager = new function() {
 		span.style.float = "none";
 		span.style.display = "block";
 		span.innerHTML = "<br><br>";
-		a.appendChild(header);
-		a.appendChild(span);
-		card.appendChild(a);
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(span);
+		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			this.display(this.containers.EDITOR, courseId, courseName, color, true);
 			event.preventDefault();

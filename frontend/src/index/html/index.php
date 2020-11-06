@@ -7,8 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/index.css">
-		<link rel="stylesheet" type="text/css" href="/src/index/css/courses-view.css">
-		<link rel="stylesheet" type="text/css" href="/src/index/css/modules-view.css">
+		<link rel="stylesheet" type="text/css" href="/src/index/css/cards-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/question-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/course-editor/course-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">
@@ -24,9 +23,9 @@
 		<div id="page-content">
 			<div id="category-container" class="category-container">
 				<div id="button-container" class="button-container">
-					<button id="courses-button"><h2>All courses</h2></button>
-					<button id="modules-button" disabled><h2>Modules</h2></button>
-					<button id="question-button" disabled><h2>Question</h2></button>
+					<button id="courses-button"><h2>All courses</h2></button><!--
+					--><button id="modules-button" disabled><h2>Modules</h2></button><!--
+					--><button id="question-button" disabled><h2>Question</h2></button>
 				</div>
 				<div id="view-container">
 					<div id="courses-view">
