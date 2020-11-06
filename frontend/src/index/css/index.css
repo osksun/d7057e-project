@@ -16,12 +16,13 @@
 	outline : none;
 	border: none;
 	vertical-align: middle;
-	color: #000000;
+	color: #fff;
 	background-color: #323232;
+	cursor:pointer;
 }
 
 .button-container>button:disabled {
-	color:#272727;
+	color:rgba(255,255,255,0.15);
 	pointer-events: none;
 }
 
@@ -29,9 +30,9 @@
 	box-shadow: 0px 0px 0px 6px #74dfff;
 }
 
-.button-container>button:hover {
-	cursor: pointer;
-	background-color: #ffffff;
+.button-container>button:hover, .button-container>button.selected {
+	background-color:#fff;
+	color:#000;
 }
 
 #courses-button {
