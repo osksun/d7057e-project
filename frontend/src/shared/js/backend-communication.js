@@ -46,7 +46,8 @@ const DbCom = new function() {
 				this.createAccessToken().then(() => {
 					resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
 				}).catch(() => {
-					//TODO if refreshtoken has expired redirect to login page
+					//If refreshtoken has expired redirect to login page
+					window.location = "/login";
 					reject();
 				});
 			}
