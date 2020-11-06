@@ -3,3 +3,6 @@ backend/auth/config.json
 backend/auth/database_config.json
 backend/main/config.json
 backend/main/database_config.json
+backend/main/public_key
+backend/auth/private_key
+backend/auth/public_key

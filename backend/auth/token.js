@@ -1,6 +1,7 @@
 
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
+const fs = require("fs");
 
 require("../replaceAll_polyfill.js");
 
@@ -54,13 +55,29 @@ function clearRefreshTokens(userID) {
 }
 exports.clearRefreshTokens = clearRefreshTokens;
 
-const {privateKey, publicKey} = crypto.generateKeyPairSync("rsa", {
-  modulusLength:2048
-});
+function writeKeyToFile(path, key) {
+	const keyString = key.export({type:"pkcs1", format:"pem"});
 
-let publicKeyString = publicKey.export({type:"pkcs1", format:"pem"});
-publicKeyString = publicKeyString.replaceAll("\n", "\\n");
-console.log("Auth public key:\n" + publicKeyString);
+	fs.writeFileSync(path, keyString);
+}
+
+let privateKey = null;
+let publicKey = null;
+
+try {
+	privateKey = crypto.createPrivateKey(fs.readFileSync("private_key"));
+	publicKey = crypto.createPublicKey(privateKey);
+} catch {
+	const keypair = crypto.generateKeyPairSync("rsa", {
+		modulusLength:2048
+	});
+	privateKey = keypair.privateKey;
+	publicKey = keypair.publicKey;
+
+	writeKeyToFile("private_key", privateKey);
+} finally {
+	writeKeyToFile("public_key", publicKey);
+}
 
 function createAccessToken(userID, refreshToken) {
 	return new Promise((resolve, reject) => {
