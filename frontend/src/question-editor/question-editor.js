@@ -1,25 +1,18 @@
 
-window.addEventListener("load", function() {
-	MathJax.startup.document.getMathItemsWithin(document.body);
-  const contentInput = document.getElementById("latex-input");
-	const contentLatex = document.getElementById("latex-output");
-	const answerRegexText = document.getElementById("question-answer-regex");
-	const submitButton = document.getElementById("create-question-button");
-	const message = document.getElementById("question-editor-message");
+const questionEditor = new function(){
+	MathJax.startup.document.getMathItemsWithin(document.body); // TODO
+	const contentInput = document.getElementById("question-editor-latex-input");
+	const contentLatex = document.getElementById("question-editor-latex-output");
+	const answerRegexText = document.getElementById("question-editor-question-answer-regex");
+	const submitButton = document.getElementById("question-editor-create-question-button");
+	const message = document.getElementById("question-editor-question-editor-message");
+	let moduleId = null;
 
-	const courseName = decodeURIComponent(window.location.pathname.substr(16).split("/")[0]);
-	const moduleName = decodeURIComponent(window.location.pathname.substr(16).split("/")[1]);
-
-	let courseID = null;
-	let moduleID = null;
-	DbCom.getCourseByName(courseName).then((result) => {
-		courseID = result.id;
-		DbCom.getModuleByName(courseID, moduleName).then((result) => {
-			moduleID = result.id;
-			submitButton.innerHTML = "<p>Create question</p>";
-			submitButton.disabled = false;
-		});
-	});
+	this.setup = function(_moduleId) {
+		moduleId = _moduleId;
+		submitButton.innerHTML = "<p>Create question</p>";
+		submitButton.disabled = false;
+	};
 
 	function refreshLatex() {
 		contentLatex.innerText = contentInput.value;
@@ -28,14 +21,14 @@ window.addEventListener("load", function() {
 		MathJax.typesetPromise();
 	}
 
-  contentInput.addEventListener("input", () => {
+	contentInput.addEventListener("input", () => {
 		refreshLatex();
-  });
+	});
 	enableTab(contentInput);
 	enableEscape(contentInput);
 
-  function enableTab(textarea) {
-  	textarea.addEventListener("keydown", function(e) {
+	function enableTab(textarea) {
+		textarea.addEventListener("keydown", function(e) {
 			if (e.keyCode === 9) { // tab was pressed
 				// get caret position/selection
 				var start = textarea.selectionStart;
@@ -48,7 +41,7 @@ window.addEventListener("load", function() {
 				// prevent the focus lose
 				e.preventDefault();
 			}
-	});
+		});
 	}
 
 	function enableEscape(textarea) {
@@ -87,4 +80,4 @@ window.addEventListener("load", function() {
 			submitButton.disabled = false;
 		});
 	});
-});
+}();

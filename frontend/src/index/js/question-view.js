@@ -1,5 +1,7 @@
 
 const questionViewManager = new function() {
+	const questionContainer = document.getElementById("question-container");
+	const editorContainer = document.getElementById("question-editor-container");
 	const submitButton = document.getElementById("submit-button");
 	const answerInput = document.getElementById("answer-input");
 	const loadingIcon = document.getElementById("loading-icon");
@@ -7,11 +9,26 @@ const questionViewManager = new function() {
 	const questionButton = document.getElementById("question-button");
 
 	let submitHandler;
-	let displayRandomHandler;
+	let displayHandler;
 	let currentCourseId = null;
 	let currentModuleId = null;
 	let currentQuestionID = null;
 	let segmentInputBoxes = [];
+
+	this.containers = {
+		QUESTION: 0,
+		EDITOR: 1
+	};
+
+	function toggleEditorContainer() {
+		questionContainer.classList.remove("visible");
+		editorContainer.classList.add("visible");
+	}
+
+	function toggleQuestionContainer() {
+		editorContainer.classList.remove("visible");
+		questionContainer.classList.add("visible");
+	}
 
 	const segmentTypes = new Map();
 	this.addSegmentType = function(type, creationFunction) {
@@ -66,17 +83,16 @@ const questionViewManager = new function() {
 			}
 		});
 	};
+
 	submitButton.addEventListener("click", (event) => {
 		this.handleSubmit(currentQuestionID);
 	});
 
 	const setupQuestion = (segments, courseId, courseName, moduleId, moduleName, addToHistory) => {
 		this.clear();
-
 		// Update the page with the content of the question
 		for(let i = 0; i < segments.length; ++i) {
 			const segment = segments[i];
-
 			if(segmentTypes.has(segment.type)) {
 				const result = segmentTypes.get(segment.type)(segment.content);
 				questionSegments.appendChild(result.div);
@@ -85,61 +101,65 @@ const questionViewManager = new function() {
 				const div = document.createElement("div");
 				div.innerText = "Error: Unknown segment! Content: " + segment.content;
 				questionSegments.appendChild(div);
-
 				segmentInputBoxes.push(null);
 			}
 		}
-
 		//Reset Mathjax
 		MathJax.texReset(0);
 		MathJax.typesetClear();
 		MathJax.typesetPromise();
-
 		// Note current course and module ids
 		currentCourseId = courseId;
 		currentModuleId = moduleId;
-
 		// Setup Page URL, title and history
 		viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-
 		// Setup question button
 		questionButton.disabled = false;
 		questionButton.children[0].innerText = moduleName;
-		questionButton.removeEventListener("click", displayRandomHandler);
-		displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
-		questionButton.addEventListener("click", displayRandomHandler);
-
-		// Toggle view
+		questionButton.removeEventListener("click", displayHandler);
+		displayHandler = this.display.bind(this, this.containers.QUESTION, courseId, courseName, moduleId, moduleName);
+		questionButton.addEventListener("click", displayHandler);
+		
+		toggleQuestionContainer();
 		viewManager.toggleQuestionView();
 	};
 
-	this.displayRandom = function(courseId, courseName, moduleId, moduleName, addToHistory = true) {
+	this.display = (containers, courseId, courseName, moduleId, moduleName, addToHistory) => {
 		if (moduleId != currentModuleId) {
 			currentQuestionID = null;
 		}
-
-		function displayQuestion(questionID) {
-			DbCom.getQuestionSegments(questionID).then((segments) => {
-				setupQuestion(segments, courseId, courseName, moduleId, moduleName, addToHistory);
-			}).catch((err) => {
-				console.error(err);
-			});
-		}
-
-		if (currentQuestionID === null) {
-			// Get all questions of the module
-			DbCom.getQuestions(courseId, moduleId).then((questions) => {
-				if (questions.length == 0) {
-					console.log("No questions found");
-					return;
+		switch (containers) {
+			case this.containers.QUESTION:
+				function displayQuestion(questionID) {
+					DbCom.getQuestionSegments(questionID).then((segments) => {
+						setupQuestion(segments, courseId, courseName, moduleId, moduleName, addToHistory);
+					}).catch((err) => {
+						console.error(err);
+					});
 				}
-				currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
-				displayQuestion(currentQuestionID);
-			}).catch((err) => {
-				console.log(err);
-			});
-		} else {
-			displayQuestion(currentQuestionID);
+				if (currentQuestionID === null) {
+					// Get all questions of the module
+					DbCom.getQuestions(moduleId).then((questions) => {
+						if (questions.length == 0) {
+							console.log("No questions found");
+							return;
+						}
+						currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
+						displayQuestion(currentQuestionID);
+					}).catch((err) => {
+						console.log(err);
+					});
+				} else {
+					displayQuestion(currentQuestionID);
+					
+				}
+					
+				break;
+			case this.containers.EDITOR:
+				questionEditor.setup(moduleId);
+				toggleEditorContainer();
+				viewManager.toggleQuestionView();
+				break;
 		}
 	};
 }();

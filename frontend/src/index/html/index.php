@@ -12,6 +12,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/index/css/question-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/course-editor/course-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">
+		<link rel="stylesheet" type="text/css" href="/src/question-editor/question-editor.css">
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
@@ -39,7 +40,11 @@
 						<?php include "../../module-editor/module-editor.html"; ?>
 					</div>
 					<div id="question-view">
-						<?php include "./question-view.html"; ?>
+						<srcipt src="/src/index/js/question-view.js" defer></srcipt>
+						<div id="question-container">
+							<?php include "./question-view.html"; ?>
+						</div>
+						<?php include "../../question-editor/question-editor.html"; ?>
 					</div>
 				</div>
 			</div>

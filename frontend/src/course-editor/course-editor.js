@@ -40,7 +40,7 @@
 			createCourseButton.disabled = true;
 
 			createCourse().then(() => {
-				viewManager.loadCourse(courseName.value, true);
+				viewManager.loadCourseView(viewManager.containers.CARD, courseName.value, true);
 				courseName.value = "";
 				courseColor.value = getRandomColor();
 				courseDescription.value = "";

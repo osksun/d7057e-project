@@ -39,35 +39,23 @@ window.addEventListener("load", () => {
 			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
 		};
 
-		this.loadCourses = function (addToHistory) {
-			coursesViewManager.display(coursesViewManager.containers.CARD, addToHistory);
-		};
-		
-		this.loadCreateCourse = function (addToHistory) {
-			coursesViewManager.display(coursesViewManager.containers.EDITOR, addToHistory);
+		this.loadCoursesView = function (container, addToHistory) {
+			coursesViewManager.display(container, addToHistory);
 		};
 
-		this.loadCourse = function (courseName, addToHistory) {
+		this.loadCourseView = function (container, courseName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
-				modulesViewManager.display(modulesViewManager.containers.CARD, course.id, course.name, "#" + course.color, addToHistory);
+				modulesViewManager.display(container, course.id, course.name, "#" + course.color, addToHistory);
 			}).catch((err) => {
 				console.log(err);
 			});
 		};
 
-		this.loadCreateModule = function (courseName, addToHistory) {
-			DbCom.getCourseByName(courseName).then((course) => {
-				modulesViewManager.display(modulesViewManager.containers.EDITOR, course.id, courseName, "#" + course.color, addToHistory);
-			}).catch((err) => {
-				console.log(err);
-			});
-		};
-
-		this.loadModule = function (courseName, moduleName, addToHistory) {
+		this.loadQuestionView = function (container, courseName, moduleName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
 				DbCom.getModuleByName(course.id, moduleName).then((module) => {
 					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
-					questionViewManager.displayRandom(course.id, course.name, module.id, module.name, addToHistory);
+					questionViewManager.display(container, course.id, course.name, module.id, module.name, addToHistory);
 				}).catch((err) => {
 					console.log(err);
 				});
@@ -76,7 +64,7 @@ window.addEventListener("load", () => {
 			});
 		};
 
-		this.loadPath = function (pathname, addToHistory = true) {
+		this.loadPath = function (pathname, addToHistory) {
 			const pathArray = pathname.substring(1).split("/");
 			switch (pathArray.length) {
 				case 1:
@@ -87,7 +75,7 @@ window.addEventListener("load", () => {
 							break;
 						case "createcourse":
 							// /createcourse
-							this.loadCreateCourse(addToHistory);
+							this.loadCoursesView(coursesViewManager.containers.EDITOR, addToHistory);
 							break;
 						}
 						break;
@@ -96,22 +84,34 @@ window.addEventListener("load", () => {
 						case "courses": {
 							// /courses/course-name
 							const courseName = decodeURIComponent(pathArray[1]);
-							this.loadCourse(courseName, addToHistory);
+							this.loadCourseView(modulesViewManager.containers.CARD, courseName, addToHistory);
 							break;
 						}
 						case "createmodule": {
 							// /createmodule/course-name
 							const courseName = decodeURIComponent(pathArray[1]);
-							this.loadCreateModule(courseName);
+							this.loadCourseView(modulesViewManager.containers.EDITOR, courseName, addToHistory);
 							break;
 						}
 					}
 					break;
 				case 3: {
-					// /courses/course-name/module-name
-					const courseName = decodeURIComponent(pathArray[1]);
-					const moduleName = decodeURIComponent(pathArray[2]);
-					this.loadModule(courseName, moduleName, addToHistory);
+					switch (pathArray[0]) {
+						case "courses": {
+							// /courses/course-name/module-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							const moduleName = decodeURIComponent(pathArray[2]);
+							this.loadQuestionView(questionViewManager.containers.QUESTION, courseName, moduleName, addToHistory);
+							break;
+						}
+						case "createquestion": {
+							// /createquestion/course-name/module-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							const moduleName = decodeURIComponent(pathArray[2]);
+							this.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, addToHistory);
+							break;
+						}
+					}
 					break;
 				}
 			}

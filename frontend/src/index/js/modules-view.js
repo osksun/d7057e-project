@@ -39,7 +39,7 @@ const modulesViewManager = new function() {
 		a.appendChild(span);
 		card.appendChild(a);
 		card.addEventListener("click", (event) => {
-			questionViewManager.displayRandom(courseId, courseName, id, name);
+			questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
 			event.preventDefault();
 		});
 		return card;
