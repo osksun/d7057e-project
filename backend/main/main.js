@@ -8,6 +8,7 @@ const readline = require("readline").createInterface({
 	input:process.stdin,
 	output:process.stdout
 });
+const fs = require("fs");
 
 const config = require("./config.json");
 const database = require("./database.js");
@@ -431,15 +432,18 @@ if(token.isSkippingVerification()) {
 	console.log("WARNING skipping access token verification! For debug purposes only!");
 	initDatabase();
 } else {
-	readline.question("Input auth public key: ", (publicKey) => {
-		publicKey = publicKey.replaceAll("\\n", "\n");
-		if(token.setPublicKey(publicKey)) {
-			console.log("Public key is valid");
-			initDatabase();
-		} else {
-			console.error("Invalid public key!");
+		try {
+			if(token.setPublicKey(fs.readFileSync("public_key"))) {
+				console.log("Public key is valid");
+				initDatabase();
+			} else {
+				console.error("Invalid public key!");
+				console.error("Shutting down...");
+				process.exit(2);
+			}
+		} catch {
+			console.error("Missing public key!");
 			console.error("Shutting down...");
 			process.exit(2);
 		}
-	});
-}
+	}
