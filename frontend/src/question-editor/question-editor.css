@@ -68,8 +68,7 @@
 	text-decoration:underline;
 }
 
-#question-editor-content-container > textarea, /*#TODO*/
-pre {
+#question-editor-content-container > textarea {
 	-moz-tab-size : 4;
 	  -o-tab-size : 4;
 		 tab-size : 4;
