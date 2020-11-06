@@ -34,8 +34,13 @@
 	background-color: #ffffff;
 }
 
-.button-container>button.selected {
-	background-color: #ffffff;
+#courses-button {
+	border-top-left-radius:12px;
+	border-bottom-left-radius:12px;
+}
+#question-button {
+	border-top-right-radius:12px;
+	border-bottom-right-radius:12px;
 }
 
 .button-container>button>h2 {
