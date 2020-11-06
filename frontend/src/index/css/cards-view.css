@@ -1,0 +1,69 @@
+:root {
+	--card-border-radius:8px;
+}
+
+.card {
+	display: inline-block;
+	border-radius:var(--card-border-radius);
+	margin: 0 25px 65px 25px;
+	vertical-align:top;
+	width: 390px;
+	height:290px;
+	text-align: left;
+	background-color: #ffffff;
+	box-shadow: 15px 15px 0 0 #323232;
+	cursor: pointer;
+}
+
+.card>a {
+	display: inline-block;
+	height: 100%;
+	width: 100%;
+	text-decoration: none;
+}
+
+.card>a>ul {
+	color: #000000;
+	font-size: 25px;
+	list-style-type: square;
+	list-style-position: inside;
+}
+
+.card>a>ul>li {
+	text-align:left;
+}
+.card > a > span {
+	display:block;
+	margin:20px;
+	font-size:22px;
+}
+
+.card-header {
+	display:table;
+	border-top-left-radius:var(--card-border-radius);
+	border-top-right-radius:var(--card-border-radius);
+	width:100%;
+	height:200px;
+	color: #ffffff;
+	text-align: center;
+}
+
+.card-header > div {
+	display:table-cell;
+	padding:20px;
+	margin:0;
+	vertical-align:middle;
+	width:100%;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+.card-header > div > h3 {
+	margin:0;
+	padding:0;
+	width:calc(390px - 20px * 2);
+	font-size:26px;
+	line-height:0.98;
+	max-height:160px;
+	overflow-wrap:break-word;
+}

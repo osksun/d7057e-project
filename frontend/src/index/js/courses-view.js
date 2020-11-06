@@ -19,11 +19,11 @@ const coursesViewManager = new function() {
 
 	function createCard(id, name, color, questionCount, answerCount) {
 		const card = document.createElement("div");
-		card.className = "course-card";
+		card.className = "card";
 		const a = document.createElement("a");
 		a.href = "#";
 		const header = document.createElement("div");
-		header.className = "course-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = color;
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
@@ -45,11 +45,11 @@ const coursesViewManager = new function() {
 
 	const createAdminCreateCard = () => {
 		const card = document.createElement("li");
-		card.className = "course-card";
+		card.className = "card";
 		const a = document.createElement("a");
 		a.href = "#";
 		const header = document.createElement("div");
-		header.className = "course-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = "#888";
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
