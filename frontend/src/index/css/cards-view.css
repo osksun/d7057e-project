@@ -3,6 +3,9 @@
 }
 
 .card {
+	position: relative;
+	padding: 0;
+	border: none;
 	display: inline-block;
 	border-radius:var(--card-border-radius);
 	margin: 0 25px 65px 25px;
@@ -15,29 +18,26 @@
 	cursor: pointer;
 }
 
-.card>a {
-	display: inline-block;
-	height: 100%;
-	width: 100%;
-	text-decoration: none;
-}
-
-.card>a>ul {
+.card > div > ul {
 	color: #000000;
 	font-size: 25px;
 	list-style-type: square;
 	list-style-position: inside;
 }
 
-.card>a>ul>li {
+.card > ul > li {
 	text-align:left;
 }
-.card > a > span {
+.card > div > span {
 	display:block;
 	margin:20px;
 	font-size:22px;
 }
 
+.card > div {
+	position: absolute;
+	top: 0;
+}
 .card-header {
 	display:table;
 	border-top-left-radius:var(--card-border-radius);

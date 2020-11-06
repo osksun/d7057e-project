@@ -18,10 +18,9 @@ const coursesViewManager = new function() {
 	}
 
 	function createCard(id, name, color, questionCount, answerCount) {
-		const card = document.createElement("div");
+		const card = document.createElement("button");
 		card.className = "card";
-		const a = document.createElement("a");
-		a.href = "#";
+		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = color;
@@ -33,10 +32,10 @@ const coursesViewManager = new function() {
 		const info = document.createElement("ul");
 		info.innerHTML = "<li><span>Progress: " + answerCount + "/" + questionCount + "</span></li>";
 		info.style.color = color;
-		a.appendChild(header);
-		a.appendChild(info);
-		card.appendChild(a);
-		a.addEventListener("click", (event) => {
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(info);
+		card.appendChild(cardWrapper);
+		card.addEventListener("click", (event) => {
 			modulesViewManager.display(modulesViewManager.containers.CARD, id, name, color, true);
 			event.preventDefault();
 		});
@@ -44,10 +43,9 @@ const coursesViewManager = new function() {
 	}
 
 	const createAdminCreateCard = () => {
-		const card = document.createElement("li");
+		const card = document.createElement("button");
 		card.className = "card";
-		const a = document.createElement("a");
-		a.href = "#";
+		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = "#888";
@@ -59,9 +57,9 @@ const coursesViewManager = new function() {
 		const info = document.createElement("ul");
 		info.style.color = "#fff";
 		info.innerHTML = "<li></li>";
-		a.appendChild(header);
-		a.appendChild(info);
-		card.appendChild(a);
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(info);
+		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			this.display(this.containers.EDITOR, true);
 			event.preventDefault();

@@ -20,10 +20,9 @@ const modulesViewManager = new function() {
 	}
 
 	function createCard(id, name, description, color, courseId, courseName) {
-		const card = document.createElement("li");
+		const card = document.createElement("button");
 		card.className = "card";
-		const a = document.createElement("a");
-		a.href = "#";
+		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = color;
@@ -35,9 +34,9 @@ const modulesViewManager = new function() {
 		const span = document.createElement("span");
 		span.style.color = color;
 		span.innerText = description;
-		a.appendChild(header);
-		a.appendChild(span);
-		card.appendChild(a);
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(span);
+		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			questionViewManager.displayRandom(courseId, courseName, id, name);
 			event.preventDefault();
@@ -48,8 +47,7 @@ const modulesViewManager = new function() {
 	const createAdminCreateCard = (courseId, courseName, color) => {
 		const card = document.createElement("li");
 		card.className = "card";
-		const a = document.createElement("a");
-		a.href = "#";
+		const cardWrapper = document.createElement("div");
 		const titleWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
@@ -62,9 +60,9 @@ const modulesViewManager = new function() {
 		span.style.float = "none";
 		span.style.display = "block";
 		span.innerHTML = "<br><br>";
-		a.appendChild(header);
-		a.appendChild(span);
-		card.appendChild(a);
+		cardWrapper.appendChild(header);
+		cardWrapper.appendChild(span);
+		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			this.display(this.containers.EDITOR, courseId, courseName, color, true);
 			event.preventDefault();
