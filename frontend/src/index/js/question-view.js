@@ -109,6 +109,43 @@ const questionViewManager = new function() {
 		displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
 		questionButton.addEventListener("click", displayRandomHandler);
 
+		//Show submit button
+		submitButton.className = "";
+
+		// Toggle view
+		viewManager.toggleQuestionView();
+	};
+
+	const setupEmptyQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		this.clear();
+
+		//Add no questions message
+		const div = document.createElement("div");
+		div.innerText = "There are no questions in this module";
+		questionSegments.appendChild(div);
+
+		//Reset Mathjax
+		MathJax.texReset(0);
+		MathJax.typesetClear();
+		MathJax.typesetPromise();
+
+		// Note current course and module ids
+		currentCourseId = courseId;
+		currentModuleId = moduleId;
+
+		// Setup Page URL, title and history
+		viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
+
+		// Setup question button
+		questionButton.disabled = false;
+		questionButton.children[0].innerText = moduleName;
+		questionButton.removeEventListener("click", displayRandomHandler);
+		displayRandomHandler = this.displayRandom.bind(this, courseId, courseName, moduleId, moduleName);
+		questionButton.addEventListener("click", displayRandomHandler);
+
+		//Hide submit button
+		submitButton.className = "hidden";
+
 		// Toggle view
 		viewManager.toggleQuestionView();
 	};
@@ -119,22 +156,27 @@ const questionViewManager = new function() {
 		}
 
 		function displayQuestion(questionID) {
-			DbCom.getQuestionSegments(questionID).then((segments) => {
-				setupQuestion(segments, courseId, courseName, moduleId, moduleName, addToHistory);
-			}).catch((err) => {
-				console.error(err);
-			});
+			if(questionID == null) {
+				setupEmptyQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
+			} else {
+				DbCom.getQuestionSegments(questionID).then((segments) => {
+					setupQuestion(segments, courseId, courseName, moduleId, moduleName, addToHistory);
+				}).catch((err) => {
+					console.error(err);
+				});
+			}
 		}
 
 		if (currentQuestionID === null) {
 			// Get all questions of the module
 			DbCom.getQuestions(courseId, moduleId).then((questions) => {
-				if (questions.length == 0) {
-					console.log("No questions found");
-					return;
+				if(questions.length == 0) {
+					currentQuestionID = null;
+					displayQuestion(currentQuestionID);
+				} else {
+					currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
+					displayQuestion(currentQuestionID);
 				}
-				currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
-				displayQuestion(currentQuestionID);
 			}).catch((err) => {
 				console.log(err);
 			});
