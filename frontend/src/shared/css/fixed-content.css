@@ -53,6 +53,7 @@
 	width: 256px;
 	height: 16px;
 	background-color: black;
+	overflow:hidden;
 }
 
 #header-xp-progress-bar-back.skip-animation>div {
