@@ -1,6 +1,5 @@
 
 const questionEditor = new function(){
-	MathJax.startup.document.getMathItemsWithin(document.body);
 	const contentInput = document.getElementById("question-editor-latex-input");
 	const contentLatex = document.getElementById("question-editor-latex-output");
 	const answerRegexText = document.getElementById("question-editor-question-answer-regex");
@@ -16,14 +15,16 @@ const questionEditor = new function(){
 
 	function refreshLatex() {
 		contentLatex.innerText = contentInput.value;
+		//Reset Mathjax
 		MathJax.texReset(0);
-		MathJax.typesetClear();
-		MathJax.typesetPromise();
+		MathJax.typesetClear([contentLatex]);
+		MathJax.typesetPromise([contentLatex]);
 	}
 
 	contentInput.addEventListener("input", () => {
 		refreshLatex();
 	});
+
 	enableTab(contentInput);
 	enableEscape(contentInput);
 
