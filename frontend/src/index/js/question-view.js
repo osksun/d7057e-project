@@ -88,8 +88,7 @@ const questionViewManager = new function() {
 		this.handleSubmit(currentQuestionID);
 	});
 
-	const setupQuestion = (segments, courseId, courseName, moduleId, moduleName, addToHistory) => {
-		this.clear();
+	const setupQuestion = (segments) => {
 		// Update the page with the content of the question
 		for(let i = 0; i < segments.length; ++i) {
 			const segment = segments[i];
@@ -109,72 +108,54 @@ const questionViewManager = new function() {
 		const mathJaxElements = questionSegments.getElementsByClassName("tex2jax_process");
 		MathJax.typesetClear(mathJaxElements);
 		MathJax.typesetPromise(mathJaxElements);
-		// Note current course and module ids
-		currentCourseId = courseId;
-		currentModuleId = moduleId;
-		// Setup Page URL, title and history
-		viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-		// Setup question button
-		questionButton.disabled = false;
-		questionButton.children[0].innerText = moduleName;
-		questionButton.removeEventListener("click", displayHandler);
-		displayHandler = this.display.bind(this, this.containers.QUESTION, courseId, courseName, moduleId, moduleName);
-		questionButton.addEventListener("click", displayHandler);
-	
-		//Show submit button
+		// Show submit button
 		submitButton.className = "";
-
-		toggleQuestionContainer();
-		// Toggle view
-		viewManager.toggleQuestionView();
 	};
 
-	const setupEmptyQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
-		this.clear();
-
-		//Add no questions message
+	const setupEmptyQuestion = () => {
+		// Add no questions message
 		const div = document.createElement("div");
 		div.innerText = "There are no questions in this module";
 		questionSegments.appendChild(div);
+		// Hide submit button
+		submitButton.className = "hidden";
+	};
 
-		// Note current course and module ids
-		currentCourseId = courseId;
-		currentModuleId = moduleId;
-
-		// Setup Page URL, title and history
-		viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-
-		// Setup question button
+	const setupQuestionButton = (container, courseId, courseName, moduleId, moduleName) => {
 		questionButton.disabled = false;
 		questionButton.children[0].innerText = moduleName;
 		questionButton.removeEventListener("click", displayHandler);
-		displayHandler = this.display.bind(this, this.containers.QUESTION, courseId, courseName, moduleId, moduleName);
+		displayHandler = this.display.bind(this, container, courseId, courseName, moduleId, moduleName, true);
 		questionButton.addEventListener("click", displayHandler);
-
-		//Hide submit button
-		submitButton.className = "hidden";
-
-		toggleQuestionContainer();
-		// Toggle view
-		viewManager.toggleQuestionView();
 	};
 
-	this.display = (containers, courseId, courseName, moduleId, moduleName, addToHistory) => {
+	this.display = (container, courseId, courseName, moduleId, moduleName, addToHistory) => {
 		if (moduleId != currentModuleId) {
 			currentQuestionID = null;
 		}
-		switch (containers) {
+		switch (container) {
 			case this.containers.QUESTION:
-				function displayQuestion(questionID) {
+				const displayQuestion = (questionID) => {
+					this.clear();
 					if(questionID == null) {
-						setupEmptyQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
+						setupEmptyQuestion();
 					} else {
 						DbCom.getQuestionSegments(questionID).then((segments) => {
-							setupQuestion(segments, courseId, courseName, moduleId, moduleName, addToHistory);
+							setupQuestion(segments);
 						}).catch((err) => {
 							console.error(err);
 						});
 					}
+					// Note current course and module ids
+					currentCourseId = courseId;
+					currentModuleId = moduleId;
+					// Setup question button
+					setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
+					// Setup Page URL, title and history
+					viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
+					// Toggle view
+					toggleQuestionContainer();
+					viewManager.toggleQuestionView();
 				}
 				if (currentQuestionID === null) {
 					// Get all questions of the module
@@ -195,6 +176,11 @@ const questionViewManager = new function() {
 				break;
 			case this.containers.EDITOR:
 				questionEditor.setup(moduleId);
+				// Setup question button
+				setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
+				// Setup Page URL, title and history
+				viewManager.updatePage("/createquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Create question", addToHistory);
+				// Toggle view
 				toggleEditorContainer();
 				viewManager.toggleQuestionView();
 				break;
