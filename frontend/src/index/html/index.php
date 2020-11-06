@@ -22,9 +22,9 @@
 		<div id="page-content">
 			<div id="category-container" class="category-container">
 				<div id="button-container" class="button-container">
-					<button id="courses-button"><h2>All courses</h2></button>
-					<button id="modules-button" disabled><h2>Modules</h2></button>
-					<button id="question-button" disabled><h2>Question</h2></button>
+					<button id="courses-button"><h2>All courses</h2></button><!--
+					--><button id="modules-button" disabled><h2>Modules</h2></button><!--
+					--><button id="question-button" disabled><h2>Question</h2></button>
 				</div>
 				<div id="view-container">
 					<div id="courses-view">

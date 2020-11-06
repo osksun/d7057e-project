@@ -4,15 +4,15 @@
 	width:92%;
 	white-space: nowrap;
 	padding-top:calc(128px - 52px);
-	margin-left:8%;
+	margin-left:4%;
 }
 
 .button-container>button {
 	display: inline-block;
 	padding:0;
-	margin:0;
-	height: 100%;
-	width: calc((100% - 30px) / 3);
+	margin:0 4px;
+	height:100%;
+	width:calc(100% / 3 - 2 * 4px);
 	outline : none;
 	border: none;
 	vertical-align: middle;
@@ -20,6 +20,14 @@
 	background-color: #323232;
 	box-shadow:5px 8px 0 0 #181818;
 	cursor:pointer;
+}
+.button-container > button:first-of-type {
+	margin-left:0;
+	width:calc(100% / 3 - 4px);
+}
+.button-container > button:last-of-type {
+	margin-right:0;
+	width:calc(100% / 3 - 4px);
 }
 
 .button-container>button:disabled {
@@ -56,7 +64,7 @@
 
 /* views */
 #view-container {
-	margin: 0 0 0 96px;  /* 96px is the width of the sidebar */
+	margin:0;
 }
 
 #view-container>div, #view-container>div>div {
