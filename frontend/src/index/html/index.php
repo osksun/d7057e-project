@@ -7,8 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/index.css">
-		<link rel="stylesheet" type="text/css" href="/src/index/css/courses-view.css">
-		<link rel="stylesheet" type="text/css" href="/src/index/css/modules-view.css">
+		<link rel="stylesheet" type="text/css" href="/src/index/css/cards-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/question-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/course-editor/course-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">

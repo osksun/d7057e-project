@@ -21,11 +21,11 @@ const modulesViewManager = new function() {
 
 	function createCard(id, name, description, color, courseId, courseName) {
 		const card = document.createElement("li");
-		card.className = "module-card";
+		card.className = "card";
 		const a = document.createElement("a");
 		a.href = "#";
 		const header = document.createElement("div");
-		header.className = "module-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = color;
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
@@ -47,12 +47,12 @@ const modulesViewManager = new function() {
 
 	const createAdminCreateCard = (courseId, courseName, color) => {
 		const card = document.createElement("li");
-		card.className = "module-card";
+		card.className = "card";
 		const a = document.createElement("a");
 		a.href = "#";
 		const titleWrapper = document.createElement("div");
 		const header = document.createElement("div");
-		header.className = "module-card-header";
+		header.className = "card-header";
 		header.style.backgroundColor = "#888";
 		const title = document.createElement("h3");
 		title.innerHTML = "<img style=\"display:block;margin:10px auto 0 auto;width:64px;\" src=\"/src/index/svg/add.svg\">";
