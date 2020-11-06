@@ -6,6 +6,7 @@
 	display: inline-block;
 	border-radius: var(--main-border-radius);
 	margin: 0 25px 65px 25px;
+	vertical-align:top;
 	width: 390px;
 	height:290px;
 	text-align: left;
