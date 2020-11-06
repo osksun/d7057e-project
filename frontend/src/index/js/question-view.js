@@ -106,8 +106,9 @@ const questionViewManager = new function() {
 		}
 		//Reset Mathjax
 		MathJax.texReset(0);
-		MathJax.typesetClear();
-		MathJax.typesetPromise();
+		const mathJaxElements = questionSegments.getElementsByClassName("tex2jax_process");
+		MathJax.typesetClear(mathJaxElements);
+		MathJax.typesetPromise(mathJaxElements);
 		// Note current course and module ids
 		currentCourseId = courseId;
 		currentModuleId = moduleId;
@@ -135,11 +136,6 @@ const questionViewManager = new function() {
 		const div = document.createElement("div");
 		div.innerText = "There are no questions in this module";
 		questionSegments.appendChild(div);
-
-		//Reset Mathjax
-		MathJax.texReset(0);
-		MathJax.typesetClear();
-		MathJax.typesetPromise();
 
 		// Note current course and module ids
 		currentCourseId = courseId;
