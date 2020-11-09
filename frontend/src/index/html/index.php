@@ -4,7 +4,7 @@
 		<title>All courses</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/index.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/cards-view.css">
@@ -15,11 +15,11 @@
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
-		<script src="/src/shared/js/fixed-content.js" defer></script>
+		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/index/js/index.js"></script>
 	</head>
 	<body class="tex2jax_ignore">
-		<?php include "../../shared/html/fixed-content.html"; ?>
+		<?php include "../../shared/html/top-bar.html"; ?>
 		<div id="page-content">
 			<div id="category-container" class="category-container">
 				<div id="button-container" class="button-container">
