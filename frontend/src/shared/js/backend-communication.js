@@ -93,15 +93,17 @@ const DbCom = new function() {
 	/**
 	 * Ajax request to create question for a module
 	 * @param {unsigned int} moduleId the id of the module the question should belong to
-	 * @param {string} content the content of the question
-	 * @param {string} answer a regular expression for defining the answer of the question
+	 * @param {string[]} types a list of the types of the segments
+	 * @param {string[]} content a list of the content of the segments
+	 * @param {string[]} answers a list of regular expressions for defining the answer of the segments
 	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the module was successfully created or not
 	 */
-	this.createQuestion = function(moduleId, content, answer) {
+	this.createQuestion = function(moduleId, types, content, answers) {
 		return this.ajaxPost(mainURL + "createquestion",
 			"moduleID=" + encodeURIComponent(moduleId) +
-			"&content=" + encodeURIComponent(content) +
-			"&answer=" + encodeURIComponent(answer));
+			"&types=" + encodeURIComponent(JSON.stringify(types)) +
+			"&content=" + encodeURIComponent(JSON.stringify(content)) +
+			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
 	/**

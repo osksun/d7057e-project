@@ -373,12 +373,141 @@ function init() {
 	app.post("/createquestion", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
+			let types = null;
+			let content = null;
+			let answers = null;
+
+			try {
+				types = JSON.parse(request.body.types);
+				content = JSON.parse(request.body.content);
+				answers = JSON.parse(request.body.answers);
+			} catch {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
+
+			//TODO validate input
+
+			if(content != null && answers != null) {
+				if(!Array.isArray(types) || !Array.isArray(content) || !Array.isArray(answers)) {
+					response.json({
+						error:"Malformed input",
+						errorCode:errorCode.malformedInput
+					});
+				} else if(types.length != content.length || content.length != answers.length) {
+					response.json({
+						error:"Malformed input",
+						errorCode:errorCode.malformedInput
+					});
+				} else {
+					let incorrectType = false;
+					for(let i = 0; i < content.length; ++i) {
+						if(typeof types[i] != "string" && types[i] != null) {
+							incorrectType = true;
+							break;
+						}
+
+						if(typeof content[i] != "string" && content[i] != null) {
+							incorrectType = true;
+							break;
+						}
+
+						if(typeof answers[i] != "string" && answers[i] != null) {
+							incorrectType = true;
+							break;
+						}
+					}
+
+					if(incorrectType) {
+						response.json({
+							error:"Malformed input",
+							errorCode:errorCode.malformedInput
+						});
+					} else {
+						database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+							if(isModerator) {
+								database.createQuestion(moduleID, types, content, answers).then(() => {
+									response.json({
+										success:true
+									});
+								}).catch(() => {
+									response.json({
+										error:"Database error",
+										errorCode:errorCode.unknownDatabaseError
+									});
+								});
+							} else {
+								response.json({
+									error:"Permission denied",
+									errorCode:errorCode.permissionDenied
+								});
+							}
+						}).catch((error) => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
+						});
+					}
+				}
+			}
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/updatecourse", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					const name = request.body.name;
+					const description = request.body.description;
+					const color = request.body.color;
+
+					//TODO validate input
+
+					database.updateCourse(courseID, name, description, color).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/updatemodule", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
+			const name = request.body.name;
+			const description = request.body.description;
 
 			//TODO validate input
 
 			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
 				if(isModerator) {
-					database.createQuestion(moduleID).then(() => {
+					database.updateModule(moduleID, name, description).then(() => {
 						response.json({
 							success:true
 						});

@@ -9,6 +9,7 @@ const bcrypt = require("bcrypt");
 const config = require("./config.json");
 const database = require("./database.js");
 const token = require("./token.js");
+const errorCode = require("../error_code.js");
 
 const validation = require("../validation.js");
 
@@ -81,17 +82,20 @@ function init() {
 					});
 				}).catch(() => {
 					response.json({
-						error:"Failed to create refresh token"
+						error:"Failed to create refresh token",
+						errorCode:errorCode.failedTokenCreation
 					});
 				});
 			}).catch(() => {
 				response.json({
-					error:"Database error"
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
 				});
 			});
 		} else {
 			response.json({
-				error:"Malformed input"
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
 			});
 		}
 	});
@@ -113,22 +117,26 @@ function init() {
 						});
 					}).catch(() => {
 						response.json({
-							error:"Failed to create refresh token"
+							error:"Failed to create refresh token",
+							errorCode:errorCode.failedTokenCreation
 						});
 					});
 				}).catch((e) => {
 					response.json({
-						error:"Failed to change password"
+						error:"Failed to change password",
+							errorCode:errorCode.failedPasswordChange
 					});
 				});
 			}).catch(() => {
 				response.json({
-					error:"Failed to verify current password"
+					error:"Failed to verify current password",
+					errorCode:errorCode.failedPasswordVerification
 				});
 			});
 		} else {
 			response.json({
-				error:"Malformed input"
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
 			});
 		}
 	});
@@ -148,17 +156,20 @@ function init() {
 					});
 				}).catch(() => {
 					response.json({
-						error:"Failed to create refresh token"
+						error:"Failed to create refresh token",
+						errorCode:errorCode.failedTokenCreation
 					});
 				});
 			}).catch(() => {
 				response.json({
-					error:"Login failed"
+					error:"Login failed",
+					errorCode:errorCode.loginFailed
 				});
 			});
 		} else {
 			response.json({
-				error:"Malformed input"
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
 			});
 		}
 	});
@@ -175,12 +186,14 @@ function init() {
 				});
 			}).catch(() => {
 				response.json({
-					error:"Failed to create access token"
+					error:"Failed to create access token",
+					errorCode:errorCode.failedTokenCreation
 				});
 			});
 		} else {
 			response.json({
-				error:"Malformed input"
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
 			});
 		}
 	});
