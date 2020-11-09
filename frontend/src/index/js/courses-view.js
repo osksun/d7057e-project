@@ -32,7 +32,7 @@ const coursesViewManager = new function() {
 			editButton.appendChild(editButtonIcon);
 			editButton.addEventListener("click", (event) => {
 				coursesViewManager.displayEditCourse(name, true);
-				event.preventDefault();
+				event.preventDefault(); // Might not be needed anymore
 				event.stopPropagation();
 			});
 			header.appendChild(editButton);
@@ -53,8 +53,8 @@ const coursesViewManager = new function() {
 		cardWrapper.appendChild(descWrapper);
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
-			modulesViewManager.display(modulesViewManager.containers.CARD, id, name, color, true);
-			event.preventDefault();
+			modulesViewManager.displayModules(id, name, color, true);
+			event.preventDefault(); // Might not be needed anymore
 		});
 		return card;
 	}
