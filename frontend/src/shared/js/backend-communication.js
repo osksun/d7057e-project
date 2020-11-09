@@ -107,6 +107,21 @@ const DbCom = new function() {
 	};
 
 	/**
+	 * Ajax request to update an existing course
+	 * @param {unsigned int} id the id of the course to update
+	 * @param {string} name the new name of the course
+	 * @param {string} description the new description of the course
+	 * @param {string} color the new color as a hexadecimal value for the cards of the course
+	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the course was successfully updated or not
+	 */
+	this.updateCourse = function(id, name, description, color) {
+		return this.ajaxPost(mainURL + "updatecourse",
+			"courseID=" + id +
+			"&name=" + encodeURIComponent(name) +
+			"&description=" + encodeURIComponent(description) +
+			"&color=" + encodeURIComponent(color));
+	};
+	/**
 	 * Ajax request to get a specific course by name
 	 * @param {string} name the name of the course
 	 * @returns {Promise<Course>} Promise resolves to a Course object

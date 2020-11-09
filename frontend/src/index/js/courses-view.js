@@ -3,8 +3,9 @@ const coursesViewManager = new function() {
 	const editorContainer = document.getElementById("course-editor-container");
 
 	this.containers =  {
-		CARD: 0,
-		EDITOR: 1
+		COURSES: 0,
+		EDIT_COURSE: 1,
+		CREATE_COURSE: 2
 	};
 
 	function toggleEditorContainer() {
@@ -65,7 +66,7 @@ const coursesViewManager = new function() {
 		cardWrapper.appendChild(info);
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
-			this.display(this.containers.EDITOR, true);
+			this.displayCreateCourse(true);
 			event.preventDefault();
 		});
 		return card;
@@ -87,24 +88,29 @@ const coursesViewManager = new function() {
 		cardContainer.innerHTML = "";
 	};
 
-	this.display = function(container, addToHistory) {
-		switch (container) {
-			case this.containers.CARD:
-				this.clearCards();
-				DbCom.getCourses().then((courses) => {
-					this.createCards(courses);
-					toggleCardContainer();
-					viewManager.updatePage("/", "All courses", addToHistory);
-					viewManager.toggleCoursesView();
-				}).catch((err) => {
-					console.log(err);
-				});
-				break;
-			case this.containers.EDITOR:
-				toggleEditorContainer();
-				viewManager.updatePage("/createcourse", "Create course", addToHistory);
-				viewManager.toggleCoursesView();
-				break;
-		}
+	this.displayCourses = function(addToHistory) {
+		this.clearCards();
+		DbCom.getCourses().then((courses) => {
+			this.createCards(courses);
+			toggleCardContainer();
+			viewManager.updatePage("/", "All courses", addToHistory);
+			viewManager.toggleCoursesView();
+		}).catch((err) => {
+			console.log(err);
+		});
+	};
+
+	this.displayEditCourse = function(courseName, addToHistory) {
+		courseEditor.setupEdit(courseName);
+		toggleEditorContainer();
+		viewManager.updatePage("/editcourse", "Edit course", addToHistory);
+		viewManager.toggleCoursesView();
+	};
+
+	this.displayCreateCourse = function(addToHistory) {
+		courseEditor.setupCreate();
+		toggleEditorContainer();
+		viewManager.updatePage("/createcourse", "Create course", addToHistory);
+		viewManager.toggleCoursesView();
 	};
 }();

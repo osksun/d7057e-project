@@ -10,7 +10,7 @@ window.addEventListener("load", () => {
 		const questionView = document.getElementById("question-view");
 		
 		coursesButton.addEventListener("click", () => {
-			this.loadCoursesView(coursesViewManager.containers.CARD, true);
+			coursesViewManager.displayCourses(true);
 		});
 
 		this.updatePage = function(url, title, addToHistory) {
@@ -37,10 +37,6 @@ window.addEventListener("load", () => {
 
 		this.toggleQuestionView = function () {
 			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
-		};
-
-		this.loadCoursesView = function (container, addToHistory) {
-			coursesViewManager.display(container, addToHistory);
 		};
 
 		this.loadCourseView = function (container, courseName, addToHistory) {
@@ -71,11 +67,11 @@ window.addEventListener("load", () => {
 					switch (pathArray[0]) {
 						case "":
 							// /
-							this.loadCoursesView(coursesViewManager.containers.CARD, addToHistory);
+							coursesViewManager.displayCourses(addToHistory);
 							break;
 						case "createcourse":
 							// /createcourse
-							this.loadCoursesView(coursesViewManager.containers.EDITOR, addToHistory);
+							coursesViewManager.displayCreateCourse(addToHistory);
 							break;
 						}
 						break;
@@ -92,6 +88,11 @@ window.addEventListener("load", () => {
 							const courseName = decodeURIComponent(pathArray[1]);
 							this.loadCourseView(modulesViewManager.containers.EDITOR, courseName, addToHistory);
 							break;
+						}
+						case "editcourse": {
+							// /editcourse/course-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							coursesViewManager.displayEditCourse(courseName, addToHistory);
 						}
 					}
 					break;
