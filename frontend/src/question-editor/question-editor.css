@@ -1,4 +1,12 @@
 
+#question-editor-segments > div {
+	padding:50px 0;
+	border-bottom:2px dashed #aaa;
+}
+#question-editor-segments > div:first-of-type {
+	border-top:2px dashed #aaa;
+}
+
 #question-editor-segments > .mathjax-latex > textarea, #question-editor-segments > .mathjax-latex > p, #question-editor-segments > .mathjax-latex-answer > .latex {
 	display: inline-block;
 	padding: 0;
