@@ -5,7 +5,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
-		<link rel="stylesheet" type="text/css" href="/src/shared/css/fixed-content.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 	</head>
