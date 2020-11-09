@@ -16,7 +16,7 @@
 	display:inline-block;
 	vertical-align:top;
 	margin:0;
-	margin-left: 70px;
+	margin-left:4%;
 	padding:17px 0 17px 0;
 	background-color:#323232;
 	white-space:nowrap;
@@ -87,8 +87,8 @@
 	line-height: 128px;
 	font-size: 85px;
 	font-weight: normal;
-		color:#000;
-		text-decoration:none;
+	color:#000;
+	text-decoration:none;
 	transform: skew(45deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
 	-webkit-transform: skew(45deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
 	-ms-transform: skew(45deg, 0deg); /* IE 9 */
@@ -98,7 +98,7 @@
 #navbar {
 	display:inline-block;
 	margin:0px;
-	margin-right: 70px;
+	margin-right: 4%;
 	padding:0 15px 5px 15px;
 	float:right;
 	background-color: #323232;
