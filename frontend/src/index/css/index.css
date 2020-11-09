@@ -3,7 +3,7 @@
 	height: 52px;
 	width:100%;
 	white-space: nowrap;
-	padding-top:calc(128px - 52px);
+	padding-top:16px;
 }
 
 #page-content {
