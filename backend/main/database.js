@@ -130,6 +130,20 @@ function createCourse(name, description, color) {
 }
 exports.createCourse = createCourse;
 
+function updateCourse(courseID, name, description, color) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE courses SET name = ?, description = ?, color = ? WHERE id = ?", [name, description, color, courseID], (error, result) => {
+			if(error) {
+				console.log(error)
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.updateCourse = updateCourse;
+
 function getCourseByName(name) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT id, name, description, color FROM courses WHERE name=?", [name], (error, result) => {
@@ -191,6 +205,19 @@ function createModule(courseID, name, description) {
 	});
 }
 exports.createModule = createModule;
+
+function updateModule(moduleID, name, description) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE modules SET name = ?, description = ? WHERE id = ?", [name, description, moduleID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.updateModule = updateModule;
 
 function getModuleByName(courseID, name) {
 	return new Promise((resolve, reject) => {

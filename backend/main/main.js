@@ -458,6 +458,82 @@ function init() {
 		});
 	});
 
+	app.post("/updatecourse", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					const name = request.body.name;
+					const description = request.body.description;
+					const color = request.body.color;
+
+					//TODO validate input
+
+					database.updateCourse(courseID, name, description, color).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/updatemodule", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
+			const name = request.body.name;
+			const description = request.body.description;
+
+			//TODO validate input
+
+			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+				if(isModerator) {
+					database.updateModule(moduleID, name, description).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
