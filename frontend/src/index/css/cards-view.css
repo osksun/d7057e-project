@@ -95,3 +95,14 @@
 	max-height:160px;
 	overflow-wrap:break-word;
 }
+
+.card-header > button {
+	position:absolute;
+	top:0;
+	right:0;
+	height:48px;
+	width:48px;
+	border:none;
+	background-color:transparent;
+	cursor: pointer;
+}
