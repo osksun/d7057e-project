@@ -4,28 +4,13 @@ const courseEditor = new function() {
 	const courseDescription = document.getElementById("course-editor-course-description");
 	const submitButton = document.getElementById("course-editor-submit-button");
 	const message = document.getElementById("course-editor-message");
+	let submitHandler = null;
 
 	this.setupCreate = function() {
 		// Setup for create new course
 		courseColor.value = getRandomColor();
 		submitButton.innerHTML = "<p>Create course</p>";
-		submitButton.addEventListener("click", () => {
-			if(courseName.reportValidity() && courseDescription.reportValidity()) {
-				submitButton.innerHTML = "<p>. . .</p>";
-				submitButton.disabled = true;
-				createCourse().then(() => {
-					viewManager.loadCourseView(modulesViewManager, courseName.value, true);
-					clear();
-				}).catch((result) => {
-					if(result.hasOwnProperty("error")) {
-						showMessage("Error: " + result.error, true);
-					}
-				}).finally(() => {
-					submitButton.innerHTML = "";
-					submitButton.disabled = false;
-				});
-			}
-		});
+		submitHandler = createCourse;
 	};
 
 	this.setupEdit = function(_courseName) {
@@ -35,25 +20,27 @@ const courseEditor = new function() {
 			courseName.value = course.name;
 			courseDescription.value = course.description;
 			submitButton.innerHTML = "<p>Update course</p>";
-			submitButton.addEventListener("click", () => {
-				if(courseName.reportValidity() && courseDescription.reportValidity()) {
-					submitButton.innerHTML = "<p>. . .</p>";
-					submitButton.disabled = true;
-					updateCourse(course.id).then(() => {
-						viewManager.loadCourseView(modulesViewManager.containers.CARD, courseName.value, true);
-						clear();
-					}).catch((result) => {
-						if(result.hasOwnProperty("error")) {
-							showMessage("Error: " + result.error, true);
-						}
-					}).finally(() => {
-						submitButton.innerHTML = "<p></p>";
-						submitButton.disabled = false;
-					});
-				}
-			});
+			submitHandler = updateCourse.bind(this, course.id);
 		});
 	};
+
+	submitButton.addEventListener("click", () => {
+		if(courseName.reportValidity() && courseDescription.reportValidity()) {
+			submitButton.innerHTML = "<p>. . .</p>";
+			submitButton.disabled = true;
+			submitHandler().then(() => {
+				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName.value, null, true);
+				clear();
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				submitButton.innerHTML = "";
+				submitButton.disabled = false;
+			});
+		}
+	});
 
 	function getRandomColor() {
 		const values = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"];
