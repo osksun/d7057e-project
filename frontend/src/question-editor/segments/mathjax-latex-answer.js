@@ -1,9 +1,19 @@
 
-questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
+questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", function() {
 	const div = document.createElement("div");
-	div.className = "mathjax-latex";
+	div.className = "mathjax-latex-answer";
+
+	const answerWrapper = document.createElement("div");
+	const answerTitle = document.createElement("span");
+	answerTitle.innerText = "Answer regex: ";
+	answerWrapper.appendChild(answerTitle);
+	const answerRegex = document.createElement("input");
+	answerWrapper.appendChild(answerRegex);
+	div.appendChild(answerWrapper);
 
 	const latexInput = document.createElement("textarea");
+	latexInput.value = "$x=$";
+	latexInput.className = "latex";
 	div.appendChild(latexInput);
 
 	latexInput.addEventListener("keydown", function(event) {
@@ -26,16 +36,27 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 		}
 	});
 
-	const latexOutput = document.createElement("p");
-	div.appendChild(latexOutput);
+	const output = document.createElement("div");
+	output.className = "latex";
+	const latexOutput = document.createElement("span");
+	output.appendChild(latexOutput);
+	const input = document.createElement("input");
+	output.appendChild(input);
+	div.appendChild(output);
 
-	latexInput.addEventListener("input", () => {
+	function refreshLatex() {
 		latexOutput.innerText = latexInput.value;
+
 		//Reset Mathjax
 		MathJax.texReset(0);
 		MathJax.typesetClear([latexOutput]);
 		MathJax.typesetPromise([latexOutput]);
+	}
+
+	latexInput.addEventListener("input", () => {
+		refreshLatex();
 	});
+	refreshLatex();
 
 	return {
 		div:div,
@@ -43,7 +64,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 			return latexInput.value
 		},
 		getAnswer:() => {
-			return null;
+			return answerRegex.value;
 		}
 	};
 });

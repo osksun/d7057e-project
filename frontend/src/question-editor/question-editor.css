@@ -1,5 +1,5 @@
 
-#question-editor-segments > .latex-editor > * {
+#question-editor-segments > .mathjax-latex > textarea, #question-editor-segments > .mathjax-latex > p, #question-editor-segments > .mathjax-latex-answer > .latex {
 	display: inline-block;
 	padding: 0;
 	width: calc((100% - 105px - 40px) * 0.5);
@@ -9,12 +9,30 @@
 	color: #ffffff;
 	border: 1px solid #ffffff;
 	vertical-align: middle;
-	font-size: 20px
+	font-size: 20px;
+	overflow-y:auto;
 }
-#question-editor-segments > .latex-editor > textarea {
+#question-editor-segments > .mathjax-latex > textarea {
 	-moz-tab-size:2;
 	-o-tab-size:2;
 	tab-size:2;
+}
+#question-editor-segments > .mathjax-latex-answer > .latex > input {
+	margin:8px;
+}
+#question-editor-segments > .mathjax-latex-answer > .latex {
+	height:100px;
+}
+
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex) {
+	margin:10px;
+}
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > span {
+	color:#fff;
+	font-size:24px;
+}
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > input {
+	font-size:24px;
 }
 
 #question-editor-bottom-container {
