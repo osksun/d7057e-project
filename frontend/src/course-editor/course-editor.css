@@ -1,10 +1,10 @@
 #course-editor-container {
-	margin:64px 0 0 0;
+	margin:0;
 	text-align:center;
 	color:#fff;
 }
 #course-editor-container > div {
-	margin:50px;
+	margin:0 0 50px 0;
 }
 #course-editor-container > div > h3 {
 	margin:0;

@@ -1,11 +1,11 @@
 
 #module-editor-container {
-	margin:65px 0 0 0;
+	margin:0;
 	text-align:center;
 	color:#fff;
 }
 #module-editor-container > div {
-	margin:50px;
+	margin:0 0 50px 0;
 }
 #module-editor-container > div > h3 {
 	margin:0;
