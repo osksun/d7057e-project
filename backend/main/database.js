@@ -229,13 +229,58 @@ function getModules(courseID) {
 }
 exports.getModules = getModules;
 
-function createQuestion(moduleID) {
+function createQuestion(moduleID, types, content, answers) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT INTO questions (moduleID) VALUES (?)", [moduleID], (error, result) => {
+		connection.beginTransaction(function(error) {
 			if(error) {
 				reject();
 			} else {
-				resolve();
+				connection.query("INSERT INTO questions (moduleID) VALUES (?)", [moduleID], (error, result) => {
+					if(error) {
+						connection.rollback(function() {
+							reject();
+						});
+					} else {
+						const questionID = result.insertId;
+						const promises = [];
+						for(let i = 0; i < types.length; ++i) {
+							promises.push(new Promise((resolve, reject) => {
+								connection.query("INSERT INTO questionsegments (questionID, segmentOrder, type, content, answer) VALUES (?, ?, ?, ?, ?)", [questionID, i, types[i], content[i], answers[i]], (error, result) => {
+									if(error) {
+										reject();
+									} else {
+										resolve();
+									}
+								});
+							}));
+						}
+
+						Promise.allSettled(promises).then((results) => {
+							let failed = false;
+							for(let i = 0; i < results.length; ++i) {
+								if(results[i].status != "fulfilled") {
+									failed = true;
+								}
+							}
+
+							if(failed) {
+								connection.rollback(function() {
+									reject();
+								});
+							} else {
+								connection.commit(function(error) {
+									if(error) {
+										connection.rollback(function() {
+											reject();
+										});
+									} else {
+										resolve();
+									}
+								});
+							}
+						});
+					}
+				});
 			}
 		});
 	});

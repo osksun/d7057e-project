@@ -1,5 +1,5 @@
 
-#question-editor-content-container>* {
+#question-editor-segments > .latex-editor > * {
 	display: inline-block;
 	padding: 0;
 	width: calc((100% - 105px - 40px) * 0.5);
@@ -11,36 +11,21 @@
 	vertical-align: middle;
 	font-size: 20px
 }
-
-#question-editor-latex-input-input {
-	margin: 0 0 0 105px;
-}
-
-#question-editor-latex-output {
-	margin: 0 0 0 0;
+#question-editor-segments > .latex-editor > textarea {
+	-moz-tab-size:2;
+	-o-tab-size:2;
+	tab-size:2;
 }
 
 #question-editor-bottom-container {
 	margin:20px 0 0 125px;
 }
 
-#question-editor-answer-title {
-	margin:0 10px 0 0;
-	padding:0;
-	display:inline-block;
-	font-family:28px;
-	color:#fff;
-}
-#question-editor-question-answer-regex {
-	width:250px;
-	font-size:28px;
-}
-
-#question-editor-create-question-button {
-	margin:0 45px 0 10px;
+#question-editor-bottom-container button {
+	display:block;
+	margin:10px auto;
 	padding:15px 35px;
-	float:right;
-	width:320px;
+	width:500px;
 	font-size:28px;
 	font-weight:bold;
 	cursor:pointer;
@@ -48,7 +33,7 @@
 	-webkit-transform:skew(-20deg, 0deg); /* Ch <36, Saf 5.1+, iOS < 9.2, An =<4.4.4 */
 	-ms-transform:skew(-20deg, 0deg); /* IE 9 */
 }
-#question-editor-create-question-button > p {
+#question-editor-bottom-container button > p {
 	margin:0;
 	padding:0;
 	transform:skew(20deg, 0deg); /* IE 10, Fx 16+, Op 12.1+ */
@@ -56,20 +41,20 @@
 	-ms-transform:skew(20deg, 0deg); /* IE 9 */
 }
 
+#question-editor-create-question-button {
+	width:320px !important;
+	margin:200px auto 50px auto !important;
+}
+
 #question-editor-question-editor-message {
-	margin:50px 0 0 0;
+	margin:50px;
 	padding:0;
 	text-align:center;
 	font-size:28px;
 	font-weight:bold;
+	color:#fff;
 }
 #question-editor-question-editor-message.error {
 	color:#f00;
 	text-decoration:underline;
-}
-
-#question-editor-content-container > textarea {
-	-moz-tab-size : 4;
-	  -o-tab-size : 4;
-		 tab-size : 4;
 }
