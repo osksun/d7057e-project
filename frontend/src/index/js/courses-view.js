@@ -114,7 +114,7 @@ const coursesViewManager = new function() {
 	this.displayEditCourse = function(courseName, addToHistory) {
 		courseEditor.setupEdit(courseName);
 		toggleEditorContainer();
-		viewManager.updatePage("/editcourse", "Edit course", addToHistory);
+		viewManager.updatePage("/editcourse/" + encodeURIComponent(courseName), "Edit course", addToHistory);
 		viewManager.toggleCoursesView();
 	};
 
