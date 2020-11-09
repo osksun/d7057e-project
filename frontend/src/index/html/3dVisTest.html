@@ -29,7 +29,7 @@
 		<div id="ggb-element"></div> 
 
 		<script>  
-			var ggbApp = new GGBApplet({"appName": "3d", "width": 800, "height": 600, "showToolBar": true, "showAlgebraInput": true, "showMenuBar": true }, true);
+			let ggbApp = new GGBApplet({"appName": "3d", "width": 800, "height": 600, "showToolBar": true, "showAlgebraInput": true, "showMenuBar": true }, true);
 			window.addEventListener("load", function() { 
 				ggbApp.inject('ggb-element');
 			});
@@ -74,7 +74,7 @@
 			//plane.rotateX( - Math.PI / 3);
 			camera.position.set(0,5,10);
 			camera.lookAt(0,0,0)
-			scene.add(helper);
+			//scene.add(helper);
 			scene.add(plane);
 			cube.position.y = -10
 			scene.add(cube);
