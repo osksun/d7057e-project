@@ -31,11 +31,16 @@ const modulesViewManager = new function() {
 		title.innerText = name;
 		titleWrapper.appendChild(title);
 		header.appendChild(titleWrapper);
-		const span = document.createElement("span");
-		span.style.color = color;
-		span.innerText = description;
+		const descWrapper = document.createElement("div");
+		descWrapper.className = "description-wrapper";
+		const paragraph = document.createElement("p");
+		paragraph.className = ""
+		paragraph.style.color = color;
+		paragraph.innerText = description;
+		descWrapper.appendChild(paragraph);
 		cardWrapper.appendChild(header);
-		cardWrapper.appendChild(span);
+		cardWrapper.appendChild(descWrapper);
+		/*cardWrapper.appendChild(span);*/
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);

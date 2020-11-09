@@ -1,5 +1,6 @@
 :root {
 	--card-border-radius:8px;
+	--desc-height:30%;
 }
 
 .card {
@@ -10,19 +11,13 @@
 	border-radius:var(--card-border-radius);
 	margin: 0 25px 65px 25px;
 	vertical-align:top;
-	width: 390px;
-	height:290px;
+	width: 300px;
+	min-height:290px;
+	max-height:350px;
 	text-align: left;
 	background-color: #ffffff;
 	box-shadow: 15px 15px 0 0 #323232;
 	cursor: pointer;
-}
-
-.card > div > ul {
-	color: #000000;
-	font-size: 25px;
-	list-style-type: square;
-	list-style-position: inside;
 }
 
 .card > ul > li {
@@ -34,18 +29,54 @@
 	font-size:22px;
 }
 
+/* Card Wrapper, inherits height and width from card*/ 
 .card > div {
 	position: absolute;
+	height:100%;
+	width:100%;
 	top: 0;
 }
+
+/* Top part contained within Card Wrapper */
 .card-header {
 	display:table;
 	border-top-left-radius:var(--card-border-radius);
 	border-top-right-radius:var(--card-border-radius);
 	width:100%;
-	height:200px;
+	height:calc(100% - var(--desc-height));
 	color: #ffffff;
 	text-align: center;
+}
+
+/* Class to alter the bottom part of the content within Card Wrapper */
+.description-wrapper{
+	width:100%;
+	height:var(--desc-height);
+	top:0;
+	
+}
+
+/* Kontrollerar unsorted list av course cards */
+.description-wrapper > ul{
+	color: #000000;
+	font-size: 25px;
+	list-style-type: square;
+	list-style-position: inside;
+}
+
+/* Kontrollerar Description av Module cards */
+.description-wrapper > p{
+	width: 90%;
+	overflow:hidden;
+	white-space: nowrap; 
+	/* CSS har ingen riktig funktionallitet för vertikal text-overflow. Föreslår att vi gör
+	   någon js funktion som printar ut "..." i slutet av en description efter x antal karaktärer.*/
+    margin-left: auto;
+    position: relative;
+    font-size: 21px;
+	margin-right: auto;
+	text-overflow: ellipsis;
+
 }
 
 .card-header > div {
@@ -61,7 +92,8 @@
 .card-header > div > h3 {
 	margin:0;
 	padding:0;
-	width:calc(390px - 20px * 2);
+	/*width:calc(390px - 20px * 2);*/ /* Fattar inte syftet att overflowa parent med en fixed h3. Har designat om så att module och courses
+	ärver bredd och höjd ordentligt nu. Båda delarna är uppdelade i varsin div som totalt täcker 100% av kortets yta */
 	font-size:26px;
 	line-height:0.98;
 	max-height:160px;

@@ -29,11 +29,15 @@ const coursesViewManager = new function() {
 		title.innerText = name;
 		titleWrapper.appendChild(title);
 		header.appendChild(titleWrapper);
+		const descWrapper = document.createElement("div");
 		const info = document.createElement("ul");
 		info.innerHTML = "<li><span>Progress: " + answerCount + "/" + questionCount + "</span></li>";
+		descWrapper.appendChild(info);
+		descWrapper.className = "description-wrapper";
 		info.style.color = color;
 		cardWrapper.appendChild(header);
-		cardWrapper.appendChild(info);
+		//cardWrapper.appendChild(info);
+		cardWrapper.appendChild(descWrapper);
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			modulesViewManager.display(modulesViewManager.containers.CARD, id, name, color, true);
