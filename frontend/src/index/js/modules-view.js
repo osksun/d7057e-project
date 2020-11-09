@@ -5,8 +5,9 @@ const modulesViewManager = new function() {
 	let displayHandler;
 
 	this.containers = {
-		CARD: 0,
-		EDITOR: 1
+		MODULES: 0,
+		EDIT_MODULE: 1,
+		CREATE_MODULE: 2
 	};
 
 	function toggleEditorContainer() {
@@ -19,13 +20,25 @@ const modulesViewManager = new function() {
 		cardContainer.classList.add("visible");
 	}
 
-	function createCard(id, name, description, color, courseId, courseName) {
+	function createCard(id, name, description, color, courseId, courseName, isAdmin, isModerator) {
 		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = color;
+		if (isAdmin || isModerator) {
+			const editButton = document.createElement("button");
+			const editButtonIcon = document.createElement("img");
+			editButtonIcon.src = "/src/index/svg/edit.svg";
+			editButton.appendChild(editButtonIcon);
+			editButton.addEventListener("click", (event) => {
+				modulesViewManager.displayEditModule(courseId, courseName, color, name, true);
+				event.preventDefault(); // Might not be needed anymore
+				event.stopPropagation();
+			});
+			header.appendChild(editButton);
+		}
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
 		title.innerText = name;
@@ -44,7 +57,7 @@ const modulesViewManager = new function() {
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
-			event.preventDefault();
+			event.preventDefault(); // Might not be needed anymore
 		});
 		return card;
 	}
@@ -69,21 +82,23 @@ const modulesViewManager = new function() {
 		cardWrapper.appendChild(span);
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
-			this.display(this.containers.EDITOR, courseId, courseName, color, true);
+			this.displayCreateModule(courseId, courseName, color, true);
 			event.preventDefault();
 		});
 		return card;
 	};
 
 	this.createCards = function(modules, color, courseId, courseName) {
-		modules.forEach((module) => {
-			cardContainer.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName));
-		});
+		DbCom.isAdmin().then((adminResult) => {
 
-		DbCom.isModerator(courseId).then((result) => {
-			if(result.isModerator) {
-				cardContainer.appendChild(createAdminCreateCard(courseId, courseName, color));
-			}
+			DbCom.isModerator(courseId).then((result) => {
+				modules.forEach((module) => {
+					cardContainer.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName, adminResult.isAdmin, result.isModerator));
+				});
+				if(result.isModerator) {
+					cardContainer.appendChild(createAdminCreateCard(courseId, courseName, color));
+				}
+			});
 		});
 	};
 
@@ -91,36 +106,41 @@ const modulesViewManager = new function() {
 		cardContainer.innerHTML = "";
 	};
 
-	this.display = function(container, courseId, courseName, color, addToHistory) {
-		switch (container) {
-			case this.containers.CARD:
-				DbCom.getModules(courseId).then((modules) => {
-					this.clear();
-					this.createCards(modules, color, courseId, courseName);
-					toggleCardContainer();
-					viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
-					questionViewManager.updateButton(courseId);
-					this.updateButton(courseId, courseName, color);
-					viewManager.toggleModulesView();
-				}).catch((err) => {
-					console.log(err);
-				});
-				break;
-			case this.containers.EDITOR:
-				moduleEditor.setup(courseId, courseName);
-				toggleEditorContainer();
-				viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", addToHistory);
-				this.updateButton(courseId, courseName, color);
-				viewManager.toggleModulesView();
-				break;
-		}
+	this.displayModules = function(courseId, courseName, color, addToHistory) {
+		DbCom.getModules(courseId).then((modules) => {
+			this.clear();
+			this.createCards(modules, color, courseId, courseName);
+			toggleCardContainer();
+			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()), courseName, addToHistory);
+			questionViewManager.updateButton(courseId);
+			this.updateButton(courseId, courseName, color);
+			viewManager.toggleModulesView();
+		}).catch((err) => {
+			console.log(err);
+		});
+	};
+	
+	this.displayEditModule = function(courseId, courseName, color, moduleName, addToHistory) {
+		moduleEditor.setupEdit(courseId, courseName, moduleName);
+		toggleEditorContainer();
+		viewManager.updatePage("/editmodule/" + encodeURIComponent(courseName) + "/" + encodeURIComponent(moduleName), "Edit module", addToHistory);
+		this.updateButton(courseId, courseName, color);
+		viewManager.toggleModulesView();
+	};
+
+	this.displayCreateModule = function(courseId, courseName, color, addToHistory) {
+		moduleEditor.setupCreate(courseId, courseName);
+		toggleEditorContainer();
+		viewManager.updatePage("/createmodule/" + encodeURIComponent(courseName), "Create module", addToHistory);
+		this.updateButton(courseId, courseName, color);
+		viewManager.toggleModulesView();
 	};
 
 	this.updateButton = function(courseId, courseName, color) {
 		modulesbutton.disabled = false;
 		modulesbutton.children[0].innerText = courseName;
 		modulesbutton.removeEventListener("click", displayHandler);
-		displayHandler = this.display.bind(this, this.containers.CARD, courseId, courseName, color, true);
+		displayHandler = this.displayModules.bind(this, courseId, courseName, color, true);
 		modulesbutton.addEventListener("click", displayHandler);
 	};
 }();

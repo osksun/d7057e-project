@@ -1,18 +1,51 @@
 const moduleEditor = new function() {
 	const courseNameTitle = document.getElementById("module-editor-course-name");
+	const moduleName = document.getElementById("module-editor-module-name");
+	const moduleDescription = document.getElementById("module-editor-module-description");
+	const createModuleButton = document.getElementById("module-editor-submit-button");
+	const message = document.getElementById("module-editor-message");
 	let courseId = null;
+	let courseName = null;
+	let submitHandler = null;
 
-	this.setup = function(_courseId, courseName) {
+	this.setupCreate = function(_courseId, courseName) {
 		courseId = _courseId;
 		createModuleButton.innerHTML = "<p>Create module</p>";
 		createModuleButton.disabled = false;
 		courseNameTitle.textContent = decodeURIComponent(courseName);
+		submitHandler = createModule;
 	};
 
-	const moduleName = document.getElementById("module-editor-module-name");
-	const moduleDescription = document.getElementById("module-editor-module-description");
-	const createModuleButton = document.getElementById("module-editor-create-module-button");
-	const message = document.getElementById("module-editor-message");
+	this.setupEdit = function(_courseId, _courseName, _moduleName) {
+		DbCom.getModuleByName(_courseId, _moduleName).then((module) => {
+			courseId = _courseId;
+			courseName = _courseName;
+			createModuleButton.innerHTML = "<p>Update module</p>";
+			createModuleButton.disabled = false;
+			courseNameTitle.textContent = decodeURIComponent(_courseName);
+			moduleName.value = module.name;
+			moduleDescription.value = module.description;
+			submitHandler = updateModule.bind(this, module.id);
+		});
+	};
+
+	createModuleButton.addEventListener("click", () => {
+		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
+			createModuleButton.innerHTML = "<p>. . .</p>";
+			createModuleButton.disabled = true;
+			submitHandler().then(() => {
+				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName, moduleName.value, true);
+				clear();
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				createModuleButton.innerHTML = "<p></p>";
+				createModuleButton.disabled = false;
+			});
+		}
+	});
 
 	function createModule() {
 		return new Promise((resolve, reject) => {
@@ -24,6 +57,22 @@ const moduleEditor = new function() {
 		});
 	}
 
+	function updateModule(id) {
+		return new Promise((resolve, reject) => {
+			DbCom.updateModule(id, moduleName.value, moduleDescription.value).then(() => {
+				resolve();
+			}).catch((result) => {
+				reject(result);
+			});
+		});
+	}
+
+	function clear() {
+		moduleName.value = "";
+		moduleDescription.value = "";
+		showMessage("", false);
+	}
+
 	function showMessage(text, isError) {
 		message.textContent = text;
 		if(isError) {
@@ -32,24 +81,4 @@ const moduleEditor = new function() {
 			message.className = "";
 		}
 	}
-
-	createModuleButton.addEventListener("click", () => {
-		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
-			createModuleButton.innerHTML = "<p>. . .</p>";
-			createModuleButton.disabled = true;
-
-			createModule().then(() => {
-				moduleName.value = "";
-				moduleDescription.value = "";
-				showMessage("", false);
-			}).catch((result) => {
-				if(result.hasOwnProperty("error")) {
-					showMessage("Error: " + result.error, true);
-				}
-			}).finally(() => {
-				createModuleButton.innerHTML = "<p>Create module</p>";
-				createModuleButton.disabled = false;
-			});
-		}
-	});
 }();

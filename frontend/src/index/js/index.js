@@ -39,9 +39,22 @@ window.addEventListener("load", () => {
 			toggleView(questionButton, questionView, [coursesButton, modulesButton], [coursesView, modulesView]);
 		};
 
-		this.loadCourseView = function (container, courseName, addToHistory) {
+		this.loadCourseView = function (container, courseName, moduleName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
-				modulesViewManager.display(container, course.id, course.name, "#" + course.color, addToHistory);
+				switch (container) {
+					case modulesViewManager.containers.MODULES: {
+						modulesViewManager.displayModules(course.id, course.name, "#" + course.color, addToHistory);
+						break;
+					}
+					case modulesViewManager.containers.EDIT_MODULE: {
+						modulesViewManager.displayEditModule(course.id, course.name, "#" + course.color, moduleName, addToHistory);
+						break;
+					}
+					case modulesViewManager.containers.CREATE_MODULE: {
+						modulesViewManager.displayCreateModule(course.id, course.name, "#" + course.color, addToHistory);
+						break;
+					}
+				}
 			}).catch((err) => {
 				console.log(err);
 			});
@@ -80,19 +93,20 @@ window.addEventListener("load", () => {
 						case "courses": {
 							// /courses/course-name
 							const courseName = decodeURIComponent(pathArray[1]);
-							this.loadCourseView(modulesViewManager.containers.CARD, courseName, addToHistory);
-							break;
-						}
-						case "createmodule": {
-							// /createmodule/course-name
-							const courseName = decodeURIComponent(pathArray[1]);
-							this.loadCourseView(modulesViewManager.containers.EDITOR, courseName, addToHistory);
+							this.loadCourseView(modulesViewManager.containers.MODULES, courseName, addToHistory);
 							break;
 						}
 						case "editcourse": {
 							// /editcourse/course-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							coursesViewManager.displayEditCourse(courseName, addToHistory);
+							break;
+						}
+						case "createmodule": {
+							// /createmodule/course-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							this.loadCourseView(modulesViewManager.containers.CREATE_MODULE, courseName, addToHistory);
+							break;
 						}
 					}
 					break;
@@ -110,6 +124,13 @@ window.addEventListener("load", () => {
 							const courseName = decodeURIComponent(pathArray[1]);
 							const moduleName = decodeURIComponent(pathArray[2]);
 							this.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, addToHistory);
+							break;
+						}
+						case "editmodule": {
+							// /editmodule/course-name/module-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							const moduleName = decodeURIComponent(pathArray[2]);
+							this.loadCourseView(modulesViewManager.containers.EDIT_MODULE, courseName, moduleName, addToHistory);
 							break;
 						}
 					}
