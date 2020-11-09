@@ -6,16 +6,13 @@
 	padding-top:calc(128px - 52px);
 }
 
-#page-content{
-	margin-left:auto;
-	margin-right:auto;
-	position: relative;
-    width: 92%;
-    height: 100%;
-    z-index: 0;
+#page-content {
+	margin:0 auto;
+	width:92%;
+	height:100%;
 }
 
-.button-container>button {
+.button-container > button {
 	display: inline-block;
 	padding:0;
 	margin:0 4px;
