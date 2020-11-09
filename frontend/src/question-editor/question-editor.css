@@ -24,15 +24,19 @@
 	height:100px;
 }
 
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex) {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex), #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
 	margin:10px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > span {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
 	color:#fff;
 	font-size:24px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > input {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
 	font-size:24px;
+}
+
+#question-editor-segments > .image > img {
+	max-width:100%;
 }
 
 #question-editor-bottom-container {
