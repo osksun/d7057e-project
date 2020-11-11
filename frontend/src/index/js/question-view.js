@@ -189,7 +189,7 @@ const questionViewManager = new function() {
 							displayQuestion(currentQuestionID);
 						}
 					}).catch((err) => {
-						console.log(err);
+						windowManager.redirect404();
 					});
 				} else {
 					displayQuestion(currentQuestionID);
@@ -217,10 +217,10 @@ const questionViewManager = new function() {
 						toggleQuestionListContainer();
 						viewManager.toggleQuestionView();
 					} else {
-						document.location.href = "../404:)";
+						windowManager.redirect404();
 					}
 				}).catch((err) => {
-					console.log(err);
+					windowManager.redirect404();
 				});
 				break;
 		}

@@ -56,7 +56,7 @@ window.addEventListener("load", () => {
 					}
 				}
 			}).catch((err) => {
-				console.log(err);
+				this.redirect404();
 			});
 		};
 
@@ -66,11 +66,15 @@ window.addEventListener("load", () => {
 					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
 					questionViewManager.display(container, course.id, course.name, module.id, module.name, addToHistory);
 				}).catch((err) => {
-					console.log(err);
+					this.redirect404();
 				});
 			}).catch((err) => {
-				console.log(err);
+				this.redirect404();
 			});
+		};
+
+		this.redirect404 = function() {
+			document.location.href = "/404";
 		};
 
 		this.loadPath = function (pathname, addToHistory) {

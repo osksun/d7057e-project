@@ -9,7 +9,7 @@ const questionList = new function() {
 				addQuestionCard(questions[i], i + 1);
 			}
 		}).catch((err) => {
-			console.log(err);
+			windowManager.redirect404();
 		}).finally(() => {
 			addCreateCard(courseName, moduleName);
 		});
