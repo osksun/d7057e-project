@@ -118,7 +118,7 @@ const modulesViewManager = new function() {
 			this.updateButton(courseId, courseName, color);
 			viewManager.toggleModulesView();
 		}).catch((err) => {
-			windowManager.redirect404();
+			viewManager.redirect404();
 		});
 	};
 	
