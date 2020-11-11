@@ -7,8 +7,18 @@
 	border-top:2px dashed #aaa;
 }
 
+#question-editor-segments > div > div.title > h2 {
+	margin:0;
+	padding:0;
+	display:inline-block;
+	width:calc((100% - 105px - 40px) * 0.5);
+	font-size:32px;
+	color:#fff;
+}
+
 #question-editor-segments > .mathjax-latex > textarea, #question-editor-segments > .mathjax-latex > p, #question-editor-segments > .mathjax-latex-answer > .latex {
 	display: inline-block;
+	margin:0;
 	padding: 0;
 	width: calc((100% - 105px - 40px) * 0.5);
 	height: 500px;
@@ -32,14 +42,14 @@
 	height:100px;
 }
 
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex), #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type, #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
 	margin:10px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
 	color:#fff;
 	font-size:24px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex) > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
+#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
 	font-size:24px;
 }
 

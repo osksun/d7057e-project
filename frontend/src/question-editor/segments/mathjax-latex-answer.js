@@ -11,6 +11,11 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	answerWrapper.appendChild(answerRegex);
 	div.appendChild(answerWrapper);
 
+	const titleDiv = document.createElement("div");
+	titleDiv.className = "title";
+	titleDiv.innerHTML = "<h2>Code</h2><h2>Preview</h2>";
+	div.appendChild(titleDiv);
+
 	const latexInput = document.createElement("textarea");
 	latexInput.value = "$x=$";
 	latexInput.className = "latex";
