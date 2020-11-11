@@ -31,6 +31,7 @@ const modulesViewManager = new function() {
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
+			editButtonIcon.alt = "edit module";
 			editButton.appendChild(editButtonIcon);
 			editButton.addEventListener("click", (event) => {
 				modulesViewManager.displayEditModule(courseId, courseName, color, name, true);

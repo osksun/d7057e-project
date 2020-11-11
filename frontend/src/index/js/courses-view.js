@@ -29,6 +29,7 @@ const coursesViewManager = new function() {
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
+			editButtonIcon.alt = "edit course";
 			editButton.appendChild(editButtonIcon);
 			editButton.addEventListener("click", (event) => {
 				coursesViewManager.displayEditCourse(name, true);
