@@ -48,7 +48,7 @@ const modulesViewManager = new function() {
 		const descWrapper = document.createElement("div");
 		descWrapper.className = "description-wrapper";
 		const paragraph = document.createElement("p");
-		paragraph.className = ""
+		paragraph.className = "";
 		paragraph.style.color = color;
 		paragraph.innerText = description;
 		descWrapper.appendChild(paragraph);
@@ -64,7 +64,7 @@ const modulesViewManager = new function() {
 	}
 
 	const createAdminCreateCard = (courseId, courseName, color) => {
-		const card = document.createElement("li");
+		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
 		const titleWrapper = document.createElement("div");
