@@ -7,5 +7,6 @@ module.exports = {
 	failedTokenCreation:4,
 	failedPasswordVerification:5,
 	failedPasswordChange:6,
-	loginFailed:7
+	loginFailed:7,
+	duplicateUser:8
 };
