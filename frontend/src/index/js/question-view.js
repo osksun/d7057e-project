@@ -88,12 +88,24 @@ const questionViewManager = new function() {
 		this.handleSubmit(currentQuestionID);
 	});
 
+	function submitClick(event) {
+		if(event.repeat) {return};
+		//key 13 is enter 
+		if(event.keyCode === 13 || event.key === "Enter") {
+			event.preventDefault();
+			submitButton.click();
+		}
+	}
+
 	const setupQuestion = (segments) => {
 		// Update the page with the content of the question
 		for(let i = 0; i < segments.length; ++i) {
 			const segment = segments[i];
 			if(segmentTypes.has(segment.type)) {
 				const result = segmentTypes.get(segment.type)(segment.content);
+				if(result.input != null) {
+					result.input.addEventListener('keydown', submitClick);
+				}
 				questionSegments.appendChild(result.div);
 				segmentInputBoxes.push(result.input);
 			} else {
@@ -103,6 +115,7 @@ const questionViewManager = new function() {
 				segmentInputBoxes.push(null);
 			}
 		}
+		
 		//Reset Mathjax
 		MathJax.texReset(0);
 		const mathJaxElements = questionSegments.getElementsByClassName("tex2jax_process");
