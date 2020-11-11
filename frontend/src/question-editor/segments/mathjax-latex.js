@@ -1,5 +1,5 @@
 
-questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
+questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function(content = "") {
 	const div = document.createElement("div");
 	div.className = "mathjax-latex";
 
@@ -9,6 +9,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 	div.appendChild(titleDiv);
 
 	const latexInput = document.createElement("textarea");
+	latexInput.value = content;
 	div.appendChild(latexInput);
 
 	latexInput.addEventListener("keydown", function(event) {
@@ -34,18 +35,23 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 	const latexOutput = document.createElement("p");
 	div.appendChild(latexOutput);
 
-	latexInput.addEventListener("input", () => {
+	function refreshLatex() {
 		latexOutput.innerText = latexInput.value;
 		//Reset Mathjax
 		MathJax.texReset(0);
 		MathJax.typesetClear([latexOutput]);
 		MathJax.typesetPromise([latexOutput]);
+	}
+
+	latexInput.addEventListener("input", () => {
+		refreshLatex();
 	});
+	refreshLatex();
 
 	return {
 		div:div,
 		getContent:() => {
-			return latexInput.value
+			return latexInput.value;
 		},
 		getAnswer:() => {
 			return null;

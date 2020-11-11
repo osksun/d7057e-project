@@ -1,5 +1,5 @@
 
-questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", function() {
+questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", function(content = "$x=$", answer = "") {
 	const div = document.createElement("div");
 	div.className = "mathjax-latex-answer";
 
@@ -8,6 +8,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	answerTitle.innerText = "Answer regex: ";
 	answerWrapper.appendChild(answerTitle);
 	const answerRegex = document.createElement("input");
+	answerRegex.value = answer;
 	answerWrapper.appendChild(answerRegex);
 	div.appendChild(answerWrapper);
 
@@ -17,7 +18,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	div.appendChild(titleDiv);
 
 	const latexInput = document.createElement("textarea");
-	latexInput.value = "$x=$";
+	latexInput.value = content;
 	latexInput.className = "latex";
 	div.appendChild(latexInput);
 
@@ -66,7 +67,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	return {
 		div:div,
 		getContent:() => {
-			return latexInput.value
+			return latexInput.value;
 		},
 		getAnswer:() => {
 			return answerRegex.value;

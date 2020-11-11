@@ -1,5 +1,5 @@
 
-questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function() {
+questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "") {
 	const div = document.createElement("div");
 	div.className = "youtube";
 
@@ -8,12 +8,14 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function() {
 	urlTitle.innerText = "Youtube embed URL: ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
+	urlInput.value = content;
 	urlWrapper.appendChild(urlInput);
 	div.appendChild(urlWrapper);
 
 	const iframe = document.createElement("iframe");
 	iframe.width = 560;
 	iframe.height = 315;
+	iframe.src = content;
 	div.appendChild(iframe);
 
 	urlInput.addEventListener("input", () => {
@@ -23,10 +25,10 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function() {
 	return {
 		div:div,
 		getContent:() => {
-			return urlInput.value
+			return urlInput.value;
 		},
 		getAnswer:() => {
-			return null
+			return null;
 		}
 	};
 });

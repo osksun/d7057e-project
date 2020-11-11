@@ -1,5 +1,5 @@
 
-questionEditor.addSegmentType("IMAGE", "Image", function() {
+questionEditor.addSegmentType("IMAGE", "Image", function(content = "") {
 	const div = document.createElement("div");
 	div.className = "image";
 
@@ -8,10 +8,12 @@ questionEditor.addSegmentType("IMAGE", "Image", function() {
 	urlTitle.innerText = "Image URL: ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
+	urlInput.value = content;
 	urlWrapper.appendChild(urlInput);
 	div.appendChild(urlWrapper);
 
 	const img = document.createElement("img");
+	img.src = content;
 	div.appendChild(img);
 
 	urlInput.addEventListener("input", () => {
@@ -21,10 +23,10 @@ questionEditor.addSegmentType("IMAGE", "Image", function() {
 	return {
 		div:div,
 		getContent:() => {
-			return urlInput.value
+			return urlInput.value;
 		},
 		getAnswer:() => {
-			return null
+			return null;
 		}
 	};
 });
