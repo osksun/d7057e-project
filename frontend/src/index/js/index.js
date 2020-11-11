@@ -119,6 +119,13 @@ window.addEventListener("load", () => {
 							this.loadQuestionView(questionViewManager.containers.QUESTION, courseName, moduleName, addToHistory);
 							break;
 						}
+						case "questionlist": {
+							// /questionlist/course-name/module-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							const moduleName = decodeURIComponent(pathArray[2]);
+							this.loadQuestionView(questionViewManager.containers.QUESTION_LIST, courseName, moduleName, addToHistory);
+							break;
+						}
 						case "createquestion": {
 							// /createquestion/course-name/module-name
 							const courseName = decodeURIComponent(pathArray[1]);
