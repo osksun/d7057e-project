@@ -15,7 +15,7 @@ const questionList = new function() {
 		});
 	};
 
-	function addQuestionCard(arrayIndex) {
+	function addQuestionCard(questionId, arrayIndex) {
 		const card = document.createElement("button");
 		card.classList.add("button");
 		card.innerHTML = "<p>Question " + arrayIndex + "</p>";
