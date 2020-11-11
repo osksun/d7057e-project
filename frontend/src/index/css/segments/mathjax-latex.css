@@ -1,0 +1,10 @@
+#question-editor-segments > .mathjax-latex > .leftTitleDiv  {
+	overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 0 16px;
+    margin: 0;
+    font-weight: normal;
+    font-size: 36px;
+	width:200px;
+	padding-left: 500px;
+}
