@@ -8,12 +8,14 @@ const questionEditor = new function() {
 	const message = document.getElementById("question-editor-question-editor-message");
 	let moduleId = null;
 
+	const segmentCreateCallbacks = new Map();
+	
 	this.addSegmentType = function(type, name, createCallback) {
+		segmentCreateCallbacks.set(type, createCallback);
 		const button = document.createElement("button");
 		button.className = "button";
 		button.innerText = name + " +";
 		addSegmentButtons.appendChild(button);
-
 		button.addEventListener("click", () => {
 			const segment = createCallback();
 			questionSegments.appendChild(segment.div);
@@ -23,9 +25,27 @@ const questionEditor = new function() {
 	};
 
 	this.setup = function(_moduleId) {
+		questionSegments.innerHTML = "";
 		moduleId = _moduleId;
 		submitButton.innerHTML = "Create question";
 		submitButton.disabled = false;
+	};
+
+	this.setupEdit = function(questionId) {
+		questionSegments.innerHTML = "";
+		DbCom.getQuestionSegments(questionId).then((segments) => {
+			for (let i = 0; i < segments.length; i++) {
+				const createCallback = segmentCreateCallbacks.get(segments[i].type);
+				const segment = createCallback(segments[i].content, segments[i].answer);
+				questionSegments.appendChild(segment.div);
+				segment.type = segments[i].type;
+				segmentsData.push(segment);
+			}
+			submitButton.innerHTML = "Create question";
+			submitButton.disabled = false;
+		}).catch((err) => {
+			viewManager.redirect404();
+		});
 	};
 
 	function showMessage(text, isError) {

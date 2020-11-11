@@ -6,7 +6,7 @@ const questionList = new function() {
 		questionContainer.innerHTML = "";
 		DbCom.getQuestions(moduleId).then((questions) => {
 			for (let i = 0; i < questions.length; i++) {
-				addQuestionCard(questions[i], i + 1);
+				addQuestionCard(courseName, moduleName, questions[i], i + 1);
 			}
 		}).catch((err) => {
 			viewManager.redirect404();
@@ -15,11 +15,13 @@ const questionList = new function() {
 		});
 	};
 
-	function addQuestionCard(questionId, arrayIndex) {
+	function addQuestionCard(courseName, moduleName, questionId, arrayIndex) {
 		const card = document.createElement("button");
 		card.classList.add("button");
 		card.innerHTML = "<p>Question " + arrayIndex + "</p>";
 		card.addEventListener("click", () => {
+			//questionViewManager.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
+			viewManager.loadQuestionView(questionViewManager.containers.EDIT_QUESTION, courseName, moduleName, questionId, true);
 			// TODO: Redirect to editor for question with questionId as id
 		});
 		questionContainer.appendChild(card);
@@ -34,7 +36,7 @@ const questionList = new function() {
 		img.alt = "add";
 		card.appendChild(img);
 		card.addEventListener("click", () => {
-			viewManager.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, true);
+			viewManager.loadQuestionView(questionViewManager.containers.CREATE_QUESTION, courseName, moduleName, null, true);
 		});
 		questionContainer.appendChild(card);
 	}

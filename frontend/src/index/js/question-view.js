@@ -16,8 +16,9 @@ const questionViewManager = new function() {
 
 	this.containers = {
 		QUESTION: 0,
-		EDITOR: 1,
-		QUESTION_LIST: 2
+		EDIT_QUESTION: 1,
+		CREATE_QUESTION: 3,
+		QUESTION_LIST: 4
 	};
 
 	function toggleEditorContainer() {
@@ -96,6 +97,8 @@ const questionViewManager = new function() {
 		this.handleSubmit(currentQuestionID);
 	});
 
+	questionButton.addEventListener("click", displayHandler);
+
 	function submitClick(event) {
 		if(event.repeat) return;
 		//key 13 is enter
@@ -142,87 +145,97 @@ const questionViewManager = new function() {
 		submitButton.className = "button hidden";
 	};
 
-	const setupQuestionButton = (container, courseId, courseName, moduleId, moduleName) => {
+	const setupQuestionButton = (moduleName) => {
 		questionButton.disabled = false;
 		questionButton.children[0].innerText = moduleName;
-		questionButton.removeEventListener("click", displayHandler);
-		displayHandler = this.display.bind(this, container, courseId, courseName, moduleId, moduleName, true);
-		questionButton.addEventListener("click", displayHandler);
 	};
 
-	this.display = (container, courseId, courseName, moduleId, moduleName, addToHistory) => {
+	this.displayQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
 		if (moduleId != currentModuleId) {
 			currentQuestionID = null;
 		}
-		switch (container) {
-			case this.containers.QUESTION:
-				const displayQuestion = (questionID) => {
-					this.clear();
-					if(questionID == null) {
-						setupEmptyQuestion();
-					} else {
-						DbCom.getQuestionSegments(questionID).then((segments) => {
-							setupQuestion(segments);
-						}).catch((err) => {
-							console.error(err);
-						});
-					}
-					// Note current course and module ids
-					currentCourseId = courseId;
-					currentModuleId = moduleId;
-					// Setup question button
-					setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
-					// Setup Page URL, title and history
-					viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-					// Toggle view
-					toggleQuestionContainer();
-					viewManager.toggleQuestionView();
-				};
-				if (currentQuestionID === null) {
-					// Get all questions of the module
-					DbCom.getQuestions(moduleId).then((questions) => {
-						if(questions.length == 0) {
-							currentQuestionID = null;
-							displayQuestion(currentQuestionID);
-						} else {
-							currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
-							displayQuestion(currentQuestionID);
-						}
-					}).catch((err) => {
-						windowManager.redirect404();
-					});
-				} else {
-					displayQuestion(currentQuestionID);
-				}
-				break;
-			case this.containers.EDITOR:
-				questionEditor.setup(moduleId);
-				// Setup question button
-				setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
-				// Setup Page URL, title and history
-				viewManager.updatePage("/createquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Create question", addToHistory);
-				// Toggle view
-				toggleEditorContainer();
-				viewManager.toggleQuestionView();
-				break;
-			case this.containers.QUESTION_LIST:
-				DbCom.isModerator(courseId).then((result) => {
-					if (result.isModerator === true) {
-						questionList.setup(courseName, moduleId, moduleName);
-						// Setup question button
-						setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
-						// Setup Page URL, title and history
-						viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
-						// Toggle view
-						toggleQuestionListContainer();
-						viewManager.toggleQuestionView();
-					} else {
-						windowManager.redirect404();
-					}
+		const showQuestion = (questionID) => {
+			this.clear();
+			if(questionID == null) {
+				setupEmptyQuestion();
+			} else {
+				DbCom.getQuestionSegments(questionID).then((segments) => {
+					setupQuestion(segments);
 				}).catch((err) => {
-					windowManager.redirect404();
+					console.error(err);
 				});
-				break;
+			}
+			// Note current course and module ids
+			currentCourseId = courseId;
+			currentModuleId = moduleId;
+			// Setup question button
+			setupQuestionButton(moduleName);
+			displayHandler = this.displayQuestion.bind(this, courseId, courseName, moduleId, moduleName, true);
+			// Setup Page URL, title and history
+			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
+			// Toggle view
+			toggleQuestionContainer();
+			viewManager.toggleQuestionView();
+		};
+		if (currentQuestionID === null) {
+			// Get all questions of the module
+			DbCom.getQuestions(moduleId).then((questions) => {
+				if(questions.length === 0) {
+					currentQuestionID = null;
+					showQuestion(currentQuestionID);
+				} else {
+					currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
+					showQuestion(currentQuestionID);
+				}
+			}).catch((err) => {
+				viewManager.redirect404();
+			});
+		} else {
+			showQuestion(currentQuestionID);
 		}
+	};
+
+	this.displayEditQuestion = (courseId, courseName, moduleId, moduleName, questionId, addToHistory) => {
+		questionEditor.setupEdit(questionId);
+		// Setup question button
+		setupQuestionButton(moduleName);
+		displayHandler = this.displayEditQuestion.bind(this, courseId, courseName, moduleId, moduleName, questionId, true);
+		// Setup Page URL, title and history
+		viewManager.updatePage("/editquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()) + "/" + questionId, "Edit question", addToHistory);
+		// Toggle view
+		toggleEditorContainer();
+		viewManager.toggleQuestionView();
+	};
+
+	this.displayCreateQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		questionEditor.setup(moduleId);
+		// Setup question button
+		setupQuestionButton(moduleName);
+		displayHandler = this.displayCreateQuestion.bind(this, courseId, courseName, moduleId, moduleName, true);
+		// Setup Page URL, title and history
+		viewManager.updatePage("/createquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Create question", addToHistory);
+		// Toggle view
+		toggleEditorContainer();
+		viewManager.toggleQuestionView();
+	};
+
+	this.displayQuestionList = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		DbCom.isModerator(courseId).then((result) => {
+			if (result.isModerator === true) {
+				questionList.setup(courseName, moduleId, moduleName);
+				// Setup question button
+				setupQuestionButton(moduleName);
+				displayHandler = this.displayQuestionList.bind(this, courseId, courseName, moduleId, moduleName, true);
+				// Setup Page URL, title and history
+				viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
+				// Toggle view
+				toggleQuestionListContainer();
+				viewManager.toggleQuestionView();
+			} else {
+				viewManager.redirect404();
+			}
+		}).catch((err) => {
+			viewManager.redirect404();
+		});
 	};
 }();

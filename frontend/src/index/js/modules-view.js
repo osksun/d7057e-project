@@ -58,9 +58,9 @@ const modulesViewManager = new function() {
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			if (isModerator) {
-				questionViewManager.display(questionViewManager.containers.QUESTION_LIST, courseId, courseName, id, name, true);
+				questionViewManager.displayQuestionList(courseId, courseName, id, name, true);
 			} else {
-				questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
+				questionViewManager.displayQuestion(courseId, courseName, id, name, true);
 			}
 			event.preventDefault(); // Might not be needed anymore
 		});

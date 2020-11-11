@@ -42,29 +42,40 @@ window.addEventListener("load", () => {
 		this.loadCourseView = function (container, courseName, moduleName, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
 				switch (container) {
-					case modulesViewManager.containers.MODULES: {
+					case modulesViewManager.containers.MODULES:
 						modulesViewManager.displayModules(course.id, course.name, "#" + course.color, addToHistory);
 						break;
-					}
-					case modulesViewManager.containers.EDIT_MODULE: {
+					case modulesViewManager.containers.EDIT_MODULE:
 						modulesViewManager.displayEditModule(course.id, course.name, "#" + course.color, moduleName, addToHistory);
 						break;
-					}
-					case modulesViewManager.containers.CREATE_MODULE: {
+					case modulesViewManager.containers.CREATE_MODULE:
 						modulesViewManager.displayCreateModule(course.id, course.name, "#" + course.color, addToHistory);
 						break;
-					}
 				}
 			}).catch((err) => {
 				this.redirect404();
 			});
 		};
 
-		this.loadQuestionView = function (container, courseName, moduleName, addToHistory) {
+		this.loadQuestionView = function (container, courseName, moduleName, questionId, addToHistory) {
 			DbCom.getCourseByName(courseName).then((course) => {
 				DbCom.getModuleByName(course.id, moduleName).then((module) => {
 					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
-					questionViewManager.display(container, course.id, course.name, module.id, module.name, addToHistory);
+					switch (container) {
+						case questionViewManager.containers.QUESTION:
+							questionViewManager.displayQuestion(course.id, course.name, module.id, module.name, addToHistory);
+							break;
+						case questionViewManager.containers.EDIT_QUESTION: 
+							questionViewManager.displayEditQuestion(course.id, course.name, module.id, module.name, questionId, addToHistory);
+							break;
+						case questionViewManager.containers.CREATE_QUESTION:
+							questionViewManager.displayCreateQuestion(course.id, course.name, module.id, module.name, addToHistory);
+							break;
+						case questionViewManager.containers.QUESTION_LIST:
+							questionViewManager.displayQuestionList(course.id, course.name, module.id, module.name, addToHistory);
+							break;
+					}
+					//questionViewManager.display(container, course.id, course.name, module.id, module.name, addToHistory);
 				}).catch((err) => {
 					this.redirect404();
 				});
@@ -120,21 +131,21 @@ window.addEventListener("load", () => {
 							// /courses/course-name/module-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							const moduleName = decodeURIComponent(pathArray[2]);
-							this.loadQuestionView(questionViewManager.containers.QUESTION, courseName, moduleName, addToHistory);
+							this.loadQuestionView(questionViewManager.containers.QUESTION, courseName, moduleName, null, addToHistory);
 							break;
 						}
 						case "questionlist": {
 							// /questionlist/course-name/module-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							const moduleName = decodeURIComponent(pathArray[2]);
-							this.loadQuestionView(questionViewManager.containers.QUESTION_LIST, courseName, moduleName, addToHistory);
+							this.loadQuestionView(questionViewManager.containers.QUESTION_LIST, courseName, moduleName, null, addToHistory);
 							break;
 						}
 						case "createquestion": {
 							// /createquestion/course-name/module-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							const moduleName = decodeURIComponent(pathArray[2]);
-							this.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, addToHistory);
+							this.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, null, addToHistory);
 							break;
 						}
 						case "editmodule": {
@@ -146,6 +157,18 @@ window.addEventListener("load", () => {
 						}
 					}
 					break;
+				}
+				case 4: {
+					switch (pathArray[0]) {
+						case "editquestion": {
+							// /editquestion/course-name/module-name/question-id
+							const courseName = decodeURIComponent(pathArray[1]);
+							const moduleName = decodeURIComponent(pathArray[2]);
+							const questionId = pathArray[3];
+							this.loadQuestionView(questionViewManager.containers.EDIT_QUESTION, courseName, moduleName, questionId, addToHistory);
+							break;
+						}
+					}
 				}
 			}
 		};
