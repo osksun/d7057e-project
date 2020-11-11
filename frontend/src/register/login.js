@@ -1,5 +1,7 @@
 
 (function() {
+	localStorage.removeItem("login_data");
+
 	const loginButton = document.getElementById("loginButton");
 	const emailField = document.getElementById("emailField");
 	const passwordField = document.getElementById("passwordField");
@@ -12,7 +14,7 @@
 			if(email == "") {
 				alert("Enter email!");
 			} else {
-				var id = DbCom.createRefreshToken(email, password).then((r) => {
+				DbCom.createRefreshToken(email, password).then((r) => {
 					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
 					window.location = "/";
 				}).catch((error) => {
@@ -25,7 +27,7 @@
 	passwordField.addEventListener("keydown", loginClick);
 	function loginClick(event) {
 		if(event.repeat) {return};
-		//key 13 is enter 
+		//key 13 is enter
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
 			loginButton.click();
