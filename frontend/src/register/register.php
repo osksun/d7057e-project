@@ -7,27 +7,25 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
-		<!--LOGIN FORM SECTION -->
-		<div id="registerContainer">
-			<div id="titleContainer">
-				<h2>REGISTER USER</h2>
-			</div>
-			<div id="contentContainer">
-				<label>Email:</label>
-				<input id="emailField" type="text" required placeholder="Email">
-				<br><br>
-				<label>Password:</label>
-				<input id="passwordField" type="password" required placeholder="Password">
-				<br><br>
-				<label>Repeat Password:</label>
-				<input id="repeatPasswordField" type="password" required placeholder="Repeat password">
-				<br><br>
-				<button id="registerButton">Register</button>
-			</div>
+		<?php include "../shared/html/background.html"; ?>
+		<h2>REGISTER</h2>
+		<div id="container">
+			<label>Email</label>
+			<input id="emailField" type="text" required placeholder="email@example.com">
+
+			<label>Password</label>
+			<input id="passwordField" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+
+			<label>Confirm Password</label>
+			<input id="repeatPasswordField" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+
+			<button id="registerButton" class="button">Register</button>
 		</div>
+		<a href="/login" class="button">Login</a>
 		<script src="/src/register/register.js"></script>
 	</body>
 </html>

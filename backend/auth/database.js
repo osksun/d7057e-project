@@ -1,6 +1,7 @@
 
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
+const errorCode = require("../error_code.js");
 
 const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
@@ -35,7 +36,17 @@ function createUser(email, passwordHash) {
 	return new Promise((resolve, reject) => {
 		connection.query("INSERT INTO users (email, password) VALUES (?, ?)", [email, passwordHash], (error, result) => {
 			if(error) {
-				reject();
+				if(error.code == "ER_DUP_ENTRY") {
+					reject({
+						error:"User already exists",
+						errorCode:errorCode.duplicateUser
+					});
+				} else {
+					reject({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
+				}
 			} else {
 				resolve(result.insertId);
 			}

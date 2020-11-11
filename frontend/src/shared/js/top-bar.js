@@ -10,7 +10,20 @@ const displayLevel = new function() {
 		xpBarBlue.style.width = percent + "%";
 	}
 
-	function updateLevelInfo(level, title) {
+	function updateLevelInfo(level) {
+		let title;
+		if(level < 2) {
+			title = "Beginner";
+		} else if(level < 5) {
+			title = "Novice";
+		} else if(level < 15) {
+			title = "Intermediate";
+		} else if(level < 30) {
+			title = "Expert";
+		} else if(level < 60) {
+			title = "Master";
+		}
+
 		levelNumber.innerHTML = "Level " + level + " | " + title;
 	}
 
@@ -20,7 +33,7 @@ const displayLevel = new function() {
 			const percent = getXpPercent(result.xp, level);
 			if (previousLevel === null) {
 				updateXpBar(percent * 100);
-				updateLevelInfo(level, "Title");
+				updateLevelInfo(level);
 			} else if (level > previousLevel) {
 				updateXpBar(100);
 				setTimeout(() => {
@@ -28,7 +41,7 @@ const displayLevel = new function() {
 					updateXpBar(0);
 					xpBarBack.offsetWidth; // Trigger reflow
 					xpBarBack.classList.remove("skip-animation");
-					updateLevelInfo(level, "Title");
+					updateLevelInfo(level);
 					updateXpBar(percent * 100);
 				}, 500);
 			} else {

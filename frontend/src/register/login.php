@@ -6,24 +6,22 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
-		<!--LOGIN FORM SECTION -->
-		<div id="registerContainer">
-			<div id="titleContainer">
-				<h2>LOGIN</h2>
-			</div>
-			<div id="contentContainer">
-				<label>Email:</label>
-				<input id="emailField" type="text" placeholder="Email" required autofocus>
-				<br><br>
-				<label>Password:</label>
-				<input id="passwordField" type="password" placeholder="Password" required>
-				<br><br>
-				<button id="loginButton">Login</button>
-			</div>
+		<?php include "../shared/html/background.html"; ?>
+		<h2>LOGIN</h2>
+		<div id="container">
+			<label>Email</label>
+			<input id="emailField" type="text" placeholder="email@example.com" required autofocus>
+
+			<label>Password</label>
+			<input id="passwordField" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
+
+			<button id="loginButton" class="button">Login</button>
 		</div>
+		<a href="/register" class="button">New account</a>
 
 		<script src="/src/register/login.js"></script>
 	</body>

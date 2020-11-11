@@ -22,8 +22,8 @@ function registerUser(email, password) {
 			} else {
 				database.createUser(email, hash).then((userID) => {
 					resolve(userID);
-				}).catch(() => {
-					reject();
+				}).catch((error) => {
+					reject(error);
 				});
 			}
 		});
@@ -86,11 +86,8 @@ function init() {
 						errorCode:errorCode.failedTokenCreation
 					});
 				});
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
-				});
+			}).catch((error) => {
+				response.json(error);
 			});
 		} else {
 			response.json({
@@ -121,10 +118,10 @@ function init() {
 							errorCode:errorCode.failedTokenCreation
 						});
 					});
-				}).catch((e) => {
+				}).catch(() => {
 					response.json({
 						error:"Failed to change password",
-							errorCode:errorCode.failedPasswordChange
+						errorCode:errorCode.failedPasswordChange
 					});
 				});
 			}).catch(() => {

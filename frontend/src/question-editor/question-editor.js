@@ -51,8 +51,6 @@ const questionEditor = new function() {
 			answers.push(segmentsData[i].getAnswer());
 		}
 
-		console.log(types, content, answers);
-
 		DbCom.createQuestion(moduleId, types, content, answers).then(() => {
 			showMessage("Question added!");
 		}).catch((result) => {

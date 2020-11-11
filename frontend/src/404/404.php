@@ -11,6 +11,7 @@ http_response_code(404);
 		<link rel="stylesheet" type="text/css" href="/src/404/404.css">
 	</head>
 	<body>
+		<?php include "../shared/html/background.html"; ?>
 		<div id="page-content">
 			<h1>404</h1>
 			<h2>Page not found</h2>

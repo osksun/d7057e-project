@@ -23,7 +23,7 @@
 			} else if(currentPassword.value == newPassword.value) {
 				showMessage("Error: New password and current password is equal", true);
 			} else {
-				changePasswordButton.innerHTML = "<p>. . .</p>";
+				changePasswordButton.innerHTML = ". . .";
 				changePasswordButton.disabled = true;
 				DbCom.changeUserPassword(currentPassword.value, newPassword.value).then((result) => {
 					//Change login data
@@ -33,12 +33,15 @@
 					}));
 
 					showMessage("Password changed successfully", false);
+					currentPassword.value = "";
+					newPassword.value = "";
+					newPasswordConfirm.value = "";
 				}).catch((result) => {
 					if(result.hasOwnProperty("error")) {
 						showMessage("Error: " + result.error, true);
 					}
 				}).finally(() => {
-					changePasswordButton.innerHTML = "<p>Change password</p>";
+					changePasswordButton.innerHTML = "Change password";
 					changePasswordButton.disabled = false;
 				});
 			}

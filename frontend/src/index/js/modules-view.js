@@ -20,14 +20,14 @@ const modulesViewManager = new function() {
 		cardContainer.classList.add("visible");
 	}
 
-	function createCard(id, name, description, color, courseId, courseName, isAdmin, isModerator) {
+	function createCard(id, name, description, color, courseId, courseName, isModerator) {
 		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = color;
-		if (isAdmin || isModerator) {
+		if (isModerator) {
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
@@ -89,16 +89,13 @@ const modulesViewManager = new function() {
 	};
 
 	this.createCards = function(modules, color, courseId, courseName) {
-		DbCom.isAdmin().then((adminResult) => {
-
-			DbCom.isModerator(courseId).then((result) => {
-				modules.forEach((module) => {
-					cardContainer.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName, adminResult.isAdmin, result.isModerator));
-				});
-				if(result.isModerator) {
-					cardContainer.appendChild(createAdminCreateCard(courseId, courseName, color));
-				}
+		DbCom.isModerator(courseId).then((result) => {
+			modules.forEach((module) => {
+				cardContainer.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName, result.isModerator));
 			});
+			if(result.isModerator) {
+				cardContainer.appendChild(createAdminCreateCard(courseId, courseName, color));
+			}
 		});
 	};
 

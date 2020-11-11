@@ -2,13 +2,12 @@
 const questionViewManager = new function() {
 	const questionContainer = document.getElementById("question-container");
 	const editorContainer = document.getElementById("question-editor-container");
+	const questionListContainer = document.getElementById("question-list-container");
 	const submitButton = document.getElementById("submit-button");
-	const answerInput = document.getElementById("answer-input");
 	const loadingIcon = document.getElementById("loading-icon");
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
 
-	let submitHandler;
 	let displayHandler;
 	let currentCourseId = null;
 	let currentModuleId = null;
@@ -17,17 +16,26 @@ const questionViewManager = new function() {
 
 	this.containers = {
 		QUESTION: 0,
-		EDITOR: 1
+		EDITOR: 1,
+		QUESTION_LIST: 2
 	};
 
 	function toggleEditorContainer() {
+		questionListContainer.classList.remove("visilbe");
 		questionContainer.classList.remove("visible");
 		editorContainer.classList.add("visible");
 	}
 
 	function toggleQuestionContainer() {
 		editorContainer.classList.remove("visible");
+		questionListContainer.classList.remove("visible");
 		questionContainer.classList.add("visible");
+	}
+
+	function toggleQuestionListContainer() {
+		questionContainer.classList.remove("visible");
+		editorContainer.classList.remove("visible");
+		questionListContainer.classList.add("visible");
 	}
 
 	const segmentTypes = new Map();
@@ -89,11 +97,11 @@ const questionViewManager = new function() {
 	});
 
 	function submitClick(event) {
-		if(event.repeat) {return};
+		if(event.repeat) return;
 		//key 13 is enter 
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
-			submitButton.click();
+			handleSubmit(currentQuestionID);
 		}
 	}
 
@@ -169,7 +177,7 @@ const questionViewManager = new function() {
 					// Toggle view
 					toggleQuestionContainer();
 					viewManager.toggleQuestionView();
-				}
+				};
 				if (currentQuestionID === null) {
 					// Get all questions of the module
 					DbCom.getQuestions(moduleId).then((questions) => {
@@ -196,6 +204,24 @@ const questionViewManager = new function() {
 				// Toggle view
 				toggleEditorContainer();
 				viewManager.toggleQuestionView();
+				break;
+			case this.containers.QUESTION_LIST:
+				DbCom.isModerator(courseId).then((result) => {
+					if (result.isModerator === true) {
+						questionList.setup(moduleId);
+						// Setup question button
+						setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
+						// Setup Page URL, title and history
+						viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
+						// Toggle view
+						toggleQuestionListContainer();
+						viewManager.toggleQuestionView();
+					} else {
+						document.location.href = "../404";
+					}
+				}).catch((err) => {
+					console.log(err);
+				});
 				break;
 		}
 	};
