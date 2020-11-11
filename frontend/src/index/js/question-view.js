@@ -89,11 +89,11 @@ const questionViewManager = new function() {
 	});
 
 	function submitClick(event) {
-		if(event.repeat) {return};
+		if(event.repeat) return;
 		//key 13 is enter 
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
-			submitButton.click();
+			handleSubmit(currentQuestionID);
 		}
 	}
 
