@@ -391,7 +391,7 @@ exports.getQuestions = getQuestions;
 
 function getQuestionSegments(questionID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT segmentOrder, type, content FROM questionsegments WHERE questionID = ? ORDER BY segmentOrder", [questionID], (error, result) => {
+		connection.query("SELECT segmentOrder, type, content, answer FROM questionsegments WHERE questionID = ? ORDER BY segmentOrder", [questionID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -401,7 +401,8 @@ function getQuestionSegments(questionID) {
 					segments.push({
 						order:row.order,
 						type:row.type,
-						content:row.content
+						content:row.content,
+						answer:row.answer
 					});
 				}
 				resolve(segments);
