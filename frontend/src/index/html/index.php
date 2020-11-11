@@ -20,6 +20,7 @@
 		<script src="/src/index/js/index.js"></script>
 	</head>
 	<body class="tex2jax_ignore">
+		<?php include "../../shared/html/background.html"; ?>
 		<?php include "../../shared/html/top-bar.html"; ?>
 		<div id="page-content">
 			<div id="category-container" class="category-container">

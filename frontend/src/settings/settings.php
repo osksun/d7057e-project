@@ -12,6 +12,7 @@
 		<script src="/src/settings/settings.js" defer></script>
 	</head>
 	<body>
+		<?php include "../shared/html/background.html"; ?>
 		<?php include "../shared/html/top-bar.html"; ?>
 		<div id="page-content">
 			<div><h3>Current password</h3><input id="current-password" type="password" autocomplete="current-password" required/></div>

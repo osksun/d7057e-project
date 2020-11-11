@@ -9,21 +9,18 @@
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
-		<!--LOGIN FORM SECTION -->
-		<div id="registerContainer">
-			<div id="titleContainer">
-				<h2>LOGIN</h2>
-			</div>
-			<div id="contentContainer">
-				<label>Email:</label>
-				<input id="emailField" type="text" placeholder="Email" required autofocus>
-				<br><br>
-				<label>Password:</label>
-				<input id="passwordField" type="password" placeholder="Password" required>
-				<br><br>
-				<button id="loginButton">Login</button>
-			</div>
+		<?php include "../shared/html/background.html"; ?>
+		<h2>LOGIN</h2>
+		<div id="container">
+			<label>Email</label>
+			<input id="emailField" type="text" placeholder="email@example.com" required autofocus>
+
+			<label>Password</label>
+			<input id="passwordField" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
+
+			<button id="loginButton">Login</button>
 		</div>
+		<a href="/register">New account</a>
 
 		<script src="/src/register/login.js"></script>
 	</body>
