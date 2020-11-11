@@ -6,7 +6,7 @@ const questionList = new function() {
 		questionContainer.innerHTML = "";
 		DbCom.getQuestions(moduleId).then((questions) => {
 			for (let i = 0; i < questions.length; i++) {
-				addQuestionCard(questions[i], i);
+				addQuestionCard(questions[i], i + 1);
 			}
 		}).catch((err) => {
 			console.log(err);
