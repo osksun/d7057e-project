@@ -17,6 +17,7 @@ const questionList = new function() {
 
 	function addQuestionCard(arrayIndex) {
 		const card = document.createElement("button");
+		card.classList.add("button");
 		card.innerHTML = "<p>Question " + arrayIndex + "</p>";
 		card.addEventListener("click", () => {
 			// TODO: Redirect to editor for question with questionId as id
@@ -27,6 +28,7 @@ const questionList = new function() {
 	function addCreateCard(courseName, moduleName) {
 		const card = document.createElement("button");
 		card.classList.add("create");
+		card.classList.add("button");
 		const img = document.createElement("img");
 		img.src = "/src/index/svg/add.svg";
 		img.alt = "add";

@@ -5,28 +5,14 @@
 
 #question-list-container > button {
 	display:block;
-	background-color:#323232;
 	padding:0 20px;
 	width:420px;
-	margin:4px auto;
-	border:none;
-	color:#fff;
+	margin:10px auto;
 	font-size:20px;
-	cursor: pointer;
-	border-radius:8px;
 }
 
 #question-list-container > button.create {
 	background-color: #888888;
-}
-
-#question-list-container > button:hover {
-	background-color:#fff;
-	color:#000;
-}
-
-#question-list-container > button:focus {
-	box-shadow:0px 0px 0px 2px #74dfff;
 }
 
 #question-list-container > button > p {
