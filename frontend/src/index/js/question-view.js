@@ -206,14 +206,22 @@ const questionViewManager = new function() {
 				viewManager.toggleQuestionView();
 				break;
 			case this.containers.QUESTION_LIST:
-				questionList.setup(moduleId);
-				// Setup question button
-				setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
-				// Setup Page URL, title and history
-				viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
-				// Toggle view
-				toggleQuestionListContainer();
-				viewManager.toggleQuestionView();
+				DbCom.isModerator(courseId).then((result) => {
+					if (result.isModerator === true) {
+						questionList.setup(moduleId);
+						// Setup question button
+						setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
+						// Setup Page URL, title and history
+						viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
+						// Toggle view
+						toggleQuestionListContainer();
+						viewManager.toggleQuestionView();
+					} else {
+						document.location.href = "../404";
+					}
+				}).catch((err) => {
+					console.log(err);
+				});
 				break;
 		}
 	};
