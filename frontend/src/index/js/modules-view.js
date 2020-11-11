@@ -31,6 +31,7 @@ const modulesViewManager = new function() {
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
+			editButtonIcon.alt = "edit module";
 			editButton.appendChild(editButtonIcon);
 			editButton.addEventListener("click", (event) => {
 				modulesViewManager.displayEditModule(courseId, courseName, color, name, true);
@@ -47,7 +48,7 @@ const modulesViewManager = new function() {
 		const descWrapper = document.createElement("div");
 		descWrapper.className = "description-wrapper";
 		const paragraph = document.createElement("p");
-		paragraph.className = ""
+		paragraph.className = "";
 		paragraph.style.color = color;
 		paragraph.innerText = description;
 		descWrapper.appendChild(paragraph);
@@ -56,14 +57,18 @@ const modulesViewManager = new function() {
 		/*cardWrapper.appendChild(span);*/
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
-			questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
+			if (isModerator) {
+				questionViewManager.display(questionViewManager.containers.QUESTION_LIST, courseId, courseName, id, name, true);
+			} else {
+				questionViewManager.display(questionViewManager.containers.QUESTION ,courseId, courseName, id, name, true);
+			}
 			event.preventDefault(); // Might not be needed anymore
 		});
 		return card;
 	}
 
 	const createAdminCreateCard = (courseId, courseName, color) => {
-		const card = document.createElement("li");
+		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
 		const titleWrapper = document.createElement("div");

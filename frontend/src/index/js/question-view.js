@@ -21,7 +21,7 @@ const questionViewManager = new function() {
 	};
 
 	function toggleEditorContainer() {
-		questionListContainer.classList.remove("visilbe");
+		questionListContainer.classList.remove("visible");
 		questionContainer.classList.remove("visible");
 		editorContainer.classList.add("visible");
 	}
@@ -208,7 +208,7 @@ const questionViewManager = new function() {
 			case this.containers.QUESTION_LIST:
 				DbCom.isModerator(courseId).then((result) => {
 					if (result.isModerator === true) {
-						questionList.setup(moduleId);
+						questionList.setup(courseName, moduleId, moduleName);
 						// Setup question button
 						setupQuestionButton(container, courseId, courseName, moduleId, moduleName);
 						// Setup Page URL, title and history
@@ -217,7 +217,7 @@ const questionViewManager = new function() {
 						toggleQuestionListContainer();
 						viewManager.toggleQuestionView();
 					} else {
-						document.location.href = "../404";
+						document.location.href = "../404:)";
 					}
 				}).catch((err) => {
 					console.log(err);

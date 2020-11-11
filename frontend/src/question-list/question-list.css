@@ -12,6 +12,12 @@
 	border:none;
 	color:#fff;
 	font-size:20px;
+	cursor: pointer;
+	border-radius:8px;
+}
+
+#question-list-container > button.create {
+	background-color: #888888;
 }
 
 #question-list-container > button:hover {
@@ -27,4 +33,11 @@
 	overflow:hidden;
 	text-overflow:ellipsis;
 	white-space:nowrap;
+}
+
+#question-list-container > button > img {
+	display:block;
+	margin:0px auto 0 auto;
+	width:24px;
+	padding: 1em 0;
 }
