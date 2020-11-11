@@ -13,16 +13,42 @@ const DbCom = new function() {
 		refreshToken = loginData["refreshToken"];
 	}
 
-	this.registerUser = function(email, passwordHash) {
-		return this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+	function sha512(string) {
+		return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(string)).then(buffer => {
+	    return Array.prototype.map.call(new Uint8Array(buffer), (char) => {
+				return ("00" + char.toString(16)).slice(-2);
+			}).join("");
+	  });
+	}
+	function clientSidePasswordHash(password) {
+		//Hash password + constant salt
+		return sha512(password + "c27097af11dce54be22679a5bfd7b7ea");
+	}
+
+	this.registerUser = function(email, password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
 	};
 
-	this.changeUserPassword = function(currentPasswordHash, newPasswordHash) {
-		return this.ajaxPostAuth(authURL + "changepassword", "userID=" + userID + "&currentPassword=" + encodeURIComponent(currentPasswordHash) + "&newPassword=" + encodeURIComponent(newPasswordHash));
+	this.changeUserPassword = function(currentPassword, newPassword) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(currentPassword).then((currentPasswordHash) => {
+				clientSidePasswordHash(newPassword).then((newPasswordHash) => {
+					return this.ajaxPostAuth(authURL + "changepassword", "userID=" + userID + "&currentPassword=" + encodeURIComponent(currentPasswordHash) + "&newPassword=" + encodeURIComponent(newPasswordHash)).then(resolve).catch(reject);
+				});
+			});
+		});
 	};
 
-	this.createRefreshToken = function(email, passwordHash) {
-		return this.ajaxPostAuth(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash));
+	this.createRefreshToken = function(email, password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				return this.ajaxPostAuth(authURL + "createrefreshtoken", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
 	};
 
 	let accessToken = null;
