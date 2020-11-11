@@ -1,7 +1,7 @@
 
 const mysql = require("mysql");
 const bcrypt = require("bcrypt");
-const errorCode = require("../error_code.js")
+const errorCode = require("../error_code.js");
 
 const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
