@@ -33,6 +33,9 @@
 					}));
 
 					showMessage("Password changed successfully", false);
+					currentPassword.value = "";
+					newPassword.value = "";
+					newPasswordConfirm.value = "";
 				}).catch((result) => {
 					if(result.hasOwnProperty("error")) {
 						showMessage("Error: " + result.error, true);
