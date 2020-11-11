@@ -7,6 +7,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
@@ -22,9 +23,9 @@
 			<label>Confirm Password</label>
 			<input id="repeatPasswordField" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 
-			<button id="registerButton">Register</button>
+			<button id="registerButton" class="button">Register</button>
 		</div>
-		<a href="/login">Login</a>
+		<a href="/login" class="button">Login</a>
 		<script src="/src/register/register.js"></script>
 	</body>
 </html>

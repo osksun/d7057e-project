@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<script type="application/javascript" src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
@@ -18,9 +19,9 @@
 			<label>Password</label>
 			<input id="passwordField" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
 
-			<button id="loginButton">Login</button>
+			<button id="loginButton" class="button">Login</button>
 		</div>
-		<a href="/register">New account</a>
+		<a href="/register" class="button">New account</a>
 
 		<script src="/src/register/login.js"></script>
 	</body>
