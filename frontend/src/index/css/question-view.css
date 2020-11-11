@@ -33,6 +33,10 @@
 	font-size:22px;
 }
 
+#question-segments > div {
+	overflow-wrap:break-word;
+}
+
 #question-segments > div > input {
 	margin:8px;
 }
