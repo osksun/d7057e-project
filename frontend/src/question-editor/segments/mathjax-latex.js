@@ -1,9 +1,12 @@
 
 questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 	const div = document.createElement("div");
+	const leftTitleDiv = document.createElement("div");
 	div.className = "mathjax-latex";
-
+	leftTitleDiv.className = "leftTitleDiv";
+	leftTitleDiv.innerText = "mathjax-latex-code";
 	const latexInput = document.createElement("textarea");
+	div.appendChild(leftTitleDiv);
 	div.appendChild(latexInput);
 
 	latexInput.addEventListener("keydown", function(event) {
