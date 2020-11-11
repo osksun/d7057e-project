@@ -23,9 +23,7 @@ function registerUser(email, password) {
 				database.createUser(email, hash).then((userID) => {
 					resolve(userID);
 				}).catch((error) => {
-					reject({
-						error
-					});
+					reject(error);
 				});
 			}
 		});
@@ -89,9 +87,7 @@ function init() {
 					});
 				});
 			}).catch((error) => {
-				response.json({
-					error
-				});
+				response.json(error);
 			});
 		} else {
 			response.json({
