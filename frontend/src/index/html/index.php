@@ -6,6 +6,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
+		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/index.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/cards-view.css">
 		<link rel="stylesheet" type="text/css" href="/src/index/css/question-view.css">

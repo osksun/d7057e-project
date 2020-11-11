@@ -10,7 +10,7 @@ const moduleEditor = new function() {
 
 	this.setupCreate = function(_courseId, courseName) {
 		courseId = _courseId;
-		createModuleButton.innerHTML = "<p>Create module</p>";
+		createModuleButton.innerHTML = "Create module";
 		createModuleButton.disabled = false;
 		courseNameTitle.textContent = decodeURIComponent(courseName);
 		submitHandler = createModule;
@@ -20,7 +20,7 @@ const moduleEditor = new function() {
 		DbCom.getModuleByName(_courseId, _moduleName).then((module) => {
 			courseId = _courseId;
 			courseName = _courseName;
-			createModuleButton.innerHTML = "<p>Update module</p>";
+			createModuleButton.innerHTML = "Update module";
 			createModuleButton.disabled = false;
 			courseNameTitle.textContent = decodeURIComponent(_courseName);
 			moduleName.value = module.name;
@@ -31,7 +31,7 @@ const moduleEditor = new function() {
 
 	createModuleButton.addEventListener("click", () => {
 		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
-			createModuleButton.innerHTML = "<p>. . .</p>";
+			createModuleButton.innerHTML = ". . .";
 			createModuleButton.disabled = true;
 			submitHandler().then(() => {
 				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName, moduleName.value, true);
@@ -41,7 +41,7 @@ const moduleEditor = new function() {
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				createModuleButton.innerHTML = "<p></p>";
+				createModuleButton.innerHTML = "";
 				createModuleButton.disabled = false;
 			});
 		}

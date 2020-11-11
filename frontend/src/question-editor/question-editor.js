@@ -10,9 +10,8 @@ const questionEditor = new function() {
 
 	this.addSegmentType = function(type, name, createCallback) {
 		const button = document.createElement("button");
-		const p = document.createElement("p");
-		p.innerText = name + " +";
-		button.appendChild(p);
+		button.className = "button";
+		button.innerText = name + " +";
 		addSegmentButtons.appendChild(button);
 
 		button.addEventListener("click", () => {
@@ -25,7 +24,7 @@ const questionEditor = new function() {
 
 	this.setup = function(_moduleId) {
 		moduleId = _moduleId;
-		submitButton.innerHTML = "<p>Create question</p>";
+		submitButton.innerHTML = "Create question";
 		submitButton.disabled = false;
 	};
 
@@ -39,7 +38,7 @@ const questionEditor = new function() {
 	}
 
 	submitButton.addEventListener("click", (event) => {
-		submitButton.innerHTML = "<p>. . .</p>";
+		submitButton.innerHTML = ". . .";
 		submitButton.disabled = true;
 
 		const types = [];
@@ -58,7 +57,7 @@ const questionEditor = new function() {
 				showMessage("Error: " + result.error, true);
 			}
 		}).finally(() => {
-			submitButton.innerHTML = "<p>Create question</p>";
+			submitButton.innerHTML = "Create question";
 			submitButton.disabled = false;
 		});
 	});

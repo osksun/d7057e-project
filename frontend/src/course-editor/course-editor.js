@@ -9,7 +9,7 @@ const courseEditor = new function() {
 	this.setupCreate = function() {
 		// Setup for create new course
 		courseColor.value = getRandomColor();
-		submitButton.innerHTML = "<p>Create course</p>";
+		submitButton.innerHTML = "Create course";
 		submitHandler = createCourse;
 	};
 
@@ -19,14 +19,14 @@ const courseEditor = new function() {
 			courseColor.value = "#" + course.color;
 			courseName.value = course.name;
 			courseDescription.value = course.description;
-			submitButton.innerHTML = "<p>Update course</p>";
+			submitButton.innerHTML = "Update course";
 			submitHandler = updateCourse.bind(this, course.id);
 		});
 	};
 
 	submitButton.addEventListener("click", () => {
 		if(courseName.reportValidity() && courseDescription.reportValidity()) {
-			submitButton.innerHTML = "<p>. . .</p>";
+			submitButton.innerHTML = ". . .";
 			submitButton.disabled = true;
 			submitHandler().then(() => {
 				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName.value, null, true);

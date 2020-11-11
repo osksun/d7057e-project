@@ -98,7 +98,7 @@ const questionViewManager = new function() {
 
 	function submitClick(event) {
 		if(event.repeat) return;
-		//key 13 is enter 
+		//key 13 is enter
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
 			handleSubmit(currentQuestionID);
@@ -123,14 +123,14 @@ const questionViewManager = new function() {
 				segmentInputBoxes.push(null);
 			}
 		}
-		
+
 		//Reset Mathjax
 		MathJax.texReset(0);
 		const mathJaxElements = questionSegments.getElementsByClassName("tex2jax_process");
 		MathJax.typesetClear(mathJaxElements);
 		MathJax.typesetPromise(mathJaxElements);
 		// Show submit button
-		submitButton.className = "";
+		submitButton.className = "button";
 	};
 
 	const setupEmptyQuestion = () => {
@@ -139,7 +139,7 @@ const questionViewManager = new function() {
 		div.innerText = "There are no questions in this module";
 		questionSegments.appendChild(div);
 		// Hide submit button
-		submitButton.className = "hidden";
+		submitButton.className = "button hidden";
 	};
 
 	const setupQuestionButton = (container, courseId, courseName, moduleId, moduleName) => {
