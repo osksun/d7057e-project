@@ -4,12 +4,10 @@ const questionViewManager = new function() {
 	const editorContainer = document.getElementById("question-editor-container");
 	const questionListContainer = document.getElementById("question-list-container");
 	const submitButton = document.getElementById("submit-button");
-	const answerInput = document.getElementById("answer-input");
 	const loadingIcon = document.getElementById("loading-icon");
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
 
-	let submitHandler;
 	let displayHandler;
 	let currentCourseId = null;
 	let currentModuleId = null;
@@ -179,7 +177,7 @@ const questionViewManager = new function() {
 					// Toggle view
 					toggleQuestionContainer();
 					viewManager.toggleQuestionView();
-				}
+				};
 				if (currentQuestionID === null) {
 					// Get all questions of the module
 					DbCom.getQuestions(moduleId).then((questions) => {
