@@ -314,6 +314,63 @@ function createQuestion(moduleID, types, content, answers) {
 }
 exports.createQuestion = createQuestion;
 
+function updateQuestion(questionID, types, content, answers) {
+	return new Promise((resolve, reject) => {
+		connection.beginTransaction(function(error) {
+			if(error) {
+				reject();
+			} else {
+				connection.query("DELETE FROM questionsegments WHERE questionID=?", [questionID], (error, result) => {
+					if(error) {
+						connection.rollback(function() {
+							reject();
+						});
+					} else {
+						const promises = [];
+						for(let i = 0; i < types.length; ++i) {
+							promises.push(new Promise((resolve, reject) => {
+								connection.query("INSERT INTO questionsegments (questionID, segmentOrder, type, content, answer) VALUES (?, ?, ?, ?, ?)", [questionID, i, types[i], content[i], answers[i]], (error, result) => {
+									if(error) {
+										reject();
+									} else {
+										resolve();
+									}
+								});
+							}));
+						}
+
+						Promise.allSettled(promises).then((results) => {
+							let failed = false;
+							for(let i = 0; i < results.length; ++i) {
+								if(results[i].status != "fulfilled") {
+									failed = true;
+								}
+							}
+
+							if(failed) {
+								connection.rollback(function() {
+									reject();
+								});
+							} else {
+								connection.commit(function(error) {
+									if(error) {
+										connection.rollback(function() {
+											reject();
+										});
+									} else {
+										resolve();
+									}
+								});
+							}
+						});
+					}
+				});
+			}
+		});
+	});
+}
+exports.updateQuestion = updateQuestion;
+
 function getQuestions(moduleID) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT id FROM questions WHERE moduleID = ?", [moduleID], (error, result) => {
@@ -451,3 +508,51 @@ function isUserModeratorOfModule(userID, moduleID) {
 	});
 }
 exports.isUserModeratorOfModule = isUserModeratorOfModule;
+
+//Also returns true if the user is an admin
+function isUserModeratorOfQuestion(userID, questionID) {
+	return new Promise((resolve, reject) => {
+		getUserIsAdmin(userID).then((isAdmin) => {
+			if(isAdmin) {
+				resolve(true);
+			} else {
+				connection.query("SELECT moduleID from questions WHERE id = ?", [questionID], (error, result) => {
+					if(error) {
+						reject();
+					} else {
+						if(result.length == 1) {
+							const moduleID = result[0].moduleID;
+							connection.query("SELECT courseID from modules WHERE id = ?", [moduleID], (error, result) => {
+								if(error) {
+									reject();
+								} else {
+									if(result.length == 1) {
+										const courseID = result[0].courseID;
+										connection.query("SELECT userID, courseID FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
+											if(error) {
+												reject();
+											} else {
+												if(result.length == 1) {
+													resolve(true);
+												} else {
+													resolve(false);
+												}
+											}
+										});
+									} else {
+										reject();
+									}
+								}
+							});
+						} else {
+							reject();
+						}
+					}
+				});
+			}
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.isUserModeratorOfQuestion = isUserModeratorOfQuestion;
