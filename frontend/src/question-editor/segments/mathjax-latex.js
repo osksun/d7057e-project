@@ -20,8 +20,8 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function() {
 			event.preventDefault();
 		}
 	});
-	latexInput.addEventListener("keydown", function(e) {
-		if(e.keyCode === 27 || event.code == "Escape") {
+	latexInput.addEventListener("keydown", function(event) {
+		if(event.keyCode === 27 || event.code == "Escape") {
 			latexInput.blur();
 		}
 	});
