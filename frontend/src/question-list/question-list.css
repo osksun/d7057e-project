@@ -12,7 +12,11 @@
 }
 
 #question-list-container > button.create {
-	background-color: #888888;
+	background-color: #888;
+}
+
+#question-list-container > button.create:hover {
+	background-color: #fff;
 }
 
 #question-list-container > button > p {
@@ -25,5 +29,5 @@
 	display:block;
 	margin:0px auto 0 auto;
 	width:24px;
-	padding: 1em 0;
+	padding:1em 0;
 }
