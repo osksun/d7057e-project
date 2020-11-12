@@ -9,7 +9,8 @@ const questionEditor = new function() {
 	let moduleId = null;
 
 	const segmentCreateCallbacks = new Map();
-	
+	let questionId = null;
+
 	this.addSegmentType = function(type, name, createCallback) {
 		segmentCreateCallbacks.set(type, createCallback);
 		const button = document.createElement("button");
@@ -24,15 +25,24 @@ const questionEditor = new function() {
 		});
 	};
 
-	this.setup = function(_moduleId) {
+	function clear() {
 		questionSegments.innerHTML = "";
+		showMessage("");
+		segmentsData.length = 0;
+		moduleId = null;
+		questionId = null;
+	}
+
+	this.setup = function(_moduleId) {
+		clear();
 		moduleId = _moduleId;
 		submitButton.innerHTML = "Create question";
 		submitButton.disabled = false;
 	};
 
-	this.setupEdit = function(questionId) {
-		questionSegments.innerHTML = "";
+	this.setupEdit = function(_questionId) {
+		clear();
+		questionId = _questionId;
 		DbCom.getQuestionSegments(questionId).then((segments) => {
 			for (let i = 0; i < segments.length; i++) {
 				const createCallback = segmentCreateCallbacks.get(segments[i].type);
@@ -41,7 +51,7 @@ const questionEditor = new function() {
 				segment.type = segments[i].type;
 				segmentsData.push(segment);
 			}
-			submitButton.innerHTML = "Create question";
+			submitButton.innerHTML = "Update question";
 			submitButton.disabled = false;
 		}).catch((err) => {
 			viewManager.redirect404();
@@ -70,15 +80,29 @@ const questionEditor = new function() {
 			answers.push(segmentsData[i].getAnswer());
 		}
 
-		DbCom.createQuestion(moduleId, types, content, answers).then(() => {
-			showMessage("Question added!");
-		}).catch((result) => {
-			if(result.hasOwnProperty("error")) {
-				showMessage("Error: " + result.error, true);
-			}
-		}).finally(() => {
-			submitButton.innerHTML = "Create question";
-			submitButton.disabled = false;
-		});
+		if (questionId !== null) {
+			DbCom.updateQuestion(questionId, types, content, answers).then(() => {
+				showMessage("Question updated!");
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				submitButton.innerHTML = "Update question";
+				submitButton.disabled = false;
+			});
+		} else {
+			DbCom.createQuestion(moduleId, types, content, answers).then(() => {
+				showMessage("Question added!");
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				submitButton.innerHTML = "Create question";
+				submitButton.disabled = false;
+			});
+		}
+
 	});
 }();
