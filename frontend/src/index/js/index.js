@@ -145,7 +145,7 @@ window.addEventListener("load", () => {
 							// /createquestion/course-name/module-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							const moduleName = decodeURIComponent(pathArray[2]);
-							this.loadQuestionView(questionViewManager.containers.EDITOR, courseName, moduleName, null, addToHistory);
+							this.loadQuestionView(questionViewManager.containers.CREATE_QUESTION, courseName, moduleName, null, addToHistory);
 							break;
 						}
 						case "editmodule": {
