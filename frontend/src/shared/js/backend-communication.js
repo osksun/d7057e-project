@@ -122,7 +122,7 @@ const DbCom = new function() {
 	 * @param {string[]} types a list of the types of the segments
 	 * @param {string[]} content a list of the content of the segments
 	 * @param {string[]} answers a list of regular expressions for defining the answer of the segments
-	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the module was successfully created or not
+	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the question was successfully created or not
 	 */
 	this.createQuestion = function(moduleId, types, content, answers) {
 		return this.ajaxPost(mainURL + "createquestion",
@@ -160,6 +160,22 @@ const DbCom = new function() {
 			"moduleID=" + id +
 			"&name=" + encodeURIComponent(name) +
 			"&description=" + encodeURIComponent(description));
+	};
+
+	/**
+	 * Ajax request to update a specific question
+	 * @param {unsigned int} questionId the id of the question to update
+	 * @param {string[]} types a list of the types of the segments
+	 * @param {string[]} content a list of the content of the segments
+	 * @param {string[]} answers a list of regular expressions for defining the answer of the segments
+	 * @returns {Promise<boolean>} Promise resolves to a boolean value depending on the question was successfully updated or not
+	 */
+	this.updateQuestion = function(questionId, types, content, answers) {
+		return this.ajaxPost(mainURL + "updatequestion",
+			"questionID=" + encodeURIComponent(questionId) +
+			"&types=" + encodeURIComponent(JSON.stringify(types)) +
+			"&content=" + encodeURIComponent(JSON.stringify(content)) +
+			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
 	/**
