@@ -1,6 +1,6 @@
 
 (function() {
-	const message = document.getElementById("message");
+	const message = document.getElementById("change-password-message");
 
 	function showMessage(text, isError) {
 		message.textContent = text;
@@ -45,6 +45,44 @@
 					changePasswordButton.disabled = false;
 				});
 			}
+		}
+	});
+})();
+
+
+(function() {
+	const message = document.getElementById("delete-message");
+
+	function showMessage(text, isError) {
+		message.textContent = text;
+		if(isError) {
+			message.className = "error";
+		} else {
+			message.className = "";
+		}
+	}
+
+	const deleteButton = document.getElementById("delete-button");
+	deleteButton.addEventListener("click", () => {
+		const passwordField = document.getElementById("delete-password");
+
+		if(passwordField.reportValidity()) {
+			deleteButton.innerHTML = ". . .";
+			deleteButton.disabled = true;
+			DbCom.deleteUser(passwordField.value).then((result) => {
+				//Logout
+				window.location.href = "/login";
+
+				showMessage("Account deleted successfully", false);
+				passwordField.value = "";
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				deleteButton.innerHTML = "Delete account";
+				deleteButton.disabled = false;
+			});
 		}
 	});
 })();

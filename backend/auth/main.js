@@ -195,6 +195,34 @@ function init() {
 		}
 	});
 
+	app.post("/delete", (request, response) => {
+		const userID = parseInt(request.body.userID, 10);
+		const password = request.body.password;
+
+		if(validation.validateUnsignedInt(userID) && validation.validatePassword(password)) {
+			database.loginUserID(userID, password).then(() => {
+				database.softDeleteUserID(userID).then(() => {
+					token.clearRefreshTokens(userID);
+					response.json({
+						success:true
+					});
+				}).catch((error) => {
+					response.json(error);
+				});
+			}).catch(() => {
+				response.json({
+					error:"Failed to verify current password",
+					errorCode:errorCode.failedPasswordVerification
+				});
+			});
+		} else {
+			response.json({
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
+			});
+		}
+	});
+
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
 		console.error("Config specifies invalid port");
@@ -206,6 +234,11 @@ function init() {
 			console.log("Server running on port " + port + "!");
 		}
 	}
+
+	database.purgeExpiredUsers();
+	setInterval(() => {
+		database.purgeExpiredUsers();
+	}, 60 * 60 * 1000);
 }
 
 database.connect().then(() => {

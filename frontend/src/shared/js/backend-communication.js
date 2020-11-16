@@ -33,6 +33,14 @@ const DbCom = new function() {
 		});
 	};
 
+	this.deleteUser = function(password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				this.ajaxPostAuth(authURL + "delete", "userID=" + userID + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
+	};
+
 	this.changeUserPassword = function(currentPassword, newPassword) {
 		return new Promise((resolve, reject) => {
 			clientSidePasswordHash(currentPassword).then((currentPasswordHash) => {
