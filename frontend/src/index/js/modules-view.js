@@ -4,6 +4,10 @@ const modulesViewManager = new function() {
 	const modulesbutton = document.getElementById("modules-button");
 	let displayHandler;
 
+	modulesbutton.addEventListener("click", () => {
+		displayHandler();
+	});
+
 	this.containers = {
 		MODULES: 0,
 		EDIT_MODULE: 1,
@@ -141,8 +145,6 @@ const modulesViewManager = new function() {
 	this.updateButton = function(courseId, courseName, color) {
 		modulesbutton.disabled = false;
 		modulesbutton.children[0].innerText = courseName;
-		modulesbutton.removeEventListener("click", displayHandler);
 		displayHandler = this.displayModules.bind(this, courseId, courseName, color, true);
-		modulesbutton.addEventListener("click", displayHandler);
 	};
 }();
