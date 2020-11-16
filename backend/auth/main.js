@@ -18,6 +18,7 @@ function registerUser(email, password) {
 		const passwordSaltRounds = 10;
 		bcrypt.hash(password, passwordSaltRounds, (error, hash) => {
 			if(error) {
+				console.error(error);
 				reject();
 			} else {
 				database.createUser(email, hash).then((userID) => {
@@ -35,6 +36,7 @@ function changeUserPassword(userID, password) {
 		const passwordSaltRounds = 10;
 		bcrypt.hash(password, passwordSaltRounds, (error, hash) => {
 			if(error) {
+				console.error(error);
 				reject();
 			} else {
 				database.changeUserPassword(userID, hash).then(() => {
