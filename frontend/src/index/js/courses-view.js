@@ -44,13 +44,12 @@ const coursesViewManager = new function() {
 		titleWrapper.appendChild(title);
 		header.appendChild(titleWrapper);
 		const descWrapper = document.createElement("div");
+		descWrapper.className = "description-wrapper";
 		const info = document.createElement("ul");
 		info.innerHTML = "<li><span>Progress: " + answerCount + "/" + questionCount + "</span></li>";
-		descWrapper.appendChild(info);
-		descWrapper.className = "description-wrapper";
 		info.style.color = color;
+		descWrapper.appendChild(info);
 		cardWrapper.appendChild(header);
-		//cardWrapper.appendChild(info);
 		cardWrapper.appendChild(descWrapper);
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
