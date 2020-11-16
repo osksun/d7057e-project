@@ -107,7 +107,6 @@ const coursesViewManager = new function() {
 			viewManager.updatePage("/", "All courses", addToHistory);
 			viewManager.toggleCoursesView();
 		}).catch((err) => {
-			viewManager.redirect404();
 		});
 	};
 
