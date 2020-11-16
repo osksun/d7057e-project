@@ -389,6 +389,28 @@ function getQuestions(moduleID) {
 }
 exports.getQuestions = getQuestions;
 
+function getRandomUnansweredQuestionID(moduleID, userID) {
+	return new Promise((resolve, reject) => {
+        connection.query(`
+            SELECT id FROM questions WHERE moduleID = ? AND id NOT IN (
+			    SELECT questionID FROM answers WHERE userID = ?
+		    ) ORDER BY RAND() LIMIT 1
+		    `, [moduleID, userID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+                if (result.length === 0) {
+                    resolve(null); // User has answered all questions in this module
+                } else {
+                    const questionID = result[0].id;
+                    resolve(questionID);
+                }
+			}
+		});
+	});
+}
+exports.getRandomUnansweredQuestionID = getRandomUnansweredQuestionID;
+
 function getQuestionSegments(questionID) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT segmentOrder, type, content, answer FROM questionsegments WHERE questionID = ? ORDER BY segmentOrder", [questionID], (error, result) => {
