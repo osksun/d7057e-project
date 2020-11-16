@@ -228,6 +228,16 @@ const DbCom = new function() {
 	};
 
 	/**
+	 * Ajax request to get a random unanswered question in a module 
+	 * @param {unsigned int} moduleId the id of the module
+	 * @return {Promise<Question>} Promise resolves to a Question object
+	 */
+	this.getRandomUnansweredQuestion = function(moduleId) {
+		return this.ajaxPost(mainURL + "getrandomunansweredquestion",
+			"moduleID=" + encodeURIComponent(moduleId));
+	};
+
+	/**
 	 * Ajax request to get all the segments of a question with the specific id
 	 * @param {unsigned int} id the id of the question
 	 * @return {Promise<[QuestionSegment]>} Promise resolves to a list of questionn segment objects
