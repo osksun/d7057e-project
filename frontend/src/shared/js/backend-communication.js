@@ -208,7 +208,7 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get all modules of given courseName
+	 * Ajax request to get all modules in a course
 	 * @param {unsigned int} id the id of the course
 	 * @return {Promise<Array<Module>>} Promise resolves to an array of Module objects
 	 */
@@ -218,7 +218,7 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get all questions in a module of a course given the courseName and moduleName
+	 * Ajax request to get all questions in a module
 	 * @param {unsigned int} moduleId the id of the module
 	 * @return {Promise<Array<Question>>} Promise resolves to an array of Question objects
 	 */
