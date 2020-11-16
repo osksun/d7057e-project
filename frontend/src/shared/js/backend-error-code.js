@@ -1,5 +1,5 @@
-// Do not forget to update "frontend/src/shared/js/backend-error-code.js" as well
-module.exports = {
+
+const backendErrorCode = {
 	invalidToken:0,
 	malformedInput:1,
 	unknownDatabaseError:2,
