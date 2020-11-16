@@ -238,16 +238,28 @@ function getModuleByName(courseID, name) {
 }
 exports.getModuleByName = getModuleByName;
 
-function getModules(courseID) {
+function getModules(courseID, userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, name, description FROM modules WHERE courseID = ?", [courseID], (error, result) => {
+		connection.query(`
+			SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
+			RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
+			RIGHT JOIN modules ON modules.id = questions.moduleID
+			WHERE modules.courseID = ?
+			GROUP BY modules.id
+			`, [userID, courseID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
 				const modules = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					modules.push({id:row.id, name:row.name, description:row.description});
+					modules.push({
+						id:row.id,
+						name:row.name,
+						description:row.description,
+						questionCount:row.questionCount,
+						answerCount:row.answerCount
+					});
 				}
 				resolve(modules);
 			}

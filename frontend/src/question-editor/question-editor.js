@@ -11,6 +11,86 @@ const questionEditor = new function() {
 	const segmentCreateCallbacks = new Map();
 	let questionId = null;
 
+	function createSegment(type, content, answer) {
+		const createCallback = segmentCreateCallbacks.get(type);
+		const segment = createCallback(content, answer);
+		questionSegments.appendChild(segment.div);
+		segment.type = type;
+		segmentsData.push(segment);
+
+		const segmentToolbar = document.createElement("div");
+		segmentToolbar.className = "segment-toolbar";
+		segment.div.appendChild(segmentToolbar);
+
+		const deleteButton = document.createElement("button");
+		deleteButton.className = "button";
+		deleteButton.innerHTML = "<img src=\"/src/question-editor/delete.svg\">";
+		deleteButton.addEventListener("click", () => {
+			for(let i = 0; i < segmentsData.length; ++i) {
+				if(segmentsData[i] == segment) {
+					segmentsData.splice(i, 1);
+					break;
+				}
+			}
+			questionSegments.removeChild(segment.div);
+		});
+		segmentToolbar.appendChild(deleteButton);
+
+		const downButton = document.createElement("button");
+		downButton.className = "button";
+		downButton.innerHTML = "<img src=\"/src/question-editor/arrow_down.svg\">";
+		downButton.addEventListener("click", () => {
+			let segmentIndex = null;
+			for(let i = 0; i < segmentsData.length; ++i) {
+				if(segmentsData[i] == segment) {
+					segmentIndex = i;
+					segmentsData.splice(i, 1);
+					break;
+				}
+			}
+			questionSegments.removeChild(segment.div);
+
+			if(segmentIndex != segmentsData.length) {
+				++segmentIndex;
+			}
+
+			if(segmentIndex == segmentsData.length) {
+				questionSegments.appendChild(segment.div);
+			} else {
+				questionSegments.insertBefore(segment.div, segmentsData[segmentIndex].div);
+			}
+			segmentsData.splice(segmentIndex, 0, segment);
+		});
+		segmentToolbar.appendChild(downButton);
+
+		const upButton = document.createElement("button");
+		upButton.className = "button";
+		upButton.innerHTML = "<img src=\"/src/question-editor/arrow_up.svg\">";
+		upButton.addEventListener("click", () => {
+			let segmentIndex = null;
+			for(let i = 0; i < segmentsData.length; ++i) {
+				if(segmentsData[i] == segment) {
+					segmentIndex = i;
+					segmentsData.splice(i, 1);
+					break;
+				}
+			}
+			questionSegments.removeChild(segment.div);
+
+			if(segmentIndex != 0) {
+				--segmentIndex;
+			}
+
+			if(segmentIndex == segmentsData.length) {
+				questionSegments.appendChild(segment.div);
+			} else {
+				questionSegments.insertBefore(segment.div, segmentsData[segmentIndex].div);
+			}
+			segmentsData.splice(segmentIndex, 0, segment);
+		});
+		segmentToolbar.appendChild(upButton);
+	}
+
 	this.addSegmentType = function(type, name, createCallback) {
 		segmentCreateCallbacks.set(type, createCallback);
 		const button = document.createElement("button");
@@ -18,10 +98,7 @@ const questionEditor = new function() {
 		button.innerText = name + " +";
 		addSegmentButtons.appendChild(button);
 		button.addEventListener("click", () => {
-			const segment = createCallback();
-			questionSegments.appendChild(segment.div);
-			segment.type = type;
-			segmentsData.push(segment);
+			createSegment(type);
 		});
 	};
 
@@ -45,11 +122,7 @@ const questionEditor = new function() {
 		questionId = _questionId;
 		DbCom.getQuestionSegments(questionId).then((segments) => {
 			for (let i = 0; i < segments.length; i++) {
-				const createCallback = segmentCreateCallbacks.get(segments[i].type);
-				const segment = createCallback(segments[i].content, segments[i].answer);
-				questionSegments.appendChild(segment.div);
-				segment.type = segments[i].type;
-				segmentsData.push(segment);
+				createSegment(segments[i].type, segments[i].content, segments[i].answer);
 			}
 			submitButton.innerHTML = "Update question";
 			submitButton.disabled = false;

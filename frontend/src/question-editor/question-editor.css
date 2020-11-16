@@ -1,5 +1,6 @@
 
 #question-editor-segments > div {
+	position:relative;
 	padding:50px 0;
 	border-bottom:2px dashed #aaa;
 }
@@ -55,6 +56,20 @@
 
 #question-editor-segments > .image > img {
 	max-width:100%;
+}
+
+#question-editor-segments > div > .segment-toolbar {
+	position:absolute;
+	left:4px;
+	top:12px;
+}
+#question-editor-segments > div > .segment-toolbar > * {
+	margin:0 4px;
+	padding:8px 10px;
+}
+#question-editor-segments > div > .segment-toolbar > *:hover > img {
+	-webkit-filter:invert(100%);
+	filter:invert(100%);
 }
 
 #question-editor-bottom-container {

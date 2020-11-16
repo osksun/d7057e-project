@@ -167,7 +167,7 @@ function init() {
 
 			//TODO validate input
 
-			database.getModules(courseID).then((modules) => {
+			database.getModules(courseID, userID).then((modules) => {
 				response.json(modules);
 			}).catch(() => {
 				response.json({

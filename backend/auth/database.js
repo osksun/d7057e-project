@@ -16,7 +16,7 @@ function connect() {
 			} else {
 				console.log("MySQL database connected!");
 
-				connection.query("CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, PRIMARY KEY(id))", (error, result) => {
+				connection.query("CREATE TABLE IF NOT EXISTS users (id INT NOT NULL AUTO_INCREMENT, email VARCHAR(255) UNIQUE NOT NULL, password VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id))", (error, result) => {
 					if(error) {
 						console.error("Failed to create database tables!");
 						reject();
@@ -57,7 +57,7 @@ exports.createUser = createUser;
 
 function changeUserPassword(userID, passwordHash) {
 	return new Promise((resolve, reject) => {
-		connection.query("UPDATE users SET password=? WHERE id=?", [passwordHash, userID], (error, result) => {
+		connection.query("UPDATE users SET password = ? WHERE id = ? and deleteon IS NULL", [passwordHash, userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -70,7 +70,7 @@ exports.changeUserPassword = changeUserPassword;
 
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, password FROM users WHERE email = ?", [email], (error, result) => {
+		connection.query("SELECT id, password FROM users WHERE email = ? and deleteon IS NULL", [email], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -96,7 +96,7 @@ exports.loginUser = loginUser;
 
 function loginUserID(userID, password) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT password FROM users WHERE id = ?", [userID], (error, result) => {
+		connection.query("SELECT password FROM users WHERE id = ? and deleteon IS NULL", [userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -119,3 +119,36 @@ function loginUserID(userID, password) {
 	});
 }
 exports.loginUserID = loginUserID;
+
+function softDeleteUserID(userID) {
+	return new Promise((resolve, reject) => {
+		//Delete in 30 days
+		connection.query("UPDATE users SET deleteon = DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) WHERE id = ?", [userID], (error, result) => {
+			if(error) {
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.softDeleteUserID = softDeleteUserID;
+
+function purgeExpiredUsers() {
+	return new Promise((resolve, reject) => {
+		connection.query("DELETE FROM users WHERE deleteon <= CURRENT_DATE", (error, result) => {
+			if(error) {
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.purgeExpiredUsers = purgeExpiredUsers;

@@ -33,6 +33,14 @@ const DbCom = new function() {
 		});
 	};
 
+	this.deleteUser = function(password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				this.ajaxPostAuth(authURL + "delete", "userID=" + userID + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
+	};
+
 	this.changeUserPassword = function(currentPassword, newPassword) {
 		return new Promise((resolve, reject) => {
 			clientSidePasswordHash(currentPassword).then((currentPasswordHash) => {
@@ -51,15 +59,22 @@ const DbCom = new function() {
 		});
 	};
 
+	let accessTokenCreatePromise = null;
 	let accessToken = null;
 	let accessTokenExpireTime = 0;
 	this.createAccessToken = function() {
 		return new Promise((resolve, reject) => {
-			this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken)).then((result) => {
+			if(accessTokenCreatePromise == null) {
+				accessTokenCreatePromise = this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken));
+			}
+
+			accessTokenCreatePromise.then((result) => {
 				accessToken = result.signature;
 				accessTokenExpireTime = result.expireTime;
+				accessTokenCreatePromise = null;
 				resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
 			}).catch((error) => {
+				accessTokenCreatePromise = null;
 				reject();
 			});
 		});
