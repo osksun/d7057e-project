@@ -35,6 +35,60 @@ const questionEditor = new function() {
 			questionSegments.removeChild(segment.div);
 		});
 		segmentToolbar.appendChild(deleteButton);
+
+		const downButton = document.createElement("button");
+		downButton.className = "button";
+		downButton.innerHTML = "<img src=\"/src/question-editor/arrow_down.svg\">";
+		downButton.addEventListener("click", () => {
+			let segmentIndex = null;
+			for(let i = 0; i < segmentsData.length; ++i) {
+				if(segmentsData[i] == segment) {
+					segmentIndex = i;
+					segmentsData.splice(i, 1);
+					break;
+				}
+			}
+			questionSegments.removeChild(segment.div);
+
+			if(segmentIndex != segmentsData.length) {
+				++segmentIndex;
+			}
+
+			if(segmentIndex == segmentsData.length) {
+				questionSegments.appendChild(segment.div);
+			} else {
+				questionSegments.insertBefore(segment.div, segmentsData[segmentIndex].div);
+			}
+			segmentsData.splice(segmentIndex, 0, segment);
+		});
+		segmentToolbar.appendChild(downButton);
+
+		const upButton = document.createElement("button");
+		upButton.className = "button";
+		upButton.innerHTML = "<img src=\"/src/question-editor/arrow_up.svg\">";
+		upButton.addEventListener("click", () => {
+			let segmentIndex = null;
+			for(let i = 0; i < segmentsData.length; ++i) {
+				if(segmentsData[i] == segment) {
+					segmentIndex = i;
+					segmentsData.splice(i, 1);
+					break;
+				}
+			}
+			questionSegments.removeChild(segment.div);
+
+			if(segmentIndex != 0) {
+				--segmentIndex;
+			}
+
+			if(segmentIndex == segmentsData.length) {
+				questionSegments.appendChild(segment.div);
+			} else {
+				questionSegments.insertBefore(segment.div, segmentsData[segmentIndex].div);
+			}
+			segmentsData.splice(segmentIndex, 0, segment);
+		});
+		segmentToolbar.appendChild(upButton);
 	}
 
 	this.addSegmentType = function(type, name, createCallback) {
