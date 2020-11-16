@@ -237,9 +237,13 @@ function init() {
 		}
 	}
 
-	database.purgeExpiredUsers();
+	database.purgeExpiredUsers().catch(() => {
+		//Errors printed in database.js
+	});
 	setInterval(() => {
-		database.purgeExpiredUsers();
+		database.purgeExpiredUsers().catch(() => {
+			//Errors printed in database.js
+		});
 	}, 60 * 60 * 1000);
 }
 
