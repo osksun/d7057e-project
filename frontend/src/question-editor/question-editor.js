@@ -11,7 +11,7 @@ const questionEditor = new function() {
 	const segmentCreateCallbacks = new Map();
 	let questionId = null;
 
-	function createSegment(type, content = null, answer = null) {
+	function createSegment(type, content, answer) {
 		const createCallback = segmentCreateCallbacks.get(type);
 		const segment = createCallback(content, answer);
 		questionSegments.appendChild(segment.div);
