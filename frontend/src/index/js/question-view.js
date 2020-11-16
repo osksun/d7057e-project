@@ -8,11 +8,19 @@ const questionViewManager = new function() {
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
 
-	let displayHandler;
 	let currentCourseId = null;
 	let currentModuleId = null;
-	let currentQuestionID = null;
+	let currentQuestion = null;
 	let segmentInputBoxes = [];
+	let displayHandler;
+
+	submitButton.addEventListener("click", (event) => {
+		this.handleSubmit(currentQuestion);
+	});
+
+	questionButton.addEventListener("click", () => {
+		displayHandler();
+	});
 
 	this.containers = {
 		QUESTION: 0,
@@ -47,7 +55,7 @@ const questionViewManager = new function() {
 	this.updateButton = function(courseId) {
 		if (courseId !== currentCourseId) {
 			this.clear();
-			currentQuestionID = null;
+			currentQuestion = null;
 		}
 	};
 
@@ -93,18 +101,12 @@ const questionViewManager = new function() {
 		});
 	};
 
-	submitButton.addEventListener("click", (event) => {
-		this.handleSubmit(currentQuestionID);
-	});
-
-	questionButton.addEventListener("click", displayHandler);
-
 	function submitClick(event) {
 		if(event.repeat) return;
 		//key 13 is enter
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
-			handleSubmit(currentQuestionID);
+			handleSubmit(currentQuestion);
 		}
 	}
 
@@ -137,9 +139,18 @@ const questionViewManager = new function() {
 	};
 
 	const setupEmptyQuestion = () => {
+		// Add no segments message
+		const div = document.createElement("div");
+		div.innerText = "There are no segments in this question";
+		questionSegments.appendChild(div);
+		// Hide submit button
+		submitButton.className = "button hidden";
+	};
+
+	const setupNoUnansweredQuestions = () => {
 		// Add no questions message
 		const div = document.createElement("div");
-		div.innerText = "There are no questions in this module";
+		div.innerText = "There are no unanswered in this module";
 		questionSegments.appendChild(div);
 		// Hide submit button
 		submitButton.className = "button hidden";
@@ -151,20 +162,7 @@ const questionViewManager = new function() {
 	};
 
 	this.displayQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
-		if (moduleId != currentModuleId) {
-			currentQuestionID = null;
-		}
-		const showQuestion = (questionID) => {
-			this.clear();
-			if(questionID == null) {
-				setupEmptyQuestion();
-			} else {
-				DbCom.getQuestionSegments(questionID).then((segments) => {
-					setupQuestion(segments);
-				}).catch((err) => {
-					console.error(err);
-				});
-			}
+		const showQuestion = () => {
 			// Note current course and module ids
 			currentCourseId = courseId;
 			currentModuleId = moduleId;
@@ -177,21 +175,33 @@ const questionViewManager = new function() {
 			toggleQuestionContainer();
 			viewManager.toggleQuestionView();
 		};
-		if (currentQuestionID === null) {
+		if (moduleId != currentModuleId) {
+			currentQuestion = null;
+		}
+		if (currentQuestion === null) {
+			this.clear();
 			// Get all questions of the module
-			DbCom.getQuestions(moduleId).then((questions) => {
-				if(questions.length === 0) {
-					currentQuestionID = null;
-					showQuestion(currentQuestionID);
+			DbCom.getRandomUnansweredQuestion(moduleId).then((question) => {
+				currentQuestion = question;
+				if(question.segments.length === 0) {
+					setupEmptyQuestion();
 				} else {
-					currentQuestionID = questions[Math.floor(Math.random() * questions.length)];
-					showQuestion(currentQuestionID);
+					setupQuestion(question.segments);
 				}
-			}).catch((err) => {
-				viewManager.redirect404();
+				showQuestion();
+			}).catch((error) => {
+				switch (error.errorCode) {
+					case backendErrorCode.noUnansweredQuestions:
+						setupNoUnansweredQuestions();
+						showQuestion();
+						break;
+					default:
+						viewManager.redirect404();
+						break;
+				}
 			});
 		} else {
-			showQuestion(currentQuestionID);
+			showQuestion();
 		}
 	};
 
