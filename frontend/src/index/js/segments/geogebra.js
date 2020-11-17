@@ -3,15 +3,15 @@
 	questionViewManager.addSegmentType("GEOGEBRA", function(content) {
 		const superDiv = document.createElement("div");
 		const div = document.createElement("div");
-		const defaultStateButton = document.createElement("button");
-		defaultStateButton.onclick = function() {loadState()};
-		superDiv.appendChild(div);
-		superDiv.appendChild(defaultStateButton);
-		div.id = "ggb-viewElement" + idIncrement;
 		let ggbApp;
 		let ggbID;
 		setTimeout(createGGBAPP, 0);
+		const defaultStateButton = document.createElement("button");
+		defaultStateButton.onclick = function() {loadGGBState();};
+		superDiv.appendChild(div);
+		superDiv.appendChild(defaultStateButton);
 		function createGGBAPP() {
+			div.id = "ggb-element" + idIncrement;
 			ggbID = "geogebraApp" + idIncrement;
 			ggbApp = new GGBApplet({
 				"id": ggbID,
@@ -21,16 +21,15 @@
 				"showToolBar": true,
 				"showAlgebraInput": true,
 				"showMenuBar": true,
-				"useBrowserForJS":false,
+				"useBrowserForJS": false,
 				"ggbBase64": content
 			}, "5.0");
-			ggbApp.inject('ggb-viewElement' + idIncrement);
+			ggbApp.inject('ggb-element' + idIncrement);
 			idIncrement++;
 		}
 
-		function loadState(){
-			const newState = window[ggbID].setBase64(content);
-			ggbApp.ggbBase64 = newState;
+		function loadGGBState(){
+			ggbApp.ggbBase64 = window[ggbID].setBase64(content);;
 		}
 		return {
 			div:superDiv,
