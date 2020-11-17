@@ -21,7 +21,7 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
-					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))"
+					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE)"
 				];
 
 				function createTable() {
