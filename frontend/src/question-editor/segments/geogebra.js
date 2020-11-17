@@ -6,10 +6,7 @@
 		let ggbApp;
 		let ggbID;
 		setTimeout(createGGBAPP, 0);
-		const defaultStateButton = document.createElement("button");
-		defaultStateButton.onclick = function() {loadGGBState();};
 		superDiv.appendChild(div);
-		superDiv.appendChild(defaultStateButton);
 		function createGGBAPP() {
 			div.id = "ggb-element" + idIncrement;
 			ggbID = "geogebraApp" + idIncrement;
@@ -30,10 +27,6 @@
 		
 		function saveGGBState(){
 			return window[ggbID].getBase64();
-		}
-
-		function loadGGBState(){
-			ggbApp.ggbBase64 = window[ggbID].setBase64(content);
 		}
 
 		return {
