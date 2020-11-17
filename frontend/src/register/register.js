@@ -31,4 +31,16 @@
 			}
 		}
 	});
+
+	function registerClick(event) {
+		if(event.repeat) {return};
+		//key 13 is enter
+		if(event.keyCode === 13 || event.key === "Enter") {
+			event.preventDefault();
+			registerButton.click();
+		}
+	}
+	emailField.addEventListener("keydown", registerClick);
+	passwordField.addEventListener("keydown", registerClick);
+	repeatPasswordField.addEventListener("keydown", registerClick);
 })();

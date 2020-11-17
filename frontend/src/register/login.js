@@ -23,8 +23,7 @@
 			}
 		}
 	});
-	emailField.addEventListener("keydown", loginClick);
-	passwordField.addEventListener("keydown", loginClick);
+
 	function loginClick(event) {
 		if(event.repeat) {return};
 		//key 13 is enter
@@ -33,4 +32,6 @@
 			loginButton.click();
 		}
 	}
+	emailField.addEventListener("keydown", loginClick);
+	passwordField.addEventListener("keydown", loginClick);
 })();
