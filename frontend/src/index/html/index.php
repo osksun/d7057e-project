@@ -14,6 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/question-editor/question-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/question-list/question-list.css">
+		<script src="https://cdn.geogebra.org/apps/deployggb.js" defer></script>
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
