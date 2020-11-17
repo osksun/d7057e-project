@@ -672,13 +672,18 @@ function init() {
 		}
 	}
 
-	database.purgeExpiredCourses().catch(() => {
-	//Errors printed in database.js
-	});
-	setInterval(() => {
+	function purgeExpiredData() {
 		database.purgeExpiredCourses().catch(() => {
 		//Errors printed in database.js
 		});
+		database.purgeExpiredModules().catch(() => {
+		//Errors printed in database.js
+		});
+	}
+
+	purgeExpiredData();
+	setInterval(() => {
+		purgeExpiredData();
 	}, 60 * 60 * 1000);
 }
 

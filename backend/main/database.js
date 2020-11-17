@@ -17,7 +17,7 @@ function connect() {
 				const tables = [
 					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, PRIMARY KEY(id), deleteon DATE)",
-					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
+					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
@@ -247,9 +247,36 @@ function updateModule(moduleID, name, description) {
 }
 exports.updateModule = updateModule;
 
+function softDeleteModule(moduleID) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE modules SET deleteon = DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) WHERE id = ?", [moduleID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.softDeleteModule = softDeleteModule;
+
+function purgeExpiredModules() {
+	return new Promise((resolve, reject) => {
+		connection.query("DELETE FROM modules WHERE deleteon <= CURRENT_DATE", (error, result) => {
+			if(error) {
+				console.log(error);
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.purgeExpiredModules = purgeExpiredModules;
+
 function getModuleByName(courseID, name) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, name, description FROM modules WHERE courseID=? AND name=?", [courseID, name], (error, result) => {
+		connection.query("SELECT id, name, description FROM modules WHERE courseID=? AND name=? AND deleteon IS NULL", [courseID, name], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -272,7 +299,7 @@ function getModules(courseID, userID) {
 			SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
 			RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
 			RIGHT JOIN modules ON modules.id = questions.moduleID
-			WHERE modules.courseID = ?
+			WHERE modules.courseID = ? AND modules.deleteon IS NULL
 			GROUP BY modules.id
 			`, [userID, courseID], (error, result) => {
 			if(error) {
