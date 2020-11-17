@@ -156,9 +156,16 @@ const questionViewManager = new function() {
 		submitButton.className = "button hidden";
 	};
 
-	const setupQuestionButton = (moduleName) => {
+	const setupQuestionButton = (moduleName, displayHandlerCallback) => {
 		questionButton.disabled = false;
 		questionButton.children[0].innerText = moduleName;
+		displayHandler = displayHandlerCallback;
+	};
+
+	this.disableButton = function() {
+		questionButton.disabled = true;
+		questionButton.children[0].innerText = "Question";
+		displayHandler = () => {};
 	};
 
 	this.displayQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
@@ -167,8 +174,9 @@ const questionViewManager = new function() {
 			currentCourseId = courseId;
 			currentModuleId = moduleId;
 			// Setup question button
-			setupQuestionButton(moduleName);
-			displayHandler = () => this.displayQuestion(courseId, courseName, moduleId, moduleName, true);
+			setupQuestionButton(moduleName, () => {
+				this.displayQuestion(courseId, courseName, moduleId, moduleName, true);
+			});
 			// Setup Page URL, title and history
 			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
 			// Toggle view
@@ -208,8 +216,9 @@ const questionViewManager = new function() {
 	this.displayEditQuestion = (courseId, courseName, moduleId, moduleName, questionId, addToHistory) => {
 		questionEditor.setupEdit(questionId);
 		// Setup question button
-		setupQuestionButton(moduleName);
-		displayHandler = () => this.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
+		setupQuestionButton(moduleName, () => {
+			this.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
+		});
 		// Setup Page URL, title and history
 		viewManager.updatePage("/editquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()) + "/" + questionId, "Edit question", addToHistory);
 		// Toggle view
@@ -220,8 +229,9 @@ const questionViewManager = new function() {
 	this.displayCreateQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
 		questionEditor.setup(moduleId);
 		// Setup question button
-		setupQuestionButton(moduleName);
-		displayHandler = () => this.displayCreateQuestion(courseId, courseName, moduleId, moduleName, true);
+		setupQuestionButton(moduleName, () => {
+			this.displayCreateQuestion(courseId, courseName, moduleId, moduleName, true);
+		});
 		// Setup Page URL, title and history
 		viewManager.updatePage("/createquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Create question", addToHistory);
 		// Toggle view
@@ -234,8 +244,9 @@ const questionViewManager = new function() {
 			if (result.isModerator === true) {
 				questionList.setup(courseName, moduleId, moduleName);
 				// Setup question button
-				setupQuestionButton(moduleName);
-				displayHandler = () => this.displayQuestionList(courseId, courseName, moduleId, moduleName, true);
+				setupQuestionButton(moduleName, () => {
+					this.displayQuestionList(courseId, courseName, moduleId, moduleName, true);
+				});
 				// Setup Page URL, title and history
 				viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
 				// Toggle view

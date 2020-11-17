@@ -150,5 +150,6 @@ const modulesViewManager = new function() {
 		modulesbutton.disabled = true;
 		modulesbutton.children[0].innerText = "Modules";
 		displayHandler = () => {};
+		questionViewManager.disableButton();
 	};
 }();
