@@ -671,6 +671,15 @@ function init() {
 			console.log("Server running on port " + port + "!");
 		}
 	}
+
+	database.purgeExpiredCourses().catch(() => {
+	//Errors printed in database.js
+	});
+	setInterval(() => {
+		database.purgeExpiredCourses().catch(() => {
+		//Errors printed in database.js
+		});
+	}, 60 * 60 * 1000);
 }
 
 function initDatabase() {
