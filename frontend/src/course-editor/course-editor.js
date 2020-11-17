@@ -26,7 +26,7 @@ const courseEditor = new function() {
 
 	submitButton.addEventListener("click", () => {
 		if(courseName.reportValidity() && courseDescription.reportValidity()) {
-			submitButton.innerHTML = ". . .";
+			submitButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			submitButton.disabled = true;
 			submitHandler().then(() => {
 				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName.value, null, true);
