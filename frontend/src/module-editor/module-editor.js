@@ -8,12 +8,13 @@ const moduleEditor = new function() {
 	let courseName = null;
 	let submitHandler = null;
 
-	this.setupCreate = function(_courseId, courseName) {
+	this.setupCreate = function(_courseId, _courseName) {
 		courseId = _courseId;
+		courseName = _courseName;
 		createModuleButton.innerHTML = "Create module";
 		createModuleButton.disabled = false;
-		courseNameTitle.textContent = decodeURIComponent(courseName);
-		submitHandler = createModule;
+		courseNameTitle.textContent = decodeURIComponent(_courseName);
+		submitHandler = () => createModule();
 	};
 
 	this.setupEdit = function(_courseId, _courseName, _moduleName) {
@@ -25,7 +26,7 @@ const moduleEditor = new function() {
 			courseNameTitle.textContent = decodeURIComponent(_courseName);
 			moduleName.value = module.name;
 			moduleDescription.value = module.description;
-			submitHandler = updateModule.bind(this, module.id);
+			submitHandler = () => updateModule(module.id);
 		});
 	};
 
