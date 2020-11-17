@@ -18,7 +18,7 @@ function connect() {
 					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, deleteon DATE, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
-					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
+					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS moderators (userID INT NOT NULL, courseID INT NOT NULL, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE)"
@@ -438,9 +438,36 @@ function updateQuestion(questionID, types, content, answers) {
 }
 exports.updateQuestion = updateQuestion;
 
+function softDeleteQuestion(questionID) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE questions SET deleteon = DATE_ADD(CURRENT_DATE, INTERVAL 30 DAY) WHERE id = ?", [questionID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.softDeleteQuestion = softDeleteQuestion;
+
+function purgeExpiredQuestions() {
+	return new Promise((resolve, reject) => {
+		connection.query("DELETE FROM questions WHERE deleteon <= CURRENT_DATE", (error, result) => {
+			if(error) {
+				console.log(error);
+				reject();
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.purgeExpiredQuestions = purgeExpiredQuestions;
+
 function getQuestions(moduleID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id FROM questions WHERE moduleID = ?", [moduleID], (error, result) => {
+		connection.query("SELECT id FROM questions WHERE moduleID = ? AND deleteon IS NULL", [moduleID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -461,7 +488,7 @@ function getRandomUnansweredQuestionID(moduleID, userID) {
 		connection.query(`
 			SELECT id FROM questions WHERE moduleID = ? AND id NOT IN (
 				SELECT questionID FROM answers WHERE userID = ?
-			) ORDER BY RAND() LIMIT 1
+			) AND deleteon IS NULL ORDER BY RAND() LIMIT 1
 			`, [moduleID, userID], (error, result) => {
 			if(error) {
 				reject();
