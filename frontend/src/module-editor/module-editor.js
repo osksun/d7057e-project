@@ -9,6 +9,7 @@ const moduleEditor = new function() {
 	let submitHandler = null;
 
 	this.setupCreate = function(_courseId, _courseName) {
+		clear();
 		courseId = _courseId;
 		courseName = _courseName;
 		createModuleButton.innerHTML = "Create module";

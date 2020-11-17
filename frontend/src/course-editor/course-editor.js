@@ -7,7 +7,7 @@ const courseEditor = new function() {
 	let submitHandler = null;
 
 	this.setupCreate = function() {
-		// Setup for create new course
+		clear();
 		courseColor.value = getRandomColor();
 		submitButton.innerHTML = "Create course";
 		submitHandler = createCourse;
@@ -15,7 +15,6 @@ const courseEditor = new function() {
 
 	this.setupEdit = function(_courseName) {
 		DbCom.getCourseByName(_courseName).then((course) => {
-			// Setup for edit existing course
 			courseColor.value = "#" + course.color;
 			courseName.value = course.name;
 			courseDescription.value = course.description;
