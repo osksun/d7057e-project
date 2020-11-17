@@ -167,6 +167,15 @@
 			<input type="submit">
 		</form>
 
+		<h1>Delete module</h1>
+		<form action="http://127.0.0.1:80/deletemodule" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			ModuleID: <input type="text" name="moduleID"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Update question</h1>
 		<form action="http://127.0.0.1:80/updatequestion" method="post">
 			User ID: <input type="text" name="userID"><br>
@@ -176,6 +185,15 @@
 			Segment types: <input type="text" name="types"><br>
 			Segment contents: <input type="text" name="content"><br>
 			Segment answers: <input type="text" name="answers"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Delete question</h1>
+		<form action="http://127.0.0.1:80/deletequestion" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			QuestionID: <input type="text" name="moduleID"><br>
 			<input type="submit">
 		</form>
 
