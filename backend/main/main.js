@@ -690,7 +690,8 @@ function init() {
 function initDatabase() {
 	database.connect().then(() => {
 		init();
-	}).catch(() => {
+	}).catch((error) => {
+		console.error(error);
 		console.error("Shutting down...");
 		process.exit(1);
 	});
