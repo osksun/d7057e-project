@@ -14,11 +14,18 @@
 			if(email == "") {
 				alert("Enter email!");
 			} else {
+				const previousText = loginButton.textContent;
+				loginButton.textContent = ". . .";
+				loginButton.disabled = true;
+
 				DbCom.createRefreshToken(email, password).then((r) => {
 					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
 					window.location = "/";
 				}).catch((error) => {
 					alert("Error: " + error);
+				}).finally(() => {
+					loginButton.textContent = previousText;
+					loginButton.disabled = false;
 				});
 			}
 		}

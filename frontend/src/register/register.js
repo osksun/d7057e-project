@@ -17,6 +17,10 @@
 				if(password != passwordRepeat) {
 					alert("Passwords do not match!");
 				} else {
+					const previousText = registerButton.textContent;
+					registerButton.textContent = ". . .";
+					registerButton.disabled = true;
+
 					DbCom.registerUser(email, password).then((result) => {
 						console.log(result);
 						localStorage.setItem("login_data", JSON.stringify({
@@ -26,6 +30,9 @@
 						window.location = "/";
 					}).catch((error) => {
 						alert("Error: " + error);
+					}).finally(() => {
+						registerButton.textContent = previousText;
+						registerButton.disabled = false;
 					});
 				}
 			}
