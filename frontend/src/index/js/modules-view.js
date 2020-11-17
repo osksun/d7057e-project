@@ -2,7 +2,7 @@ const modulesViewManager = new function() {
 	const cardContainer = document.getElementById("module-cards-container");
 	const editorContainer = document.getElementById("module-editor-container");
 	const modulesbutton = document.getElementById("modules-button");
-	let displayHandler;
+	let displayHandler = () => {};
 
 	modulesbutton.addEventListener("click", () => {
 		displayHandler();
@@ -143,6 +143,12 @@ const modulesViewManager = new function() {
 	this.updateButton = function(courseId, courseName, color) {
 		modulesbutton.disabled = false;
 		modulesbutton.children[0].innerText = courseName;
-		displayHandler = this.displayModules.bind(this, courseId, courseName, color, true);
+		displayHandler =  () => this.displayModules(courseId, courseName, color, true);
+	};
+
+	this.disableButton = function() {
+		modulesbutton.disabled = true;
+		modulesbutton.children[0].innerText = "Modules";
+		displayHandler = () => {};
 	};
 }();
