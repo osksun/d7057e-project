@@ -727,6 +727,41 @@ function init() {
 		});
 	});
 
+	app.post("/deletequestion", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const questionID = parseInt(request.body.questionID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
+				if(isModerator) {
+					database.softDeleteQuestion(questionID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
