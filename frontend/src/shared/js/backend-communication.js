@@ -33,6 +33,14 @@ const DbCom = new function() {
 		});
 	};
 
+	this.deleteUser = function(password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				this.ajaxPostAuth(authURL + "delete", "userID=" + userID + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
+	};
+
 	this.changeUserPassword = function(currentPassword, newPassword) {
 		return new Promise((resolve, reject) => {
 			clientSidePasswordHash(currentPassword).then((currentPasswordHash) => {
@@ -51,15 +59,22 @@ const DbCom = new function() {
 		});
 	};
 
+	let accessTokenCreatePromise = null;
 	let accessToken = null;
 	let accessTokenExpireTime = 0;
 	this.createAccessToken = function() {
 		return new Promise((resolve, reject) => {
-			this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken)).then((result) => {
+			if(accessTokenCreatePromise == null) {
+				accessTokenCreatePromise = this.ajaxPostAuth(authURL + "createaccesstoken", "userID=" + userID + "&refreshToken=" + encodeURIComponent(refreshToken));
+			}
+
+			accessTokenCreatePromise.then((result) => {
 				accessToken = result.signature;
 				accessTokenExpireTime = result.expireTime;
+				accessTokenCreatePromise = null;
 				resolve({accessToken:accessToken, accessTokenExpireTime:accessTokenExpireTime});
 			}).catch((error) => {
+				accessTokenCreatePromise = null;
 				reject();
 			});
 		});
@@ -208,7 +223,7 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get all modules of given courseName
+	 * Ajax request to get all modules in a course
 	 * @param {unsigned int} id the id of the course
 	 * @return {Promise<Array<Module>>} Promise resolves to an array of Module objects
 	 */
@@ -218,12 +233,22 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get all questions in a module of a course given the courseName and moduleName
+	 * Ajax request to get all questions in a module
 	 * @param {unsigned int} moduleId the id of the module
 	 * @return {Promise<Array<Question>>} Promise resolves to an array of Question objects
 	 */
 	this.getQuestions = function(moduleId) {
 		return this.ajaxPost(mainURL + "getquestions",
+			"moduleID=" + encodeURIComponent(moduleId));
+	};
+
+	/**
+	 * Ajax request to get a random unanswered question in a module 
+	 * @param {unsigned int} moduleId the id of the module
+	 * @return {Promise<Question>} Promise resolves to a Question object
+	 */
+	this.getRandomUnansweredQuestion = function(moduleId) {
+		return this.ajaxPost(mainURL + "getrandomunansweredquestion",
 			"moduleID=" + encodeURIComponent(moduleId));
 	};
 

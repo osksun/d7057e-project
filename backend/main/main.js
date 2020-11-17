@@ -167,7 +167,7 @@ function init() {
 
 			//TODO validate input
 
-			database.getModules(courseID).then((modules) => {
+			database.getModules(courseID, userID).then((modules) => {
 				response.json(modules);
 			}).catch(() => {
 				response.json({
@@ -188,6 +188,43 @@ function init() {
 
 			database.getQuestions(moduleID).then((questions) => {
 				response.json(questions);
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/getrandomunansweredquestion", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
+
+			//TODO validate input
+
+			database.getRandomUnansweredQuestionID(moduleID, userID).then((questionID) => {
+				if (questionID === null) {
+					// There are no unanswered questions in the module
+					response.json({
+						error:"There are no unanswered questions in this module for this user",
+						errorCode:errorCode.noUnansweredQuestions
+					});
+				} else {
+					database.getQuestionSegments(questionID).then((segments) => {
+						response.json({
+							id:questionID,
+							segments:segments
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				}
 			}).catch(() => {
 				response.json({
 					error:"Database error",

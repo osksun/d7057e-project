@@ -238,16 +238,28 @@ function getModuleByName(courseID, name) {
 }
 exports.getModuleByName = getModuleByName;
 
-function getModules(courseID) {
+function getModules(courseID, userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, name, description FROM modules WHERE courseID = ?", [courseID], (error, result) => {
+		connection.query(`
+			SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
+			RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
+			RIGHT JOIN modules ON modules.id = questions.moduleID
+			WHERE modules.courseID = ?
+			GROUP BY modules.id
+			`, [userID, courseID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
 				const modules = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					modules.push({id:row.id, name:row.name, description:row.description});
+					modules.push({
+						id:row.id,
+						name:row.name,
+						description:row.description,
+						questionCount:row.questionCount,
+						answerCount:row.answerCount
+					});
 				}
 				resolve(modules);
 			}
@@ -388,6 +400,28 @@ function getQuestions(moduleID) {
 	});
 }
 exports.getQuestions = getQuestions;
+
+function getRandomUnansweredQuestionID(moduleID, userID) {
+	return new Promise((resolve, reject) => {
+        connection.query(`
+            SELECT id FROM questions WHERE moduleID = ? AND id NOT IN (
+			    SELECT questionID FROM answers WHERE userID = ?
+		    ) ORDER BY RAND() LIMIT 1
+		    `, [moduleID, userID], (error, result) => {
+			if(error) {
+				reject();
+			} else {
+                if (result.length === 0) {
+                    resolve(null); // User has answered all questions in this module
+                } else {
+                    const questionID = result[0].id;
+                    resolve(questionID);
+                }
+			}
+		});
+	});
+}
+exports.getRandomUnansweredQuestionID = getRandomUnansweredQuestionID;
 
 function getQuestionSegments(questionID) {
 	return new Promise((resolve, reject) => {

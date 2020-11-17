@@ -17,6 +17,10 @@
 				if(password != passwordRepeat) {
 					alert("Passwords do not match!");
 				} else {
+					const previousText = registerButton.textContent;
+					registerButton.textContent = ". . .";
+					registerButton.disabled = true;
+
 					DbCom.registerUser(email, password).then((result) => {
 						console.log(result);
 						localStorage.setItem("login_data", JSON.stringify({
@@ -26,9 +30,24 @@
 						window.location = "/";
 					}).catch((error) => {
 						alert("Error: " + error);
+					}).finally(() => {
+						registerButton.textContent = previousText;
+						registerButton.disabled = false;
 					});
 				}
 			}
 		}
 	});
+
+	function registerClick(event) {
+		if(event.repeat) {return};
+		//key 13 is enter
+		if(event.keyCode === 13 || event.key === "Enter") {
+			event.preventDefault();
+			registerButton.click();
+		}
+	}
+	emailField.addEventListener("keydown", registerClick);
+	passwordField.addEventListener("keydown", registerClick);
+	repeatPasswordField.addEventListener("keydown", registerClick);
 })();

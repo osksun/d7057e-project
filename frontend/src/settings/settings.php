@@ -16,12 +16,19 @@
 		<?php include "../shared/html/background.html"; ?>
 		<?php include "../shared/html/top-bar.html"; ?>
 		<h2>Change password</h2>
-		<div id="page-content">
+		<div class="form">
 			<div><h3>Current password</h3><input id="current-password" type="password" autocomplete="current-password" required/></div>
 			<div><h3>New password</h3><input id="new-password" type="password" autocomplete="new-password" required/></div>
 			<div><h3>Confirm new password</h3><input id="new-password-confirm" type="password" autocomplete="new-password" required/></div>
 			<div><button id="change-password-button" class="button">Change password</button></div>
-			<div id="message"></div>
+			<div id="change-password-message"></div>
+		</div>
+
+		<h2>Delete account</h2>
+		<div class="form">
+			<div><h3>Current password</h3><input id="delete-password" type="password" autocomplete="current-password" required/></div>
+			<div><button id="delete-button" class="button">Delete account</button></div>
+			<div id="delete-message"></div>
 		</div>
 	</body>
 </html>

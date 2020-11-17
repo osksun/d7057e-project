@@ -17,6 +17,7 @@
 		<script src="https://cdn.geogebra.org/apps/deployggb.js" defer></script>
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
+		<script src="/src/shared/js/backend-error-code.js"></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/index/js/index.js"></script>

@@ -4,6 +4,10 @@ const modulesViewManager = new function() {
 	const modulesbutton = document.getElementById("modules-button");
 	let displayHandler;
 
+	modulesbutton.addEventListener("click", () => {
+		displayHandler();
+	});
+
 	this.containers = {
 		MODULES: 0,
 		EDIT_MODULE: 1,
@@ -20,7 +24,7 @@ const modulesViewManager = new function() {
 		cardContainer.classList.add("visible");
 	}
 
-	function createCard(id, name, description, color, courseId, courseName, isModerator) {
+	function createCard(id, name, color, questionCount, answerCount, courseId, courseName, isModerator) {
 		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
@@ -47,14 +51,12 @@ const modulesViewManager = new function() {
 		header.appendChild(titleWrapper);
 		const descWrapper = document.createElement("div");
 		descWrapper.className = "description-wrapper";
-		const paragraph = document.createElement("p");
-		paragraph.className = "";
-		paragraph.style.color = color;
-		paragraph.innerText = description;
-		descWrapper.appendChild(paragraph);
+		const info = document.createElement("ul");
+		info.innerHTML = "<li><span>Progress: " + answerCount + "/" + questionCount + "</span></li>";
+		info.style.color = color;
+		descWrapper.appendChild(info);
 		cardWrapper.appendChild(header);
 		cardWrapper.appendChild(descWrapper);
-		/*cardWrapper.appendChild(span);*/
 		card.appendChild(cardWrapper);
 		card.addEventListener("click", (event) => {
 			if (isModerator) {
@@ -96,7 +98,7 @@ const modulesViewManager = new function() {
 	this.createCards = function(modules, color, courseId, courseName) {
 		DbCom.isModerator(courseId).then((result) => {
 			modules.forEach((module) => {
-				cardContainer.appendChild(createCard(module.id, module.name, module.description, color, courseId, courseName, result.isModerator));
+				cardContainer.appendChild(createCard(module.id, module.name, color, module.questionCount, module.answerCount, courseId, courseName, result.isModerator));
 			});
 			if(result.isModerator) {
 				cardContainer.appendChild(createAdminCreateCard(courseId, courseName, color));
@@ -121,7 +123,7 @@ const modulesViewManager = new function() {
 			viewManager.redirect404();
 		});
 	};
-	
+
 	this.displayEditModule = function(courseId, courseName, color, moduleName, addToHistory) {
 		moduleEditor.setupEdit(courseId, courseName, moduleName);
 		toggleEditorContainer();
@@ -141,8 +143,6 @@ const modulesViewManager = new function() {
 	this.updateButton = function(courseId, courseName, color) {
 		modulesbutton.disabled = false;
 		modulesbutton.children[0].innerText = courseName;
-		modulesbutton.removeEventListener("click", displayHandler);
 		displayHandler = this.displayModules.bind(this, courseId, courseName, color, true);
-		modulesbutton.addEventListener("click", displayHandler);
 	};
 }();

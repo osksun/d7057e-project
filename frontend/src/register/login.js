@@ -14,17 +14,23 @@
 			if(email == "") {
 				alert("Enter email!");
 			} else {
+				const previousText = loginButton.textContent;
+				loginButton.textContent = ". . .";
+				loginButton.disabled = true;
+
 				DbCom.createRefreshToken(email, password).then((r) => {
 					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
 					window.location = "/";
 				}).catch((error) => {
 					alert("Error: " + error);
+				}).finally(() => {
+					loginButton.textContent = previousText;
+					loginButton.disabled = false;
 				});
 			}
 		}
 	});
-	emailField.addEventListener("keydown", loginClick);
-	passwordField.addEventListener("keydown", loginClick);
+
 	function loginClick(event) {
 		if(event.repeat) {return};
 		//key 13 is enter
@@ -33,4 +39,6 @@
 			loginButton.click();
 		}
 	}
+	emailField.addEventListener("keydown", loginClick);
+	passwordField.addEventListener("keydown", loginClick);
 })();
