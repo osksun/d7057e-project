@@ -7,6 +7,8 @@
 		let ggbID;
 		setTimeout(createGGBAPP, 0);
 		const defaultStateButton = document.createElement("button");
+		defaultStateButton.innerText = "Revert to default";
+		defaultStateButton.classList.add("button");
 		defaultStateButton.onclick = function() {loadGGBState();};
 		superDiv.appendChild(div);
 		superDiv.appendChild(defaultStateButton);
