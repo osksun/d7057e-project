@@ -674,10 +674,13 @@ function init() {
 
 	function purgeExpiredData() {
 		database.purgeExpiredCourses().catch(() => {
-		//Errors printed in database.js
+			//Errors printed in database.js
 		});
 		database.purgeExpiredModules().catch(() => {
-		//Errors printed in database.js
+			//Errors printed in database.js
+		});
+		database.purgeExpiredQuestions().catch(() => {
+			//Errors printed in database.js
 		});
 	}
 
