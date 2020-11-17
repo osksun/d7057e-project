@@ -117,6 +117,10 @@ const DbCom = new function() {
 			"&color=" + encodeURIComponent(color));
 	};
 
+	this.deleteCourse = function(courseId) {
+		return this.ajaxPost(mainURL + "deletecourse", "courseID=" + encodeURIComponent(courseId));
+	};
+
 	/**
 	 * Ajax request to create a module for a course
 	 * @param {string} name the name of the new module
@@ -129,6 +133,10 @@ const DbCom = new function() {
 			"name=" + encodeURIComponent(name) +
 			"&courseID=" + encodeURIComponent(courseId) +
 			"&description=" + encodeURIComponent(description));
+	};
+
+	this.deleteModule = function(moduleID) {
+		return this.ajaxPost(mainURL + "deletemodule", "moduleID=" + encodeURIComponent(moduleID));
 	};
 
 	/**
@@ -243,7 +251,7 @@ const DbCom = new function() {
 	};
 
 	/**
-	 * Ajax request to get a random unanswered question in a module 
+	 * Ajax request to get a random unanswered question in a module
 	 * @param {unsigned int} moduleId the id of the module
 	 * @return {Promise<Question>} Promise resolves to a Question object
 	 */

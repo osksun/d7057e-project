@@ -33,6 +33,9 @@
 	width:400px;
 	font-size:28px;
 }
+#course-editor-container > div > button.hidden {
+	display:none;
+}
 #course-editor-container > #course-editor-message {
 	margin:0;
 	padding:0;

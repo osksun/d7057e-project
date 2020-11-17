@@ -34,6 +34,9 @@
 	width:400px;
 	font-size:28px;
 }
+#module-editor-container > div > button.hidden {
+	display:none;
+}
 #module-editor-container > #module-editor-message {
 	margin:0;
 	padding:0;

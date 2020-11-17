@@ -125,7 +125,7 @@ const modulesViewManager = new function() {
 	};
 
 	this.displayEditModule = function(courseId, courseName, color, moduleName, addToHistory) {
-		moduleEditor.setupEdit(courseId, courseName, moduleName);
+		moduleEditor.setupEdit(courseId, courseName, color, moduleName);
 		toggleEditorContainer();
 		viewManager.updatePage("/editmodule/" + encodeURIComponent(courseName) + "/" + encodeURIComponent(moduleName), "Edit module", addToHistory);
 		this.updateButton(courseId, courseName, color);
