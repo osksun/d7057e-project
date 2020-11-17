@@ -18,7 +18,7 @@
 					alert("Passwords do not match!");
 				} else {
 					const previousText = registerButton.textContent;
-					registerButton.textContent = ". . .";
+					registerButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 					registerButton.disabled = true;
 
 					DbCom.registerUser(email, password).then((result) => {

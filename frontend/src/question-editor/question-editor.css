@@ -66,6 +66,7 @@
 #question-editor-segments > div > .segment-toolbar > * {
 	margin:0 4px;
 	padding:8px 10px;
+	min-height:0;
 }
 #question-editor-segments > div > .segment-toolbar > *:hover > img {
 	-webkit-filter:invert(100%);

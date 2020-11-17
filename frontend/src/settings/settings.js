@@ -23,7 +23,7 @@
 			} else if(currentPassword.value == newPassword.value) {
 				showMessage("Error: New password and current password is equal", true);
 			} else {
-				changePasswordButton.innerHTML = ". . .";
+				changePasswordButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 				changePasswordButton.disabled = true;
 				DbCom.changeUserPassword(currentPassword.value, newPassword.value).then((result) => {
 					//Change login data
@@ -67,7 +67,7 @@
 		const passwordField = document.getElementById("delete-password");
 
 		if(passwordField.reportValidity()) {
-			deleteButton.innerHTML = ". . .";
+			deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			deleteButton.disabled = true;
 			DbCom.deleteUser(passwordField.value).then((result) => {
 				//Logout

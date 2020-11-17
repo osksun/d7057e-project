@@ -31,7 +31,7 @@ const moduleEditor = new function() {
 
 	createModuleButton.addEventListener("click", () => {
 		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
-			createModuleButton.innerHTML = ". . .";
+			createModuleButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			createModuleButton.disabled = true;
 			submitHandler().then(() => {
 				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName, moduleName.value, true);

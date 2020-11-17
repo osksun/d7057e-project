@@ -141,7 +141,7 @@ const questionEditor = new function() {
 	}
 
 	submitButton.addEventListener("click", (event) => {
-		submitButton.innerHTML = ". . .";
+		submitButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 		submitButton.disabled = true;
 
 		const types = [];
