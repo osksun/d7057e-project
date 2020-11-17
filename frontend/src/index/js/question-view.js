@@ -12,7 +12,7 @@ const questionViewManager = new function() {
 	let currentModuleId = null;
 	let currentQuestion = null;
 	let segmentInputBoxes = [];
-	let displayHandler;
+	let displayHandler = () => {};
 
 	submitButton.addEventListener("click", (event) => {
 		this.handleSubmit(currentQuestion);
@@ -168,7 +168,7 @@ const questionViewManager = new function() {
 			currentModuleId = moduleId;
 			// Setup question button
 			setupQuestionButton(moduleName);
-			displayHandler = this.displayQuestion.bind(this, courseId, courseName, moduleId, moduleName, true);
+			displayHandler = () => this.displayQuestion(courseId, courseName, moduleId, moduleName, true);
 			// Setup Page URL, title and history
 			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
 			// Toggle view
@@ -209,7 +209,7 @@ const questionViewManager = new function() {
 		questionEditor.setupEdit(questionId);
 		// Setup question button
 		setupQuestionButton(moduleName);
-		displayHandler = this.displayEditQuestion.bind(this, courseId, courseName, moduleId, moduleName, questionId, true);
+		displayHandler = () => this.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
 		// Setup Page URL, title and history
 		viewManager.updatePage("/editquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()) + "/" + questionId, "Edit question", addToHistory);
 		// Toggle view
@@ -221,7 +221,7 @@ const questionViewManager = new function() {
 		questionEditor.setup(moduleId);
 		// Setup question button
 		setupQuestionButton(moduleName);
-		displayHandler = this.displayCreateQuestion.bind(this, courseId, courseName, moduleId, moduleName, true);
+		displayHandler = () => this.displayCreateQuestion(courseId, courseName, moduleId, moduleName, true);
 		// Setup Page URL, title and history
 		viewManager.updatePage("/createquestion/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Create question", addToHistory);
 		// Toggle view
@@ -235,7 +235,7 @@ const questionViewManager = new function() {
 				questionList.setup(courseName, moduleId, moduleName);
 				// Setup question button
 				setupQuestionButton(moduleName);
-				displayHandler = this.displayQuestionList.bind(this, courseId, courseName, moduleId, moduleName, true);
+				displayHandler = () => this.displayQuestionList(courseId, courseName, moduleId, moduleName, true);
 				// Setup Page URL, title and history
 				viewManager.updatePage("/questionlist/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), "Question list", addToHistory);
 				// Toggle view
