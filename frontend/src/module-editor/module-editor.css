@@ -47,3 +47,13 @@
 	color:#f00;
 	text-decoration:underline;
 }
+
+#module-editor-delete-button {
+	background-color:#a93434;
+}
+#module-editor-delete-button:hover {
+	background-color:#fff;
+}
+#module-editor-delete-button:disabled {
+	background-color:#323232;
+}
