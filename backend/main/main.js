@@ -534,6 +534,39 @@ function init() {
 		});
 	});
 
+	app.post("/deletecourse", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					database.softDeleteCourse(courseID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	app.post("/updatemodule", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
