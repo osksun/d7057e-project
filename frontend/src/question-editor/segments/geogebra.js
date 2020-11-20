@@ -15,21 +15,21 @@
 			ggbID = "geogebraApp" + idIncrement;
 			ggbApp = new GGBApplet({
 				"id": ggbID,
-				"appName": "3d",
+				"appName": "classic",
 				"width": 1280,
 				"height": 720,
 				"ggbBase64": content,
 				"showToolBar": true,
 				"showAlgebraInput": true,
 				"showMenuBar": true,
-				"useBrowserForJS": false,
+				"showResetIcon": true,
+				"useBrowserForJS": true,
 			}, "5.0");
 			ggbApp.inject('ggb-element' + idIncrement);
 			idIncrement++;
 		}
 		
 		function saveGGBState(){
-			window[ggbID].showToolBar(true);
 			return window[ggbID].getBase64();
 		}
 
