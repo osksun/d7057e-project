@@ -534,6 +534,39 @@ function init() {
 		});
 	});
 
+	app.post("/deletecourse", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					database.softDeleteCourse(courseID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	app.post("/updatemodule", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
@@ -545,6 +578,41 @@ function init() {
 			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
 				if(isModerator) {
 					database.updateModule(moduleID, name, description).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/deletemodule", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const moduleID = parseInt(request.body.moduleID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+				if(isModerator) {
+					database.softDeleteModule(moduleID).then(() => {
 						response.json({
 							success:true
 						});
@@ -659,6 +727,41 @@ function init() {
 		});
 	});
 
+	app.post("/deletequestion", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const questionID = parseInt(request.body.questionID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
+				if(isModerator) {
+					database.softDeleteQuestion(questionID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
@@ -671,12 +774,30 @@ function init() {
 			console.log("Server running on port " + port + "!");
 		}
 	}
+
+	function purgeExpiredData() {
+		database.purgeExpiredCourses().catch(() => {
+			//Errors printed in database.js
+		});
+		database.purgeExpiredModules().catch(() => {
+			//Errors printed in database.js
+		});
+		database.purgeExpiredQuestions().catch(() => {
+			//Errors printed in database.js
+		});
+	}
+
+	purgeExpiredData();
+	setInterval(() => {
+		purgeExpiredData();
+	}, 60 * 60 * 1000);
 }
 
 function initDatabase() {
 	database.connect().then(() => {
 		init();
-	}).catch(() => {
+	}).catch((error) => {
+		console.error(error);
 		console.error("Shutting down...");
 		process.exit(1);
 	});

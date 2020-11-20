@@ -9,6 +9,7 @@
 	text-decoration:none;
 	box-shadow:5px 8px 0 0 #181818;
 	font-weight:bold;
+	min-height:90px;
 }
 
 .button:hover {
@@ -24,4 +25,11 @@
 	background-color:#323232;
 	color:#525252;
 	cursor:default;
+}
+
+.button > .loading {
+	display:block;
+	margin:0 auto;
+	height:32px;
+	vertical-align:middle;
 }

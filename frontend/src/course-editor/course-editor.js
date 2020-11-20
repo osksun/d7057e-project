@@ -4,29 +4,35 @@ const courseEditor = new function() {
 	const courseDescription = document.getElementById("course-editor-course-description");
 	const submitButton = document.getElementById("course-editor-submit-button");
 	const message = document.getElementById("course-editor-message");
+	const deleteButton = document.getElementById("course-editor-delete-button");
 	let submitHandler = null;
+	let editCourseID = null;
 
 	this.setupCreate = function() {
-		// Setup for create new course
+		clear();
 		courseColor.value = getRandomColor();
 		submitButton.innerHTML = "Create course";
 		submitHandler = createCourse;
+		deleteButton.className = "button hidden";
 	};
 
 	this.setupEdit = function(_courseName) {
+		deleteButton.className = "button hidden";
 		DbCom.getCourseByName(_courseName).then((course) => {
-			// Setup for edit existing course
 			courseColor.value = "#" + course.color;
 			courseName.value = course.name;
 			courseDescription.value = course.description;
 			submitButton.innerHTML = "Update course";
 			submitHandler = updateCourse.bind(this, course.id);
+
+			deleteButton.className = "button";
+			editCourseID = course.id;
 		});
 	};
 
 	submitButton.addEventListener("click", () => {
 		if(courseName.reportValidity() && courseDescription.reportValidity()) {
-			submitButton.innerHTML = ". . .";
+			submitButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			submitButton.disabled = true;
 			submitHandler().then(() => {
 				viewManager.loadCourseView(modulesViewManager.containers.MODULES, courseName.value, null, true);
@@ -40,6 +46,24 @@ const courseEditor = new function() {
 				submitButton.disabled = false;
 			});
 		}
+	});
+
+	deleteButton.addEventListener("click", () => {
+		const previousText = deleteButton.textContent;
+		deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+		deleteButton.disabled = true;
+		DbCom.deleteCourse(editCourseID).then(() => {
+			modulesViewManager.disableButton();
+			coursesViewManager.displayCourses(true);
+			clear();
+		}).catch((result) => {
+			if(result.hasOwnProperty("error")) {
+				showMessage("Error: " + result.error, true);
+			}
+		}).finally(() => {
+			deleteButton.textContent = previousText;
+			deleteButton.disabled = false;
+		});
 	});
 
 	function getRandomColor() {
@@ -72,6 +96,7 @@ const courseEditor = new function() {
 	}
 
 	function clear() {
+		editCourseID = null;
 		courseName.value = "";
 		courseColor.value = getRandomColor();
 		courseDescription.value = "";

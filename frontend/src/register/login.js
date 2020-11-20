@@ -15,7 +15,7 @@
 				alert("Enter email!");
 			} else {
 				const previousText = loginButton.textContent;
-				loginButton.textContent = ". . .";
+				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 				loginButton.disabled = true;
 
 				DbCom.createRefreshToken(email, password).then((r) => {

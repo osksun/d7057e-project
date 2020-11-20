@@ -33,6 +33,9 @@
 	width:400px;
 	font-size:28px;
 }
+#course-editor-container > div > button.hidden {
+	display:none;
+}
 #course-editor-container > #course-editor-message {
 	margin:0;
 	padding:0;
@@ -42,4 +45,14 @@
 #course-editor-container > #course-editor-message.error {
 	color:#f00;
 	text-decoration:underline;
+}
+
+#course-editor-delete-button {
+	background-color:#a93434;
+}
+#course-editor-delete-button:hover {
+	background-color:#fff;
+}
+#course-editor-delete-button:disabled {
+	background-color:#323232;
 }

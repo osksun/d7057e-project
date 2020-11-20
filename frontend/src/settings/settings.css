@@ -49,3 +49,13 @@ body > h2:first-of-type {
 #message {
 	font-size:22px;
 }
+
+#delete-button {
+	background-color:#a93434;
+}
+#delete-button:hover {
+	background-color:#fff;
+}
+#delete-button:disabled {
+	background-color:#323232;
+}
