@@ -31,5 +31,39 @@
 	display:block;
 	margin:0 auto;
 	height:32px;
-	vertical-align:middle;
+}
+
+/* Reset styling for GeoGebra segments */
+.geogebra-div .button {
+	border:unset;
+	text-align:unset;
+	cursor:unset;
+	border-radius:unset;
+	background-color:unset;
+	color:unset;
+	text-decoration:unset;
+	box-shadow:unset;
+	font-weight:unset;
+	min-height:unset;
+}
+
+.geogebra-div .button:hover {
+	background-color:unset;
+	color:unset;
+}
+
+.button:focus {
+	box-shadow:unset;
+}
+
+.button:disabled {
+	background-color:unset;
+	color:unset;
+	cursor:unset;
+}
+
+.button > .loading {
+	display:unset;
+	margin:unset;
+	height:unset;
 }

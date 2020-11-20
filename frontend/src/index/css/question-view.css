@@ -54,3 +54,13 @@
 #submit-button.hidden {
 	display:none;
 }
+
+#question-segments > .geogebra-container > .geogebra-scaling-container {
+	width:75vw;
+	height:calc(75vw * 9 / 16);
+	margin:0 auto;
+}
+
+#question-segments > .image > img {
+	max-width:100%;
+}
