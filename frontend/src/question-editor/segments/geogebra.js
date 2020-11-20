@@ -3,6 +3,9 @@
 	questionEditor.addSegmentType("GEOGEBRA", "GeoGebra", function(content = "") {
 		const superDiv = document.createElement("div");
 		const div = document.createElement("div");
+
+		superDiv.className = "geogebra-superDiv";
+		div.className = "geogebra-div";
 		let ggbApp;
 		let ggbID;
 		setTimeout(createGGBAPP, 0);
@@ -13,19 +16,20 @@
 			ggbApp = new GGBApplet({
 				"id": ggbID,
 				"appName": "3d",
-				"width": 800,
-				"height": 600,
+				"width": 1280,
+				"height": 720,
+				"ggbBase64": content,
 				"showToolBar": true,
 				"showAlgebraInput": true,
 				"showMenuBar": true,
 				"useBrowserForJS": false,
-				"ggbBase64": content
 			}, "5.0");
 			ggbApp.inject('ggb-element' + idIncrement);
 			idIncrement++;
 		}
 		
 		function saveGGBState(){
+			window[ggbID].showToolBar(true);
 			return window[ggbID].getBase64();
 		}
 
