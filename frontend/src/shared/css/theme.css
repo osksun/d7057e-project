@@ -52,17 +52,17 @@
 	color:unset;
 }
 
-.button:focus {
+.geogebra-div .button:focus {
 	box-shadow:unset;
 }
 
-.button:disabled {
+.geogebra-div .button:disabled {
 	background-color:unset;
 	color:unset;
 	cursor:unset;
 }
 
-.button > .loading {
+.geogebra-div .button > .loading {
 	display:unset;
 	margin:unset;
 	height:unset;
