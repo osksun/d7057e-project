@@ -12,24 +12,27 @@
 			const passwordRepeat = repeatPasswordField.value;
 
 			if(email == "" || password == "" || passwordRepeat == "") {
-				alert("Fill in all the required fields");
+				messageBox.show("Fill in all the required fields");
 			} else {
 				if(password != passwordRepeat) {
-					alert("Passwords do not match!");
+					messageBox.show("Passwords do not match!");
 				} else {
 					const previousText = registerButton.textContent;
 					registerButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 					registerButton.disabled = true;
 
 					DbCom.registerUser(email, password).then((result) => {
-						console.log(result);
 						localStorage.setItem("login_data", JSON.stringify({
 							"userID":result["userID"],
 							"refreshToken":result["refreshToken"]
 						}));
 						window.location = "/";
 					}).catch((error) => {
-						alert("Error: " + error);
+						if(error == null) {
+							messageBox.show("Connection error");
+						} else {
+							messageBox.show(error.error);
+						}
 					}).finally(() => {
 						registerButton.textContent = previousText;
 						registerButton.disabled = false;

@@ -12,7 +12,7 @@
 			const password = passwordField.value;
 
 			if(email == "") {
-				alert("Enter email!");
+				messageBox.show("Email required!");
 			} else {
 				const previousText = loginButton.textContent;
 				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
@@ -22,7 +22,11 @@
 					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
 					window.location = "/";
 				}).catch((error) => {
-					alert("Error: " + error);
+					if(error == null) {
+						messageBox.show("Connection error");
+					} else {
+						messageBox.show(error.error);
+					}
 				}).finally(() => {
 					loginButton.textContent = previousText;
 					loginButton.disabled = false;

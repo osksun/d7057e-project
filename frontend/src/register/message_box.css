@@ -1,0 +1,45 @@
+
+#message-box {
+	margin:40px auto;
+	padding:20px;
+	width:500px;
+	background-color:#a93434;
+	border-radius:12px;
+	box-shadow:5px 8px 0 0 #181818;
+	color:#fff;
+	text-align:center;
+	font-size:24px;
+	pointer-events:none;
+	opacity:0;
+	-webkit-transform:scale(0, 0);
+	-ms-transform:scale(0, 0);
+	transform:scale(0, 0);
+}
+#message-box.show {
+	animation-name:message-box-animation;
+	animation-duration:0.175s;
+	animation-iteration-count:1;
+	animation-timing-function:ease-in-out;
+	opacity:1;
+	-webkit-transform:scale(1, 1);
+	-ms-transform:scale(1, 1);
+	transform:scale(1, 1);
+}
+
+@keyframes message-box-animation {
+	0% {
+		-webkit-transform:scale(0, 0);
+		-ms-transform:scale(0, 0);
+		transform:scale(0, 0);
+	}
+	80% {
+		-webkit-transform:scale(1.1, 1.1);
+		-ms-transform:scale(1.1, 1.1);
+		transform:scale(1.1, 1.1);
+	}
+	100% {
+		-webkit-transform:scale(1, 1);
+		-ms-transform:scale(1, 1);
+		transform:scale(1, 1);
+	}
+}
