@@ -32,6 +32,7 @@
 				"showToolBar": true,
 				"showMenuBar": true,
 				"showResetIcon": true,
+				"showAlgebraInput": true,
 				"useBrowserForJS": true,
 				"allowUpscale": true,
 				"scaleContainerClass": "geogebra-scaling-container"
