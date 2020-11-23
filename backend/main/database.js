@@ -576,8 +576,10 @@ function isUserModeratorOfCourse(userID, courseID) {
 					} else {
 						if(result.length == 1) {
 							resolve(true);
-						} else {
+						} else if(result.length == 0) {
 							resolve(false);
+						} else {
+							reject();
 						}
 					}
 				});
@@ -596,23 +598,17 @@ function isUserModeratorOfModule(userID, moduleID) {
 			if(isAdmin) {
 				resolve(true);
 			} else {
-				connection.query("SELECT courseID from modules WHERE id = ?", [moduleID], (error, result) => {
+				connection.query(`
+					SELECT userID, modules.courseID FROM moderators
+					INNER JOIN modules WHERE userID = ? AND modules.id = ?
+					`, [userID, courseID], (error, result) => {
 					if(error) {
 						reject();
 					} else {
 						if(result.length == 1) {
-							const courseID = result[0].courseID;
-							connection.query("SELECT userID, courseID FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
-								if(error) {
-									reject();
-								} else {
-									if(result.length == 1) {
-										resolve(true);
-									} else {
-										resolve(false);
-									}
-								}
-							});
+							resolve(true);
+						} else if(result.length == 0) {
+							resolve(false);
 						} else {
 							reject();
 						}
@@ -633,34 +629,19 @@ function isUserModeratorOfQuestion(userID, questionID) {
 			if(isAdmin) {
 				resolve(true);
 			} else {
-				connection.query("SELECT moduleID from questions WHERE id = ?", [questionID], (error, result) => {
+				connection.query(`
+					SELECT userID, modules.courseID FROM moderators
+					INNER JOIN modules
+					INNER JOIN questions ON questions.moduleID = modules.id
+					WHERE userID = ? AND questions.id = ?
+					`, [userID, questionID], (error, result) => {
 					if(error) {
 						reject();
 					} else {
 						if(result.length == 1) {
-							const moduleID = result[0].moduleID;
-							connection.query("SELECT courseID from modules WHERE id = ?", [moduleID], (error, result) => {
-								if(error) {
-									reject();
-								} else {
-									if(result.length == 1) {
-										const courseID = result[0].courseID;
-										connection.query("SELECT userID, courseID FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
-											if(error) {
-												reject();
-											} else {
-												if(result.length == 1) {
-													resolve(true);
-												} else {
-													resolve(false);
-												}
-											}
-										});
-									} else {
-										reject();
-									}
-								}
-							});
+							resolve(true);
+						} else if(result.length == 0) {
+							resolve(false);
 						} else {
 							reject();
 						}
