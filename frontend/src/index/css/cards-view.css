@@ -53,27 +53,15 @@
 	width:100%;
 	height:var(--desc-height);
 	top:0;
-
 }
 
-/* Unsorted list of course cards */
 .description-wrapper > ul {
 	color: #000000;
+	font-weight:bold;
 	font-size: 25px;
-	list-style-type: square;
+	list-style-type: none;
 	list-style-position: inside;
-}
-
-/* Description of module cards */
-.description-wrapper > p {
-	width: 90%;
-	overflow:hidden;
-	white-space: nowrap;
-	margin-left: auto;
-	position: relative;
-	font-size: 21px;
-	margin-right: auto;
-	text-overflow: ellipsis;
+	text-shadow:1px 1px 1px rgba(100,100,100,0.75);
 }
 
 .card-header > div {
@@ -94,6 +82,7 @@
 	line-height:0.98;
 	max-height:160px;
 	overflow-wrap:break-word;
+	text-shadow:1px 1px 1px rgba(0,0,0,0.75);
 }
 
 .card-header > button {
@@ -105,4 +94,5 @@
 	border:none;
 	background-color:transparent;
 	cursor: pointer;
+	filter:drop-shadow(1px 1px 1px rgba(0,0,0,0.75));
 }
