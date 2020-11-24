@@ -7,7 +7,8 @@
 		if(isError) {
 			message.className = "error";
 		} else {
-			message.className = "";
+			message.textContent = "";
+			messageBox.show(text);
 		}
 	}
 
