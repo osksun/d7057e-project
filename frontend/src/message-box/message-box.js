@@ -28,10 +28,10 @@ const messageBox = new function() {
 		button.className = "button";
 		button.textContent = "Ok";
 		button.addEventListener("click", () => {
-			this.hide();
 			if(callbackFunction != null) {
 				callbackFunction();
 			}
+			this.hide();
 		});
 		box.appendChild(button);
 
@@ -53,21 +53,30 @@ const messageBox = new function() {
 			document.body.removeChild(div);
 			div = null;
 		}
+
+		if(timeout != null) {
+			clearTimeout(timeout);
+		}
+
+		if(callbackFunction != null) {
+			callbackFunction = null;
+		}
 	};
 
 	window.addEventListener("keydown", (event) => {
 		if(event.keycode == 27 || event.code == "Escape") {
-			this.hide();
 			if(callbackFunction != null) {
 				callbackFunction();
 			}
+			this.hide();
+			event.preventDefault();
 		}
 
 		if(event.keycode == 13 || event.code == "Enter") {
-			this.hide();
 			if(callbackFunction != null) {
 				callbackFunction();
 			}
+			this.hide();
 		}
 	});
 }();
