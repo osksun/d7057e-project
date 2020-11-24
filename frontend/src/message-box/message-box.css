@@ -12,7 +12,10 @@
 
 .message-box > div {
 	display:inline-block;
-	margin:30% 0 0 0;
+	position:absolute;
+	top:calc(50% - 200px);
+	left:calc(50% - 425px / 2);
+	margin:0;
 	padding:20px;
 	background-color:#3a3a3a;
 	box-shadow:5px 8px 0 0 #181818;
