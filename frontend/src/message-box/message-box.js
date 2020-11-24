@@ -45,7 +45,9 @@ const messageBox = new function() {
 
 		document.body.appendChild(div);
 
-		window.blur();
+		if(document.activeElement != null) {
+			document.activeElement.blur();
+		}
 	};
 
 	//Tab only between message box buttons
