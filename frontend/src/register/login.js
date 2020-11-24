@@ -28,7 +28,10 @@
 						loginButton.textContent = previousText;
 						loginButton.disabled = false;
 					} else {
-						messageBox.show("Account has been set to be deleted. Account will be recovered.", () => {
+						messageBox.showConfirm("Account has been set to be deleted after 30 days. Do you wish to recover it?", () => {
+							loginButton.textContent = previousText;
+							loginButton.disabled = false;
+						}, () => {
 							DbCom.recoverUser(email, password).then((result) => {
 								DbCom.createRefreshToken(email, password).then((result) => {
 									refreshToken = result["refreshToken"];
