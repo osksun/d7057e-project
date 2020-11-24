@@ -214,7 +214,7 @@ const questionViewManager = new function() {
 	};
 
 	this.displayEditQuestion = (courseId, courseName, moduleId, moduleName, questionId, addToHistory) => {
-		questionEditor.setupEdit(questionId);
+		questionEditor.setupEdit(courseId, courseName, moduleId, moduleName, questionId);
 		// Setup question button
 		setupQuestionButton(moduleName, () => {
 			this.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
@@ -227,7 +227,7 @@ const questionViewManager = new function() {
 	};
 
 	this.displayCreateQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
-		questionEditor.setup(moduleId);
+		questionEditor.setup(courseId, courseName, moduleId, moduleName);
 		// Setup question button
 		setupQuestionButton(moduleName, () => {
 			this.displayCreateQuestion(courseId, courseName, moduleId, moduleName, true);
