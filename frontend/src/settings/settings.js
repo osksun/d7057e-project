@@ -7,7 +7,8 @@
 		if(isError) {
 			message.className = "error";
 		} else {
-			message.className = "";
+			message.textContent = "";
+			messageBox.show(text);
 		}
 	}
 
@@ -71,9 +72,10 @@
 			deleteButton.disabled = true;
 			DbCom.deleteUser(passwordField.value).then((result) => {
 				//Logout
-				window.location.href = "/login";
+				messageBox.show("Account deleted successfully", () => {
+					window.location.href = "/login";
+				});
 
-				showMessage("Account deleted successfully", false);
 				passwordField.value = "";
 			}).catch((result) => {
 				if(result.hasOwnProperty("error")) {

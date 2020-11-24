@@ -1,6 +1,6 @@
 
-const messageBox = new function() {
-	const div = document.getElementById("message-box");
+const errorBox = new function() {
+	const div = document.getElementById("error-box");
 	let timeout = null;
 
 	this.show = function(text) {

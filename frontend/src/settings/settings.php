@@ -8,9 +8,11 @@
 		<link rel="stylesheet" type="text/css" href="/src/settings/settings.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
+		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/settings/settings.js" defer></script>
+		<script src="/src/message-box/message-box.js"></script>
 	</head>
 	<body>
 		<?php include "../shared/html/background.html"; ?>

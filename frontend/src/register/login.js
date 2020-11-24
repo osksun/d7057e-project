@@ -12,22 +12,66 @@
 			const password = passwordField.value;
 
 			if(email == "") {
-				messageBox.show("Email required!");
+				errorBox.show("Email required!");
 			} else {
 				const previousText = loginButton.textContent;
 				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 				loginButton.disabled = true;
 
-				DbCom.createRefreshToken(email, password).then((r) => {
-					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
-					window.location = "/";
+				DbCom.createRefreshToken(email, password).then((result) => {
+					const userID = result["userID"];
+					let refreshToken = result["refreshToken"];
+					if(refreshToken != null) {
+						localStorage.setItem("login_data", JSON.stringify({"userID":userID, "refreshToken":refreshToken}));
+						window.location = "/";
+
+						loginButton.textContent = previousText;
+						loginButton.disabled = false;
+					} else {
+						messageBox.showConfirm("Account has been set to be deleted after 30 days. Do you wish to recover it?", () => {
+							loginButton.textContent = previousText;
+							loginButton.disabled = false;
+						}, () => {
+							DbCom.recoverUser(email, password).then((result) => {
+								DbCom.createRefreshToken(email, password).then((result) => {
+									refreshToken = result["refreshToken"];
+
+									localStorage.setItem("login_data", JSON.stringify({"userID":userID, "refreshToken":refreshToken}));
+									window.location = "/";
+
+									loginButton.textContent = previousText;
+									loginButton.disabled = false;
+								}).catch((error) => {
+									if(error == null) {
+										errorBox.show("Connection error");
+									} else {
+										errorBox.show(error.error);
+									}
+
+									loginButton.textContent = previousText;
+									loginButton.disabled = false;
+								});
+							}).catch((error) => {
+								if(error == null) {
+									errorBox.show("Connection error");
+								} else {
+									errorBox.show(error.error);
+								}
+
+								loginButton.textContent = previousText;
+								loginButton.disabled = false;
+							});
+						});
+					}
 				}).catch((error) => {
 					if(error == null) {
-						messageBox.show("Connection error");
+						errorBox.show("Connection error");
+					} else if(error.error) {
+						errorBox.show(error.error);
 					} else {
-						messageBox.show(error.error);
+						errorBox.show(error);
 					}
-				}).finally(() => {
+
 					loginButton.textContent = previousText;
 					loginButton.disabled = false;
 				});

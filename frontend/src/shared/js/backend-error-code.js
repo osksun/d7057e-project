@@ -9,5 +9,6 @@ const backendErrorCode = {
 	failedPasswordChange:6,
 	loginFailed:7,
 	duplicateUser:8,
-	noUnansweredQuestions:9
+	noUnansweredQuestions:9,
+	userAlreadyRecovered:10
 };

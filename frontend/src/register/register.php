@@ -8,7 +8,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
-		<link rel="stylesheet" type="text/css" href="/src/register/message_box.css">
+		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 	</head>
 	<body>
@@ -26,10 +26,10 @@
 
 			<button id="registerButton" class="button">Register</button>
 		</div>
-		<div id="message-box"></div>
+		<div id="error-box"></div>
 		<a href="/login" class="button">Login</a>
 
 		<script src="/src/register/register.js"></script>
-		<script src="/src/register/message_box.js"></script>
+		<script src="/src/register/error-box.js"></script>
 	</body>
 </html>

@@ -52,17 +52,22 @@ const courseEditor = new function() {
 		const previousText = deleteButton.textContent;
 		deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 		deleteButton.disabled = true;
-		DbCom.deleteCourse(editCourseID).then(() => {
-			modulesViewManager.disableButton();
-			coursesViewManager.displayCourses(true);
-			clear();
-		}).catch((result) => {
-			if(result.hasOwnProperty("error")) {
-				showMessage("Error: " + result.error, true);
-			}
-		}).finally(() => {
+		messageBox.showConfirm("Are you sure you want to delete this course?", () => {
 			deleteButton.textContent = previousText;
 			deleteButton.disabled = false;
+		}, () => {
+			DbCom.deleteCourse(editCourseID).then(() => {
+				modulesViewManager.disableButton();
+				coursesViewManager.displayCourses(true);
+				clear();
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				deleteButton.textContent = previousText;
+				deleteButton.disabled = false;
+			});
 		});
 	});
 
