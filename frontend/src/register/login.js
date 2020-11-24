@@ -12,7 +12,7 @@
 			const password = passwordField.value;
 
 			if(email == "") {
-				messageBox.show("Email required!");
+				errorBox.show("Email required!");
 			} else {
 				const previousText = loginButton.textContent;
 				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
@@ -23,9 +23,9 @@
 					window.location = "/";
 				}).catch((error) => {
 					if(error == null) {
-						messageBox.show("Connection error");
+						errorBox.show("Connection error");
 					} else {
-						messageBox.show(error.error);
+						errorBox.show(error.error);
 					}
 				}).finally(() => {
 					loginButton.textContent = previousText;
