@@ -32,5 +32,6 @@
 			<div><button id="delete-button" class="button">Delete account</button></div>
 			<div id="delete-message"></div>
 		</div>
+		<br>
 	</body>
 </html>
