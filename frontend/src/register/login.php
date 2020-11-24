@@ -8,7 +8,9 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
+		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
+		<script src="/src/message-box/message-box.js"></script>
 	</head>
 	<body>
 		<?php include "../shared/html/background.html"; ?>

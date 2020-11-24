@@ -18,16 +18,57 @@
 				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 				loginButton.disabled = true;
 
-				DbCom.createRefreshToken(email, password).then((r) => {
-					localStorage.setItem("login_data", JSON.stringify({"userID":r["userID"], "refreshToken":r["refreshToken"]}));
-					window.location = "/";
+				DbCom.createRefreshToken(email, password).then((result) => {
+					const userID = result["userID"];
+					let refreshToken = result["refreshToken"];
+					if(refreshToken != null) {
+						localStorage.setItem("login_data", JSON.stringify({"userID":userID, "refreshToken":refreshToken}));
+						window.location = "/";
+
+						loginButton.textContent = previousText;
+						loginButton.disabled = false;
+					} else {
+						messageBox.show("Account has been set to be deleted. Account will be recovered.", () => {
+							DbCom.recoverUser(email, password).then((result) => {
+								DbCom.createRefreshToken(email, password).then((result) => {
+									refreshToken = result["refreshToken"];
+
+									localStorage.setItem("login_data", JSON.stringify({"userID":userID, "refreshToken":refreshToken}));
+									window.location = "/";
+
+									loginButton.textContent = previousText;
+									loginButton.disabled = false;
+								}).catch((error) => {
+									if(error == null) {
+										errorBox.show("Connection error");
+									} else {
+										errorBox.show(error.error);
+									}
+
+									loginButton.textContent = previousText;
+									loginButton.disabled = false;
+								});
+							}).catch((error) => {
+								if(error == null) {
+									errorBox.show("Connection error");
+								} else {
+									errorBox.show(error.error);
+								}
+
+								loginButton.textContent = previousText;
+								loginButton.disabled = false;
+							});
+						});
+					}
 				}).catch((error) => {
 					if(error == null) {
 						errorBox.show("Connection error");
-					} else {
+					} else if(error.error) {
 						errorBox.show(error.error);
+					} else {
+						errorBox.show(error);
 					}
-				}).finally(() => {
+
 					loginButton.textContent = previousText;
 					loginButton.disabled = false;
 				});

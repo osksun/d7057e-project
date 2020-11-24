@@ -74,7 +74,7 @@ exports.changeUserPassword = changeUserPassword;
 
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, password FROM users WHERE email = ? and deleteon IS NULL", [email], (error, result) => {
+		connection.query("SELECT id, password, deleteon FROM users WHERE email = ?", [email], (error, result) => {
 			if(error) {
 				console.error(error);
 				reject();
@@ -85,7 +85,10 @@ function loginUser(email, password) {
 					const storedPasswordHash = result[0].password;
 					bcrypt.compare(password, storedPasswordHash).then((success) => {
 						if(success == true) {
-							resolve(result[0].id);
+							resolve({
+								id:result[0].id,
+								deleted:(result[0].deleteon != null)
+							});
 						} else {
 							reject();
 						}
@@ -127,6 +130,23 @@ function loginUserID(userID, password) {
 	});
 }
 exports.loginUserID = loginUserID;
+
+function recoverUserID(userID) {
+	return new Promise((resolve, reject) => {
+		connection.query("UPDATE users SET deleteon = NULL WHERE id = ?", [userID], (error, result) => {
+			if(error) {
+				console.error(error);
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.recoverUserID = recoverUserID;
 
 function softDeleteUserID(userID) {
 	return new Promise((resolve, reject) => {

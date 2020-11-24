@@ -51,8 +51,8 @@ function changeUserPassword(userID, password) {
 
 function loginUser(email, password) {
 	return new Promise((resolve, reject) => {
-			database.loginUser(email, password).then((userID) => {
-				resolve(userID);
+			database.loginUser(email, password).then((user) => {
+				resolve(user);
 			}).catch(() => {
 				reject();
 			});
@@ -145,20 +145,30 @@ function init() {
 		const password = request.body.password;
 
 		if(validation.validateEmail(email) && validation.validatePassword(password)) {
-			loginUser(email, password).then((userID) => {
-				console.log("Created refresh token for \"" + email + "\"");
+			loginUser(email, password).then((user) => {
+				const userID = user.id;
+				const userDeleted = user.deleted;
 
-				token.createRefreshToken(userID).then((refreshToken) => {
+				if(userDeleted) {
 					response.json({
 						userID:userID,
-						refreshToken:refreshToken
+						refreshToken:null
 					});
-				}).catch(() => {
-					response.json({
-						error:"Failed to create refresh token",
-						errorCode:errorCode.failedTokenCreation
+				} else {
+					console.log("Created refresh token for \"" + email + "\"");
+
+					token.createRefreshToken(userID).then((refreshToken) => {
+						response.json({
+							userID:userID,
+							refreshToken:refreshToken
+						});
+					}).catch(() => {
+						response.json({
+							error:"Failed to create refresh token",
+							errorCode:errorCode.failedTokenCreation
+						});
 					});
-				});
+				}
 			}).catch(() => {
 				response.json({
 					error:"Login failed",
@@ -187,6 +197,42 @@ function init() {
 				response.json({
 					error:"Failed to create access token",
 					errorCode:errorCode.failedTokenCreation
+				});
+			});
+		} else {
+			response.json({
+				error:"Malformed input",
+				errorCode:errorCode.malformedInput
+			});
+		}
+	});
+
+	app.post("/recover", (request, response) => {
+		const email = request.body.email;
+		const password = request.body.password;
+
+		if(validation.validateEmail(email) && validation.validatePassword(password)) {
+			loginUser(email, password).then((user) => {
+				const userID = user.id;
+				const userDeleted = user.deleted;
+				if(userDeleted) {
+					database.recoverUserID(userID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch((error) => {
+						response.json(error);
+					});
+				} else {
+					response.json({
+						error:"User already recovered",
+						errorCode:errorCode.userAlreadyRecovered
+					});
+				}
+			}).catch(() => {
+				response.json({
+					error:"Failed to verify current password",
+					errorCode:errorCode.failedPasswordVerification
 				});
 			});
 		} else {

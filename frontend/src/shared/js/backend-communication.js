@@ -33,6 +33,14 @@ const DbCom = new function() {
 		});
 	};
 
+	this.recoverUser = function(email, password) {
+		return new Promise((resolve, reject) => {
+			clientSidePasswordHash(password).then((passwordHash) => {
+				this.ajaxPostAuth(authURL + "recover", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+			});
+		});
+	};
+
 	this.deleteUser = function(password) {
 		return new Promise((resolve, reject) => {
 			clientSidePasswordHash(password).then((passwordHash) => {
