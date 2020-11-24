@@ -113,7 +113,7 @@ function init() {
 
 			//TODO validate input
 
-			database.getCourseByName(name).then((course) => {
+			database.getCourseByName(name, userID).then((course) => {
 				response.json(course);
 			}).catch(() => {
 				response.json({

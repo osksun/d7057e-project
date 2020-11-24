@@ -17,6 +17,7 @@ function connect() {
 				const tables = [
 					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, deleteon DATE, PRIMARY KEY(id))",
+					"CREATE TABLE IF NOT EXISTS courseaccess (userID int NOT NULL, courseID INT NOT NULL, lastAccess DATETIME, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES users(id), FOREIGN KEY(courseID) REFERENCES courses(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
@@ -171,18 +172,38 @@ function purgeExpiredCourses() {
 }
 exports.purgeExpiredCourses = purgeExpiredCourses;
 
-function getCourseByName(name) {
+function getCourseByName(name, userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT id, name, description, color FROM courses WHERE name=? AND deleteon IS NULL", [name], (error, result) => {
+		connection.beginTransaction(function(error) {
 			if(error) {
 				reject();
 			} else {
-				if(result.length == 1) {
-					const row = result[0];
-					resolve({id:row.id, name:row.name, description:row.description, color:row.color});
-				} else {
-					reject();
-				}
+				connection.query("SELECT id, name, description, color FROM courses WHERE name=? AND deleteon IS NULL", [name], (error, result) => {
+					if(error) {
+						reject();
+					} else {
+						if(result.length == 1) {
+							const row = result[0];
+							const courseID = row.id;
+							connection.query(`
+								INSERT INTO courseaccess (userID, courseID, lastAccess) VALUES (?, ?, CURRENT_TIMESTAMP)
+								ON DUPLICATE KEY UPDATE lastAccess = CURRENT_TIMESTAMP
+								`, [userID, courseID], (error) => {
+								if(error) {
+									connection.rollback(function() {
+										reject();
+									});
+								} else {
+									resolve({id:courseID, name:row.name, description:row.description, color:row.color});
+								}
+							});
+						} else {
+							connection.rollback(function() {
+								reject();
+							});
+						}
+					}
+				});
 			}
 		});
 	});
@@ -192,13 +213,17 @@ exports.getCourseByName = getCourseByName;
 function getCourses(userID) {
 	return new Promise((resolve, reject) => {
 		connection.query(`
-			SELECT courses.id, courses.name, courses.description, courses.color, COUNT(courseID) AS questionCount, COUNT(userID) AS answerCount FROM answers
-			RIGHT JOIN questions ON questions.id = answers.questionID AND userID=?
-			INNER JOIN modules ON modules.id = questions.moduleID
-			RIGHT JOIN courses ON courses.id = modules.courseID
-			WHERE courses.deleteon IS NULL
-			GROUP BY courses.id
-			`, [userID], (error, result) => {
+			SELECT id, name, description, color, questionCount, answerCount FROM (
+				SELECT courses.id, courses.name, courses.description, courses.color, COUNT(modules.courseID) AS questionCount, COUNT(answers.userID) AS answerCount FROM answers
+				RIGHT JOIN questions ON questions.id = answers.questionID AND answers.userID = ?
+				INNER JOIN modules ON modules.id = questions.moduleID
+				RIGHT JOIN courses ON courses.id = modules.courseID
+				WHERE courses.deleteon IS NULL
+				GROUP BY courses.id
+			) AS selectedCourses
+			LEFT JOIN courseaccess ON courseaccess.courseID = selectedCourses.id AND courseaccess.userID = ?
+			ORDER BY courseaccess.lastAccess DESC
+			`, [userID, userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -295,28 +320,55 @@ exports.getModuleByName = getModuleByName;
 
 function getModules(courseID, userID) {
 	return new Promise((resolve, reject) => {
-		connection.query(`
-			SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
-			RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
-			RIGHT JOIN modules ON modules.id = questions.moduleID
-			WHERE modules.courseID = ? AND modules.deleteon IS NULL
-			GROUP BY modules.id
-			`, [userID, courseID], (error, result) => {
+		connection.beginTransaction(function(error) {
 			if(error) {
 				reject();
 			} else {
-				const modules = [];
-				for(let i = 0; i < result.length; ++i) {
-					const row = result[i];
-					modules.push({
-						id:row.id,
-						name:row.name,
-						description:row.description,
-						questionCount:row.questionCount,
-						answerCount:row.answerCount
-					});
-				}
-				resolve(modules);
+				connection.query(`
+					SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
+					RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
+					RIGHT JOIN modules ON modules.id = questions.moduleID
+					WHERE modules.courseID = ? AND modules.deleteon IS NULL
+					GROUP BY modules.id
+					`, [userID, courseID], (error, result) => {
+					if(error) {
+						connection.rollback(function() {
+							reject();
+						});
+					} else {
+						connection.query(`
+							INSERT INTO courseaccess (userID, courseID, lastAccess) VALUES (?, ?, CURRENT_TIMESTAMP)
+							ON DUPLICATE KEY UPDATE lastAccess = CURRENT_TIMESTAMP
+							`, [userID, courseID], (error) => {
+							if(error) {
+								connection.rollback(function() {
+									reject();
+								});
+							} else {
+								const modules = [];
+								for(let i = 0; i < result.length; ++i) {
+									const row = result[i];
+									modules.push({
+										id:row.id,
+										name:row.name,
+										description:row.description,
+										questionCount:row.questionCount,
+										answerCount:row.answerCount
+									});
+								}
+								connection.commit(function(error) {
+									if(error) {
+										connection.rollback(function() {
+											reject();
+										});
+									} else {
+										resolve(modules);
+									}
+								});
+							}
+						});
+					}
+				});
 			}
 		});
 	});
