@@ -601,7 +601,7 @@ function isUserModeratorOfModule(userID, moduleID) {
 				connection.query(`
 					SELECT userID, modules.courseID FROM moderators
 					INNER JOIN modules WHERE userID = ? AND modules.id = ?
-					`, [userID, courseID], (error, result) => {
+					`, [userID, moduleID], (error, result) => {
 					if(error) {
 						reject();
 					} else {
