@@ -26,13 +26,17 @@ const questionEditor = new function() {
 		deleteButton.className = "button";
 		deleteButton.innerHTML = "<img src=\"/src/question-editor/delete.svg\">";
 		deleteButton.addEventListener("click", () => {
-			for(let i = 0; i < segmentsData.length; ++i) {
-				if(segmentsData[i] == segment) {
-					segmentsData.splice(i, 1);
-					break;
+			messageBox.showConfirm("Are you sure you want to delete this segment?", () => {
+				//Do nothing
+			}, () => {
+				for(let i = 0; i < segmentsData.length; ++i) {
+					if(segmentsData[i] == segment) {
+						segmentsData.splice(i, 1);
+						break;
+					}
 				}
-			}
-			questionSegments.removeChild(segment.div);
+				questionSegments.removeChild(segment.div);
+			});
 		});
 		segmentToolbar.appendChild(deleteButton);
 

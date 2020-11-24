@@ -63,17 +63,23 @@ const moduleEditor = new function() {
 		const previousText = deleteButton.textContent;
 		deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 		deleteButton.disabled = true;
-		DbCom.deleteModule(editModuleID).then(() => {
-			questionViewManager.disableButton();
-			modulesViewManager.displayModules(courseId, courseName, courseColor, true);
-			clear();
-		}).catch((result) => {
-			if(result.hasOwnProperty("error")) {
-				showMessage("Error: " + result.error, true);
-			}
-		}).finally(() => {
+
+		messageBox.showConfirm("Are you sure you want to delete this module?", () => {
 			deleteButton.textContent = previousText;
 			deleteButton.disabled = false;
+		}, () => {
+			DbCom.deleteModule(editModuleID).then(() => {
+				questionViewManager.disableButton();
+				modulesViewManager.displayModules(courseId, courseName, courseColor, true);
+				clear();
+			}).catch((result) => {
+				if(result.hasOwnProperty("error")) {
+					showMessage("Error: " + result.error, true);
+				}
+			}).finally(() => {
+				deleteButton.textContent = previousText;
+				deleteButton.disabled = false;
+			});
 		});
 	});
 
