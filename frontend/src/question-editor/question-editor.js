@@ -145,9 +145,13 @@ const questionEditor = new function() {
 		deleteButton.className = "button hidden";
 	}
 
-	this.setup = function(_moduleId) {
+	this.setup = function(_courseId, _courseName, _moduleId, _moduleName) {
 		clear();
+		courseId = _courseId;
+		courseName = _courseName;
 		moduleId = _moduleId;
+		moduleName = _moduleName;
+		questionId = null;
 		submitButton.innerHTML = "Create question";
 		submitButton.disabled = false;
 	};
@@ -206,7 +210,8 @@ const questionEditor = new function() {
 			});
 		} else {
 			DbCom.createQuestion(moduleId, types, content, answers).then(() => {
-				showMessage("Question added!");
+				questionViewManager.displayQuestionList(courseId, courseName, moduleId, moduleName, true);
+				clear();
 			}).catch((result) => {
 				if(result.hasOwnProperty("error")) {
 					showMessage("Error: " + result.error, true);
