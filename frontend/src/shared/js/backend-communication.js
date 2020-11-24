@@ -163,6 +163,10 @@ const DbCom = new function() {
 			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
+	this.deleteQuestion = function(questionID) {
+		return this.ajaxPost(mainURL + "deletequestion", "questionID=" + questionID);
+	};
+
 	/**
 	 * Ajax request to update an existing course
 	 * @param {unsigned int} id the id of the course to update

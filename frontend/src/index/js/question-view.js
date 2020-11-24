@@ -214,7 +214,7 @@ const questionViewManager = new function() {
 	};
 
 	this.displayEditQuestion = (courseId, courseName, moduleId, moduleName, questionId, addToHistory) => {
-		questionEditor.setupEdit(questionId);
+		questionEditor.setupEdit(courseId, courseName, moduleId, moduleName, questionId);
 		// Setup question button
 		setupQuestionButton(moduleName, () => {
 			this.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
