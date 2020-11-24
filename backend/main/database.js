@@ -213,7 +213,7 @@ exports.getCourseByName = getCourseByName;
 function getCourses(userID) {
 	return new Promise((resolve, reject) => {
 		connection.query(`
-			SELECT id, name, description, color, questionCount, answerCount FROM (
+			SELECT id, name, description, color, questionCount, answerCount, CASE WHEN moderators.userID IS NULL THEN False ELSE True END AS isModerator FROM (
 				SELECT courses.id, courses.name, courses.description, courses.color, COUNT(modules.courseID) AS questionCount, COUNT(answers.userID) AS answerCount FROM answers
 				RIGHT JOIN questions ON questions.id = answers.questionID AND answers.userID = ?
 				INNER JOIN modules ON modules.id = questions.moduleID
@@ -222,8 +222,9 @@ function getCourses(userID) {
 				GROUP BY courses.id
 			) AS selectedCourses
 			LEFT JOIN courseaccess ON courseaccess.courseID = selectedCourses.id AND courseaccess.userID = ?
+			LEFT JOIN moderators ON moderators.courseID = selectedCourses.id AND moderators.userID = ?
 			ORDER BY courseaccess.lastAccess DESC
-			`, [userID, userID], (error, result) => {
+			`, [userID, userID, userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
@@ -236,7 +237,8 @@ function getCourses(userID) {
 						description:row.description,
 						color:row.color,
 						questionCount:row.questionCount,
-						answerCount:row.answerCount
+						answerCount:row.answerCount,
+						isModerator:row.isModerator
 					});
 				}
 				resolve(courses);

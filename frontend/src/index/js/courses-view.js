@@ -18,14 +18,14 @@ const coursesViewManager = new function() {
 		cardContainer.classList.add("visible");
 	}
 
-	function createCard(id, name, color, questionCount, answerCount, isAdmin) {
+	function createCard(id, name, color, questionCount, answerCount, isAdmin, isModerator) {
 		const card = document.createElement("button");
 		card.className = "card";
 		const cardWrapper = document.createElement("div");
 		const header = document.createElement("div");
 		header.className = "card-header";
 		header.style.backgroundColor = color;
-		if (isAdmin) { // TODO: Add check for moderators of the course as well
+		if (isAdmin || isModerator) {
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
@@ -87,7 +87,7 @@ const coursesViewManager = new function() {
 	this.createCards = function(courses) {
 		DbCom.isAdmin().then((result) => {
 			courses.forEach((course) => {
-				cardContainer.appendChild(createCard(course.id, course.name, "#" + course.color, course.questionCount, course.answerCount, result.isAdmin));
+				cardContainer.appendChild(createCard(course.id, course.name, "#" + course.color, course.questionCount, course.answerCount, result.isAdmin, course.isModerator));
 			});
 			if(result.isAdmin) {
 				cardContainer.appendChild(createAdminCreateCard());
