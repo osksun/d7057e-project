@@ -10,9 +10,12 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
+		<script src= "https://www.google.com/recaptcha/api.js" async defer></script>
 	</head>
+
 	<body>
-		<?php include "../shared/html/background.html"; ?>
+		<?php include "../shared/html/background.html";?>
+
 		<h2>REGISTER</h2>
 		<div id="container">
 			<label>Email</label>
@@ -26,6 +29,7 @@
 
 			<button id="registerButton" class="button">Register</button>
 		</div>
+		<div id = "captcha" class="g-recaptcha" data-sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" data-theme="dark"> </div>
 		<div id="error-box"></div>
 		<a href="/login" class="button">Login</a>
 

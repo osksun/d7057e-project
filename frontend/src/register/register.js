@@ -4,6 +4,7 @@
 	const emailField = document.getElementById("emailField");
 	const passwordField = document.getElementById("passwordField");
 	const repeatPasswordField = document.getElementById("repeatPasswordField");
+	const captcha = document.getElementById("captcha");
 
 	registerButton.addEventListener("click", () => {
 		if(emailField.reportValidity() && passwordField.reportValidity() && repeatPasswordField.reportValidity()) {
@@ -49,6 +50,13 @@
 			event.preventDefault();
 			registerButton.click();
 		}
+	}
+
+	function captchaPostRequest() {
+		const request = new XMLHttpRequest();
+		request.open("POST", "https://www.google.com/recaptcha/api/siteverify", true);
+		request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		request.setRequestHeader('Content-Type', 'application/json');
 	}
 	emailField.addEventListener("keydown", registerClick);
 	passwordField.addEventListener("keydown", registerClick);
