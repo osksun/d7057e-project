@@ -8,7 +8,7 @@ window.addEventListener("load", () => {
 		const coursesView = document.getElementById("courses-view");
 		const modulesView = document.getElementById("modules-view");
 		const questionView = document.getElementById("question-view");
-		
+
 		coursesButton.addEventListener("click", () => {
 			coursesViewManager.displayCourses(true);
 		});
@@ -19,7 +19,7 @@ window.addEventListener("load", () => {
 				window.history.pushState({"pageTitle":title}, "", url);
 			}
 		};
-		
+
 		function toggleView(activeButton, visibleView, unselectedButtons, hiddenViews) {
 			activeButton.classList.add("selected");
 			visibleView.classList.add("visible");
@@ -65,7 +65,7 @@ window.addEventListener("load", () => {
 						case questionViewManager.containers.QUESTION:
 							questionViewManager.displayQuestion(course.id, course.name, module.id, module.name, addToHistory);
 							break;
-						case questionViewManager.containers.EDIT_QUESTION: 
+						case questionViewManager.containers.EDIT_QUESTION:
 							questionViewManager.displayEditQuestion(course.id, course.name, module.id, module.name, questionId, addToHistory);
 							break;
 						case questionViewManager.containers.CREATE_QUESTION:
@@ -121,6 +121,12 @@ window.addEventListener("load", () => {
 							// /createmodule/course-name
 							const courseName = decodeURIComponent(pathArray[1]);
 							this.loadCourseView(modulesViewManager.containers.CREATE_MODULE, courseName, addToHistory);
+							break;
+						}
+						case "moderators": {
+							// /moderators/course-name
+							const courseName = decodeURIComponent(pathArray[1]);
+							coursesViewManager.displayModeratorsList(courseName, addToHistory);
 							break;
 						}
 					}
