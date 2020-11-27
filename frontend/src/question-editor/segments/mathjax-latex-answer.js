@@ -4,12 +4,47 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	div.className = "mathjax-latex-answer";
 
 	const answerWrapper = document.createElement("div");
+	answerWrapper.className = "answer-wrapper";
+
+	function testRegex(answer, regex) {
+		const regExp = new RegExp(regex);
+		setRegexTest(regExp.test(answer));
+	}
+
+	function setRegexTest(isMatching) {
+		if (isMatching) {
+			answerRegexTestInput.className = "match";
+			answerRegexTestMessage.innerText = "Answer is matching";
+		} else {
+			answerRegexTestInput.className = "no-match";
+			answerRegexTestMessage.innerText = "Answer is not matching";
+		}
+	}
+	
 	const answerTitle = document.createElement("span");
-	answerTitle.innerText = "Answer regex: ";
+	answerTitle.innerText = "Answer regex:";
 	answerWrapper.appendChild(answerTitle);
 	const answerRegex = document.createElement("input");
 	answerRegex.value = answer;
+	answerRegex.addEventListener("input", () => {
+		testRegex(answerRegexTestInput.value, answerRegex.value);
+	});
 	answerWrapper.appendChild(answerRegex);
+
+	const answerTestTitle = document.createElement("span");
+	answerTestTitle.innerText = "Test regex:";
+	answerWrapper.appendChild(answerTestTitle);
+	const answerRegexTestInput = document.createElement("input");
+	answerRegexTestInput.addEventListener("input", () => {
+		testRegex(answerRegexTestInput.value, answerRegex.value);
+	});
+	answerWrapper.appendChild(answerRegexTestInput);
+	const answerRegexTestMessage = document.createElement("span");
+	answerRegexTestMessage.className = "test-message";
+	answerWrapper.appendChild(answerRegexTestMessage);
+
+	testRegex(answerRegexTestInput.value, answerRegex.value);
+
 	div.appendChild(answerWrapper);
 
 	const titleDiv = document.createElement("div");
