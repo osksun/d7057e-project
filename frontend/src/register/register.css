@@ -26,11 +26,8 @@ h2 {
 	display:block;
 	margin:0 auto 40px auto;
 	padding:10px;
-	border:none;
 	font-size:28px;
 	text-align:center;
-	border-radius:12px;
-	box-shadow:5px 8px 0 0 #181818;
 }
 
 #container > button, a {

@@ -68,3 +68,10 @@
 	margin:unset;
 	height:unset;
 }
+
+.text-box {
+	background-color:#fff;
+	border:none;
+	border-radius:12px;
+	box-shadow:5px 8px 0 0 #181818;
+}

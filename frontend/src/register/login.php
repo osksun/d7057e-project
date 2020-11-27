@@ -17,10 +17,10 @@
 		<h2>LOGIN</h2>
 		<div id="container">
 			<label>Email</label>
-			<input id="emailField" type="text" placeholder="email@example.com" required autofocus>
+			<input id="emailField" class="text-box" type="text" placeholder="email@example.com" required autofocus>
 
 			<label>Password</label>
-			<input id="passwordField" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
+			<input id="passwordField" class="text-box" type="password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" required>
 
 			<button id="loginButton" class="button">Login</button>
 		</div>

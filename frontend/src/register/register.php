@@ -19,13 +19,13 @@
 		<h2>REGISTER</h2>
 		<div id="container">
 			<label>Email</label>
-			<input id="emailField" type="text" required placeholder="email@example.com">
+			<input id="emailField" class="text-box" type="text" required placeholder="email@example.com">
 
 			<label>Password</label>
-			<input id="passwordField" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+			<input id="passwordField" class="text-box" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 
 			<label>Confirm Password</label>
-			<input id="repeatPasswordField" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+			<input id="repeatPasswordField" class="text-box" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 
 			<button id="registerButton" class="button">Register</button>
 		</div>

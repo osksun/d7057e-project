@@ -32,10 +32,7 @@ body > h2:first-of-type {
 	width:360px;
 	font-size:35px;
 	vertical-align:middle;
-	border:none;
-	border-radius:12px;
 	text-align:center;
-	box-shadow:5px 8px 0 0 #181818;
 }
 .form > div > button {
 	margin-top:40px;
