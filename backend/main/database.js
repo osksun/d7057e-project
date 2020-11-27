@@ -4,6 +4,8 @@ const mysql = require("mysql");
 const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
 
+const errorCode = require("../error_code.js");
+
 function connect() {
 	console.log("Connecting MySQL database...");
 	return new Promise((resolve, reject) => {
@@ -83,19 +85,23 @@ exports.getUserIsAdmin = getUserIsAdmin;
 
 function getXP(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT xp FROM userdata WHERE id = ?", [userID], (error, result) => {
-			if(error) {
-				reject();
-			} else {
-				if(result.length == 0) {
-					//Return 0 XP by default
-					resolve(0);
-				} else if(result.length == 1) {
-					resolve(result[0].xp);
-				} else {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("SELECT xp FROM userdata WHERE id = ?", [userID], (error, result) => {
+				if(error) {
 					reject();
+				} else {
+					if(result.length == 0) {
+						//Return 0 XP by default
+						resolve(0);
+					} else if(result.length == 1) {
+						resolve(result[0].xp);
+					} else {
+						reject();
+					}
 				}
-			}
+			});
+		}).catch(() => {
+			reject();
 		});
 	});
 }
@@ -616,6 +622,52 @@ function addAnswer(userID, questionID) {
 	});
 }
 exports.addAnswer = addAnswer;
+
+function addModerator(userID, courseID) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+			if(error) {
+				if(error.code == "ER_DUP_ENTRY") {
+					reject({
+						error:"User is already moderator",
+						errorCode:errorCode.duplicateModerator
+					});
+				} else if(error.code == "ER_NO_REFERENCED_ROW_2") {
+					reject({
+						error:"User does not exist",
+						errorCode:errorCode.userDoesNotExist
+					});
+				} else {
+					console.error(error);
+					reject({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
+				}
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.addModerator = addModerator;
+
+function deleteModerator(userID, courseID) {
+	return new Promise((resolve, reject) => {
+		connection.query("DELETE FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
+			if(error) {
+				console.error(error);
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.deleteModerator = deleteModerator;
 
 function getModerators(courseID) {
 	return new Promise((resolve, reject) => {

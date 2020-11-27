@@ -197,6 +197,26 @@
 			<input type="submit">
 		</form>
 
+		<h1>Add moderator</h1>
+		<form action="http://127.0.0.1:80/addmoderator" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			ModeratorID: <input type="text" name="moderatorID"><br>
+			CourseID: <input type="text" name="courseID"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Delete moderator</h1>
+		<form action="http://127.0.0.1:80/deletemoderator" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			ModeratorID: <input type="text" name="moderatorID"><br>
+			CourseID: <input type="text" name="courseID"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Get moderators</h1>
 		<form action="http://127.0.0.1:80/getmoderators" method="post">
 			User ID: <input type="text" name="userID"><br>
