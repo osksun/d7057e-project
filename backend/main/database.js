@@ -617,6 +617,25 @@ function addAnswer(userID, questionID) {
 }
 exports.addAnswer = addAnswer;
 
+function getModerators(courseID) {
+	return new Promise((resolve, reject) => {
+		connection.query("SELECT userID FROM moderators WHERE courseID = ?", [courseID], (error, result) => {
+			if(error) {
+				console.log(error);
+				reject();
+			} else {
+				const moderators = [];
+				for(let i = 0; i < result.length; ++i) {
+					const row = result[i];
+					moderators.push(row.userID);
+				}
+				resolve(moderators);
+			}
+		});
+	});
+}
+exports.getModerators = getModerators;
+
 //Also returns true if the user is an admin
 function isUserModeratorOfCourse(userID, courseID) {
 	return new Promise((resolve, reject) => {
