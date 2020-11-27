@@ -294,6 +294,9 @@ const DbCom = new function() {
 			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
+	this.addModerator = function(userID, courseId) {
+		return this.ajaxPost(mainURL + "addmoderator", "moderatorID=" + userID + "&courseID=" + courseId);
+	};
 	this.getModerators = function(courseId) {
 		return this.ajaxPost(mainURL + "getmoderators", "courseID=" + courseId);
 	};

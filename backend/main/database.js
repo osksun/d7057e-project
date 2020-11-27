@@ -4,6 +4,8 @@ const mysql = require("mysql");
 const config = require("./database_config.json");
 const connection = mysql.createConnection(config);
 
+const errorCode = require("../error_code.js");
+
 function connect() {
 	console.log("Connecting MySQL database...");
 	return new Promise((resolve, reject) => {
@@ -620,6 +622,35 @@ function addAnswer(userID, questionID) {
 	});
 }
 exports.addAnswer = addAnswer;
+
+function addModerator(userID, courseID) {
+	return new Promise((resolve, reject) => {
+		connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+			if(error) {
+				if(error.code == "ER_DUP_ENTRY") {
+					reject({
+						error:"User is already moderator",
+						errorCode:errorCode.duplicateModerator
+					});
+				} else if(error.code == "ER_NO_REFERENCED_ROW_2") {
+					reject({
+						error:"User does not exist",
+						errorCode:errorCode.userDoesNotExist
+					});
+				} else {
+					console.error(error);
+					reject({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
+				}
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.addModerator = addModerator;
 
 function getModerators(courseID) {
 	return new Promise((resolve, reject) => {
