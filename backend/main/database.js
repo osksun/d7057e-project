@@ -652,6 +652,23 @@ function addModerator(userID, courseID) {
 }
 exports.addModerator = addModerator;
 
+function deleteModerator(userID, courseID) {
+	return new Promise((resolve, reject) => {
+		connection.query("DELETE FROM moderators WHERE userID = ? AND courseID = ?", [userID, courseID], (error, result) => {
+			if(error) {
+				console.error(error);
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				resolve();
+			}
+		});
+	});
+}
+exports.deleteModerator = deleteModerator;
+
 function getModerators(courseID) {
 	return new Promise((resolve, reject) => {
 		connection.query("SELECT userID FROM moderators WHERE courseID = ?", [courseID], (error, result) => {

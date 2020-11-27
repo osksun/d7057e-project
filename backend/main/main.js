@@ -795,6 +795,39 @@ function init() {
 		});
 	});
 
+	app.post("/deletemoderator", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const moderatorID = parseInt(request.body.moderatorID, 10);
+			const courseID = parseInt(request.body.courseID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					database.deleteModerator(moderatorID, courseID).then(() => {
+						response.json({
+							success:true
+						});
+					}).catch((error) => {
+						response.json(error);
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	app.post("/getmoderators", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const courseID = parseInt(request.body.courseID, 10);
