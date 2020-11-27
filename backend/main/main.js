@@ -762,6 +762,39 @@ function init() {
 		});
 	});
 
+	app.post("/getmoderators", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			const courseID = parseInt(request.body.courseID, 10);
+
+			//TODO validate input
+
+			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+				if(isModerator) {
+					database.getModerators(courseID).then((moderators) => {
+						response.json(moderators);
+					}).catch(() => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					});
+				} else {
+					response.json({
+						error:"Permission denied",
+						errorCode:errorCode.permissionDenied
+					});
+				}
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	//Start server
 	const port = parseInt(config["port"], 10);
 	if(isNaN(port)) {
