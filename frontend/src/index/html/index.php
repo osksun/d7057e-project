@@ -14,6 +14,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/module-editor/module-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/question-editor/question-editor.css">
 		<link rel="stylesheet" type="text/css" href="/src/question-list/question-list.css">
+		<link rel="stylesheet" type="text/css" href="/src/moderators/moderators-list.css">
 		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
 		<script src="https://cdn.geogebra.org/apps/deployggb.js" defer></script>
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
@@ -39,6 +40,7 @@
 						<script src="/src/index/js/courses-view.js" defer></script>
 						<div id="course-cards-container"></div>
 						<?php include "../../course-editor/course-editor.html"; ?>
+						<?php include "../../moderators/moderators-list.html"; ?>
 					</div>
 					<div id="modules-view">
 						<script src="/src/index/js/modules-view.js" defer></script>

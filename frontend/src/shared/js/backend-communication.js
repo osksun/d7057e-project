@@ -294,6 +294,16 @@ const DbCom = new function() {
 			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
+	this.addModerator = function(userID, courseId) {
+		return this.ajaxPost(mainURL + "addmoderator", "moderatorID=" + userID + "&courseID=" + courseId);
+	};
+	this.deleteModerator = function(userID, courseId) {
+		return this.ajaxPost(mainURL + "deletemoderator", "moderatorID=" + userID + "&courseID=" + courseId);
+	};
+	this.getModerators = function(courseId) {
+		return this.ajaxPost(mainURL + "getmoderators", "courseID=" + courseId);
+	};
+
 	/**
 	 * Ajax request to get the xp of the current user
 	 * @return {Promise<number>} Promise resolves to a number representing the amount of xp the current user has

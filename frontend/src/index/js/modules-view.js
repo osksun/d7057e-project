@@ -32,6 +32,9 @@ const modulesViewManager = new function() {
 		header.className = "card-header";
 		header.style.backgroundColor = color;
 		if (isModerator) {
+			const buttonSpan = document.createElement("span");
+			header.appendChild(buttonSpan);
+
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
@@ -42,7 +45,7 @@ const modulesViewManager = new function() {
 				event.preventDefault(); // Might not be needed anymore
 				event.stopPropagation();
 			});
-			header.appendChild(editButton);
+			buttonSpan.appendChild(editButton);
 		}
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");

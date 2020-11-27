@@ -1,21 +1,31 @@
 const coursesViewManager = new function() {
 	const cardContainer = document.getElementById("course-cards-container");
 	const editorContainer = document.getElementById("course-editor-container");
+	const moderatorsContainer = document.getElementById("moderators-list-container");
 
 	this.containers =  {
 		COURSES: 0,
 		EDIT_COURSE: 1,
-		CREATE_COURSE: 2
+		CREATE_COURSE: 2,
+		MODERATORS_LIST: 3
 	};
 
 	function toggleEditorContainer() {
 		cardContainer.classList.remove("visible");
+		moderatorsContainer.classList.remove("visible");
 		editorContainer.classList.add("visible");
 	}
 
 	function toggleCardContainer() {
 		editorContainer.classList.remove("visible");
+		moderatorsContainer.classList.remove("visible");
 		cardContainer.classList.add("visible");
+	}
+
+	function toggleModeratorsListContainer() {
+		editorContainer.classList.remove("visible");
+		cardContainer.classList.remove("visible");
+		moderatorsContainer.classList.add("visible");
 	}
 
 	function createCard(id, name, color, questionCount, answerCount, isAdmin, isModerator) {
@@ -26,6 +36,21 @@ const coursesViewManager = new function() {
 		header.className = "card-header";
 		header.style.backgroundColor = color;
 		if (isAdmin || isModerator) {
+			const buttonSpan = document.createElement("span");
+			header.appendChild(buttonSpan);
+
+			const moderatorButton = document.createElement("button");
+			const moderatorButtonIcon = document.createElement("img");
+			moderatorButtonIcon.src = "/src/index/svg/moderators.svg";
+			moderatorButtonIcon.alt = "Edit moderators";
+			moderatorButton.appendChild(moderatorButtonIcon);
+			moderatorButton.addEventListener("click", (event) => {
+				coursesViewManager.displayModeratorsList(name, true);
+				event.preventDefault(); // Might not be needed anymore
+				event.stopPropagation();
+			});
+			buttonSpan.appendChild(moderatorButton);
+
 			const editButton = document.createElement("button");
 			const editButtonIcon = document.createElement("img");
 			editButtonIcon.src = "/src/index/svg/edit.svg";
@@ -36,7 +61,7 @@ const coursesViewManager = new function() {
 				event.preventDefault(); // Might not be needed anymore
 				event.stopPropagation();
 			});
-			header.appendChild(editButton);
+			buttonSpan.appendChild(editButton);
 		}
 		const titleWrapper = document.createElement("div");
 		const title = document.createElement("h3");
@@ -121,6 +146,13 @@ const coursesViewManager = new function() {
 		courseEditor.setupCreate();
 		toggleEditorContainer();
 		viewManager.updatePage("/createcourse", "Create course", addToHistory);
+		viewManager.toggleCoursesView();
+	};
+
+	this.displayModeratorsList = function(courseName, addToHistory) {
+		moderatorsList.setup(courseName);
+		toggleModeratorsListContainer();
+		viewManager.updatePage("/moderators/" + encodeURIComponent(courseName), "Moderators", addToHistory);
 		viewManager.toggleCoursesView();
 	};
 }();

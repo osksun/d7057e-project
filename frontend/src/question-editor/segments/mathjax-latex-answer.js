@@ -4,12 +4,47 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 	div.className = "mathjax-latex-answer";
 
 	const answerWrapper = document.createElement("div");
+	answerWrapper.className = "answer-wrapper";
+
+	function testRegex(answer, regex) {
+		const regExp = new RegExp(regex);
+		setRegexTest(regExp.test(answer));
+	}
+
+	function setRegexTest(isMatching) {
+		if (isMatching) {
+			answerRegexTestInput.className = "match";
+			answerRegexTestMessage.innerText = "Answer is matching";
+		} else {
+			answerRegexTestInput.className = "no-match";
+			answerRegexTestMessage.innerText = "Answer is not matching";
+		}
+	}
+	
 	const answerTitle = document.createElement("span");
-	answerTitle.innerText = "Answer regex: ";
+	answerTitle.innerText = "Answer regex:";
 	answerWrapper.appendChild(answerTitle);
 	const answerRegex = document.createElement("input");
 	answerRegex.value = answer;
+	answerRegex.addEventListener("input", () => {
+		testRegex(answerRegexTestInput.value, answerRegex.value);
+	});
 	answerWrapper.appendChild(answerRegex);
+
+	const answerTestTitle = document.createElement("span");
+	answerTestTitle.innerText = "Test regex:";
+	answerWrapper.appendChild(answerTestTitle);
+	const answerRegexTestInput = document.createElement("input");
+	answerRegexTestInput.addEventListener("input", () => {
+		testRegex(answerRegexTestInput.value, answerRegex.value);
+	});
+	answerWrapper.appendChild(answerRegexTestInput);
+	const answerRegexTestMessage = document.createElement("span");
+	answerRegexTestMessage.className = "test-message";
+	answerWrapper.appendChild(answerRegexTestMessage);
+
+	testRegex(answerRegexTestInput.value, answerRegex.value);
+
 	div.appendChild(answerWrapper);
 
 	const titleDiv = document.createElement("div");
@@ -42,21 +77,22 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 		}
 	});
 
-	const output = document.createElement("div");
-	output.className = "latex";
-	const latexOutput = document.createElement("span");
-	output.appendChild(latexOutput);
-	const input = document.createElement("input");
-	output.appendChild(input);
-	div.appendChild(output);
+	const preview = document.createElement("div");
+	preview.className = "latex";
+	const previewSpan = document.createElement("span");
+	preview.appendChild(previewSpan);
+	const previewInput = document.createElement("input");
+	preview.appendChild(previewInput);
+	div.appendChild(preview);
 
+	
 	function refreshLatex() {
-		latexOutput.innerText = latexInput.value;
+		previewSpan.innerText = latexInput.value;
 
 		//Reset Mathjax
 		MathJax.texReset(0);
-		MathJax.typesetClear([latexOutput]);
-		MathJax.typesetPromise([latexOutput]);
+		MathJax.typesetClear([previewSpan]);
+		MathJax.typesetPromise([previewSpan]);
 	}
 
 	latexInput.addEventListener("input", () => {

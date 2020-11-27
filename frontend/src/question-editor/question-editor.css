@@ -42,6 +42,20 @@
 #question-editor-segments > .mathjax-latex-answer > .latex {
 	height:100px;
 }
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > * {
+	margin:0 2.5px;
+}
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input[class="match"] {
+	background-color:#58d68d;
+}
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input[class="no-match"] {
+	background-color:#cd6155;
+}
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > span[class="test-message"] {
+	display: inline-block;
+	width: 250px;
+	text-align: left;
+}
 
 #question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type, #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
 	margin:10px;

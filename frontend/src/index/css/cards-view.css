@@ -85,14 +85,24 @@
 	text-shadow:1px 1px 1px rgba(0,0,0,0.75);
 }
 
-.card-header > button {
+.card-header > span {
 	position:absolute;
 	top:0;
 	right:0;
+}
+.card-header > span > button {
+	margin:0;
+	padding:8px;
 	height:48px;
 	width:48px;
 	border:none;
 	background-color:transparent;
 	cursor: pointer;
 	filter:drop-shadow(1px 1px 1px rgba(0,0,0,0.75));
+}
+.card-header > span > button > img {
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
 }
