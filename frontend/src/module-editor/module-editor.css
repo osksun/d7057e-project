@@ -15,6 +15,7 @@
 	width:360px;
 	font-size:28px;
 	vertical-align:middle;
+	padding:8px;
 }
 #module-editor-container > div > input[type="color"] {
 	margin:0;
@@ -29,6 +30,8 @@
 	max-width:500px;
 	height:300px;
 	font-size:20px;
+	padding:4px;
+	border-bottom-right-radius:0;
 }
 #module-editor-container > div > button {
 	padding:25px 0;
