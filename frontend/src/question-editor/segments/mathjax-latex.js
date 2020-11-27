@@ -32,15 +32,15 @@ questionEditor.addSegmentType("MATHJAX_LATEX", "Mathjax Latex", function(content
 		}
 	});
 
-	const latexOutput = document.createElement("p");
-	div.appendChild(latexOutput);
+	const latexPreview = document.createElement("p");
+	div.appendChild(latexPreview);
 
 	function refreshLatex() {
-		latexOutput.innerText = latexInput.value;
+		latexPreview.innerText = latexInput.value;
 		//Reset Mathjax
 		MathJax.texReset(0);
-		MathJax.typesetClear([latexOutput]);
-		MathJax.typesetPromise([latexOutput]);
+		MathJax.typesetClear([latexPreview]);
+		MathJax.typesetPromise([latexPreview]);
 	}
 
 	latexInput.addEventListener("input", () => {

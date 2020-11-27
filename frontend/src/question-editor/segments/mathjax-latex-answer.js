@@ -42,21 +42,22 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER", "Mathjax Latex Answer", fu
 		}
 	});
 
-	const output = document.createElement("div");
-	output.className = "latex";
-	const latexOutput = document.createElement("span");
-	output.appendChild(latexOutput);
-	const input = document.createElement("input");
-	output.appendChild(input);
-	div.appendChild(output);
+	const preview = document.createElement("div");
+	preview.className = "latex";
+	const previewSpan = document.createElement("span");
+	preview.appendChild(previewSpan);
+	const previewInput = document.createElement("input");
+	preview.appendChild(previewInput);
+	div.appendChild(preview);
 
+	
 	function refreshLatex() {
-		latexOutput.innerText = latexInput.value;
+		previewSpan.innerText = latexInput.value;
 
 		//Reset Mathjax
 		MathJax.texReset(0);
-		MathJax.typesetClear([latexOutput]);
-		MathJax.typesetPromise([latexOutput]);
+		MathJax.typesetClear([previewSpan]);
+		MathJax.typesetPromise([previewSpan]);
 	}
 
 	latexInput.addEventListener("input", () => {
