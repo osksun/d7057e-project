@@ -83,19 +83,23 @@ exports.getUserIsAdmin = getUserIsAdmin;
 
 function getXP(userID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT xp FROM userdata WHERE id = ?", [userID], (error, result) => {
-			if(error) {
-				reject();
-			} else {
-				if(result.length == 0) {
-					//Return 0 XP by default
-					resolve(0);
-				} else if(result.length == 1) {
-					resolve(result[0].xp);
-				} else {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("SELECT xp FROM userdata WHERE id = ?", [userID], (error, result) => {
+				if(error) {
 					reject();
+				} else {
+					if(result.length == 0) {
+						//Return 0 XP by default
+						resolve(0);
+					} else if(result.length == 1) {
+						resolve(result[0].xp);
+					} else {
+						reject();
+					}
 				}
-			}
+			});
+		}).catch(() => {
+			reject();
 		});
 	});
 }
