@@ -297,6 +297,9 @@ const DbCom = new function() {
 	this.addModerator = function(userID, courseId) {
 		return this.ajaxPost(mainURL + "addmoderator", "moderatorID=" + userID + "&courseID=" + courseId);
 	};
+	this.deleteModerator = function(userID, courseId) {
+		return this.ajaxPost(mainURL + "deletemoderator", "moderatorID=" + userID + "&courseID=" + courseId);
+	};
 	this.getModerators = function(courseId) {
 		return this.ajaxPost(mainURL + "getmoderators", "courseID=" + courseId);
 	};

@@ -41,15 +41,31 @@ const moderatorsList = new function() {
 				moderatorsList.innerHTML = "<p>This course has no moderators</p>";
 			} else {
 				for(let i = 0; i < moderators.length; ++i) {
-					addModerator(moderators[i]);
+					addModerator("ID: " + moderators[i], moderators[i]);
 				}
 			}
 		});
 	}
 
-	function addModerator(text) {
+	function addModerator(text, userID) {
 		const li = document.createElement("li");
 		li.textContent = text;
 		moderatorsList.appendChild(li);
+
+		const deleteButton = document.createElement("button");
+		deleteButton.textContent = "Delete";
+		deleteButton.addEventListener("click", () => {
+			DbCom.deleteModerator(userID, courseID).then((course) => {
+				messageBox.show("Moderator removed!");
+				refreshList();
+			}).catch((error) => {
+				if(error.error) {
+					messageBox.show("Error: " + error.error);
+				} else {
+					messageBox.show("Error: " + error);
+				}
+			});
+		});
+		li.appendChild(deleteButton);
 	}
 }();
