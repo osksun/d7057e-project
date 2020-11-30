@@ -7,21 +7,17 @@ const moderatorsList = new function() {
 	let courseID = null;
 
 	moderatorsListAddButton.addEventListener("click", () => {
-		const userID = parseInt(moderatorsListAddInput.value, 10);
-		if(isNaN(userID) || userID <= 0) {
-			messageBox.show("Error: Input is not a valid ID");
-		} else {
-			DbCom.addModerator(userID, courseID).then((course) => {
-				messageBox.show("Moderator added!");
-				refreshList();
-			}).catch((error) => {
-				if(error.error) {
-					messageBox.show("Error: " + error.error);
-				} else {
-					messageBox.show("Error: " + error);
-				}
-			});
-		}
+		const username = moderatorsListAddInput.value;
+		DbCom.addModerator(username, courseID).then((course) => {
+			messageBox.show("Moderator added!");
+			refreshList();
+		}).catch((error) => {
+			if(error.error) {
+				messageBox.show("Error: " + error.error);
+			} else {
+				messageBox.show("Error: " + error);
+			}
+		});
 	});
 
 	this.setup = function(courseName) {

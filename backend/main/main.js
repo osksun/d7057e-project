@@ -806,14 +806,14 @@ function init() {
 
 	app.post("/addmoderator", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const moderatorID = parseInt(request.body.moderatorID, 10);
+			const username = request.body.username;
 			const courseID = parseInt(request.body.courseID, 10);
 
 			//TODO validate input
 
 			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
 				if(isModerator) {
-					database.addModerator(moderatorID, courseID).then(() => {
+					database.addModerator(username, courseID).then(() => {
 						response.json({
 							success:true
 						});

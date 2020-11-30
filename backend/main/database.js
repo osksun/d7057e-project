@@ -661,29 +661,48 @@ function addAnswer(userID, questionID) {
 }
 exports.addAnswer = addAnswer;
 
-function addModerator(userID, courseID) {
+function addModerator(username, courseID) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+		connection.query("SELECT id FROM userdata WHERE username = ?", [username], (error, result) => {
 			if(error) {
-				if(error.code == "ER_DUP_ENTRY") {
-					reject({
-						error:"User is already moderator",
-						errorCode:errorCode.duplicateModerator
-					});
-				} else if(error.code == "ER_NO_REFERENCED_ROW_2") {
+				console.error(error);
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				if(result.length == 0) {
 					reject({
 						error:"User does not exist",
 						errorCode:errorCode.userDoesNotExist
 					});
+				} else if(result.length == 1) {
+					const userID = result[0].id;
+					connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+						if(error) {
+							if(error.code == "ER_DUP_ENTRY") {
+								reject({
+									error:"User is already moderator",
+									errorCode:errorCode.duplicateModerator
+								});
+							} else {
+								console.error(error);
+								reject({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
+							}
+						} else {
+							resolve();
+						}
+					});
 				} else {
-					console.error(error);
+					console.error("Several users have same username");
 					reject({
 						error:"Database error",
 						errorCode:errorCode.unknownDatabaseError
 					});
 				}
-			} else {
-				resolve();
 			}
 		});
 	});
