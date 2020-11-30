@@ -1,15 +1,12 @@
 function validateEmail(email) {
-	//Checks if email is not undefined
-	if(email) {
-		//Checks if the email is the correct type (String)
-		if(typeof email === "string") {
-			//Checks if the email length is within the range 0-254
-			if(email.length > 0 && email.length <= 254) {
-				//Checks if the email is in a valid form
-				const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if(mailRegex.test(email)) {
-					return true;
-				}
+	//Checks if the email is the correct type (String)
+	if(typeof email === "string") {
+		//Checks if the email length is within the range 0-254
+		if(email.length > 0 && email.length <= 254) {
+			//Checks if the email is in a valid form
+			const mailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+			if(mailRegex.test(email)) {
+				return true;
 			}
 		}
 	}
@@ -18,14 +15,11 @@ function validateEmail(email) {
 exports.validateEmail = validateEmail;
 
 function validatePassword(password) {
-	//Checks if password is not undefined
-	if(password) {
-		//Checks if the password is the correct type (String)
-		if(typeof password === "string") {
-			//Checks if the password length is within the range 0-254
-			if(password.length > 0 && password.length <= 254) {
-				return true;
-			}
+	//Checks if the password is the correct type (String)
+	if(typeof password === "string") {
+		//Checks if the password length is within the range 0-254
+		if(password.length > 0 && password.length <= 254) {
+			return true;
 		}
 	}
 	return false;
@@ -33,17 +27,14 @@ function validatePassword(password) {
 exports.validatePassword = validatePassword;
 
 function validateRefreshToken(token) {
-	//Checks if token is not undefined
-	if(token) {
-		//Checks if the token is the correct type (String)
-		if(typeof token === "string") {
-			//Checks if the token is the correct length
-			if(token.length == 64) {
-				//Checks if the token is in a valid format
-				const tokenRegex = /^[A-Za-z0-9\+\/]*$/;
-				if(tokenRegex.test(token)) {
-					return true;
-				}
+	//Checks if the token is the correct type (String)
+	if(typeof token === "string") {
+		//Checks if the token is the correct length
+		if(token.length == 64) {
+			//Checks if the token is in a valid format
+			const tokenRegex = /^[A-Za-z0-9\+\/]*$/;
+			if(tokenRegex.test(token)) {
+				return true;
 			}
 		}
 	}
@@ -52,17 +43,14 @@ function validateRefreshToken(token) {
 exports.validateRefreshToken = validateRefreshToken;
 
 function validateAccessToken(token) {
-	//Checks if token is not undefined
-	if(token) {
-		//Checks if the token is the correct type (String)
-		if(typeof token === "string") {
-			//Checks if the token is the correct length
-			if(token.length == 344) {
-				//Checks if the token is in a valid format
-				const tokenRegex = /^[A-Za-z0-9\+\/]*==$/;
-				if(tokenRegex.test(token)) {
-					return true;
-				}
+	//Checks if the token is the correct type (String)
+	if(typeof token === "string") {
+		//Checks if the token is the correct length
+		if(token.length == 344) {
+			//Checks if the token is in a valid format
+			const tokenRegex = /^[A-Za-z0-9\+\/]*==$/;
+			if(tokenRegex.test(token)) {
+				return true;
 			}
 		}
 	}
@@ -71,12 +59,10 @@ function validateAccessToken(token) {
 exports.validateAccessToken = validateAccessToken;
 
 function validateTokenExpire(time) {
-	if(time) {
-		if(typeof time === "number") {
-			if(!isNaN(time)) {
-				if(time > 0) {
-					return true;
-				}
+	if(typeof time === "number") {
+		if(!isNaN(time)) {
+			if(time > 0) {
+				return true;
 			}
 		}
 	}
@@ -84,11 +70,11 @@ function validateTokenExpire(time) {
 }
 exports.validateTokenExpire = validateTokenExpire;
 
-function validateUnsignedInt(id) {
-	if(id) {
-		if(typeof id === "number") {
-			if(!isNaN(id)) {
-				if(id >= 0) {
+function validateUnsignedInt(i) {
+	if(typeof i === "number") {
+		if(!isNaN(i)) {
+			if(i >= 0) {
+				if(Number.isInteger(i)) {
 					return true;
 				}
 			}
