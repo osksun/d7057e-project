@@ -15,7 +15,7 @@ const questionViewManager = new function() {
 	let displayHandler = () => {};
 
 	submitButton.addEventListener("click", (event) => {
-		this.handleSubmit(currentQuestion);
+		this.handleSubmit(currentQuestion.id);
 	});
 
 	questionButton.addEventListener("click", () => {
@@ -106,7 +106,7 @@ const questionViewManager = new function() {
 		//key 13 is enter
 		if(event.keyCode === 13 || event.key === "Enter") {
 			event.preventDefault();
-			handleSubmit(currentQuestion);
+			handleSubmit(currentQuestion.id);
 		}
 	}
 
