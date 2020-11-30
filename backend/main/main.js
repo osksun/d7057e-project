@@ -107,6 +107,48 @@ function init() {
 		});
 	});
 
+	app.post("/getusername", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			database.getUsername(userID).then((username) => {
+				response.json({
+					username:username
+				});
+			}).catch(() => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
+	app.post("/setusername", (request, response) => {
+		validateUser(request, response).then((userID) => {
+			let username = request.body.username;
+
+			//TODO validate input
+
+			if(username.length == 0) {
+				username = null;
+			}
+
+			database.setUsername(userID, username).then(() => {
+				response.json({
+					success:true
+				});
+			}).catch((error) => {
+				response.json({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			});
+		}).catch((error) => {
+			response.json(error);
+		});
+	});
+
 	app.post("/getcoursebyname", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const name = request.body.name;

@@ -312,6 +312,13 @@ const DbCom = new function() {
 		return this.ajaxPost(mainURL + "getxp");
 	};
 
+	this.getUsername = function() {
+		return this.ajaxPost(mainURL + "getusername");
+	};
+	this.setUsername = function(username) {
+		return this.ajaxPost(mainURL + "setusername", "username=" + encodeURIComponent(username));
+	};
+
 	/**
 	 * Creates an ajax post request to given url with given data
 	 * Use this function when additional data should be appended to the request

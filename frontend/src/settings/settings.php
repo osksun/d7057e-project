@@ -13,6 +13,7 @@
 		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/message-box/message-box.js" defer></script>
 		<script src="/src/settings/change-password.js" defer></script>
+		<script src="/src/settings/set-username.js" defer></script>
 		<script src="/src/settings/delete-account.js" defer></script>
 	</head>
 	<body>
@@ -25,6 +26,13 @@
 			<div><h3>Confirm new password</h3><input id="new-password-confirm" class="text-box" type="password" autocomplete="new-password" required/></div>
 			<div><button id="change-password-button" class="button">Change password</button></div>
 			<div id="change-password-message"></div>
+		</div>
+
+		<h2>Set account username</h2>
+		<div class="form">
+			<div><h3>Username</h3><input id="username-field" class="text-box" type="text"/></div>
+			<div><button id="username-button" class="button">Set username</button></div>
+			<div id="set-username-message"></div>
 		</div>
 
 		<h2>Delete account</h2>

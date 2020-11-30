@@ -17,7 +17,7 @@ function connect() {
 				console.log("MySQL database connected!");
 
 				const tables = [
-					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
+					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, username VARCHAR(255) UNIQUE, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, deleteon DATE, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courseaccess (userID int NOT NULL, courseID INT NOT NULL, lastAccess DATETIME, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))",
 					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
@@ -123,6 +123,44 @@ function addUserXP(userID, xp) {
 	});
 }
 exports.addUserXP = addUserXP;
+
+function getUsername(userID) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("SELECT username FROM userdata WHERE id = ?", [userID], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					if(result.length == 1) {
+						resolve(result[0].username);
+					} else {
+						reject();
+					}
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.getUsername = getUsername;
+
+function setUsername(userID, username) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("UPDATE userdata SET username = ? WHERE id = ?", [username, userID], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					resolve();
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.setUsername = setUsername;
 
 function createCourse(name, description, color) {
 	return new Promise((resolve, reject) => {
