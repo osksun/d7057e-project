@@ -30,7 +30,7 @@
 
 		<h2>Set account username</h2>
 		<div class="form">
-			<div><h3>Username</h3><input id="username-field" class="text-box" type="text"/></div>
+			<div><h3>Username</h3><input id="username-field" class="text-box" type="text" maxlength=255 /></div>
 			<div><button id="username-button" class="button">Set username</button></div>
 			<div id="set-username-message"></div>
 		</div>
