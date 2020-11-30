@@ -83,3 +83,59 @@ function validateUnsignedInt(i) {
 	return false;
 }
 exports.validateUnsignedInt = validateUnsignedInt;
+
+function validateStringMax(s, maxLength) {
+	if(typeof s === "string") {
+		if(s.length <= maxLength) {
+			return true;
+		}
+	}
+	return false;
+}
+exports.validateStringMax = validateStringMax;
+
+function validateStringMaxArray(a, maxArrayLength, maxLength) {
+	if(Array.isArray(a)) {
+		if(a.length <= maxArrayLength) {
+			for(let i = 0; i < a.length; ++i) {
+				const s = a[i];
+				if(!validateStringMax(s, maxLength)) {
+					return false;
+				}
+			}
+
+			return true;
+		}
+	}
+	return false;
+}
+exports.validateStringMaxArray = validateStringMaxArray;
+
+function validateStringMaxWithNullArray(a, maxArrayLength, maxLength) {
+	if(Array.isArray(a)) {
+		if(a.length <= maxArrayLength) {
+			for(let i = 0; i < a.length; ++i) {
+				const s = a[i];
+				if(s != null) {
+					if(!validateStringMax(s, maxLength)) {
+						return false;
+					}
+				}
+			}
+
+			return true;
+		}
+	}
+	return false;
+}
+exports.validateStringMaxWithNullArray = validateStringMaxWithNullArray;
+
+function validateHexColor(c) {
+	if(typeof c === "string") {
+		if(c.length == 6) {
+			return true;
+		}
+	}
+	return false;
+}
+exports.validateHexColor = validateHexColor;

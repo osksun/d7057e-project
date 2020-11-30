@@ -73,18 +73,23 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const courseID = parseInt(request.body.courseID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				response.json({
-					isModerator:isModerator
+			if(validation.validateUnsignedInt(courseID)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					response.json({
+						isModerator:isModerator
+					});
+				}).catch(() => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
 				});
-			});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -128,22 +133,27 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			let username = request.body.username;
 
-			//TODO validate input
+			if(validation.validateStringMax(username, 255)) {
+				if(username.length == 0) {
+					username = null;
+				}
 
-			if(username.length == 0) {
-				username = null;
+				database.setUsername(userID, username).then(() => {
+					response.json({
+						success:true
+					});
+				}).catch((error) => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
+				});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
 			}
-
-			database.setUsername(userID, username).then(() => {
-				response.json({
-					success:true
-				});
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
-				});
-			});
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -153,16 +163,21 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const name = request.body.name;
 
-			//TODO validate input
-
-			database.getCourseByName(name, userID).then((course) => {
-				response.json(course);
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			if(validation.validateStringMax(name, 255)) {
+				database.getCourseByName(name, userID).then((course) => {
+					response.json(course);
+				}).catch(() => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -188,16 +203,21 @@ function init() {
 			const courseID = parseInt(request.body.courseID, 10);
 			const name = request.body.name;
 
-			//TODO validate input
-
-			database.getModuleByName(courseID, name).then((module) => {
-				response.json(module);
-			}).catch((e) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			if(validation.validateUnsignedInt(courseID) && validation.validateStringMax(name, 255)) {
+				database.getModuleByName(courseID, name).then((module) => {
+					response.json(module);
+				}).catch((e) => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -207,16 +227,21 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const courseID = parseInt(request.body.courseID, 10);
 
-			//TODO validate input
-
-			database.getModules(courseID, userID).then((modules) => {
-				response.json(modules);
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			if(validation.validateUnsignedInt(courseID)) {
+				database.getModules(courseID, userID).then((modules) => {
+					response.json(modules);
+				}).catch(() => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -226,16 +251,21 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
 
-			//TODO validate input
-
-			database.getQuestions(moduleID).then((questions) => {
-				response.json(questions);
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			if(validation.validateUnsignedInt(moduleID)) {
+				database.getQuestions(moduleID).then((questions) => {
+					response.json(questions);
+				}).catch(() => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -245,34 +275,39 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
 
-			//TODO validate input
-
-			database.getRandomUnansweredQuestionID(moduleID, userID).then((questionID) => {
-				if (questionID === null) {
-					// There are no unanswered questions in the module
+			if(validation.validateUnsignedInt(moduleID)) {
+				database.getRandomUnansweredQuestionID(moduleID, userID).then((questionID) => {
+					if (questionID === null) {
+						// There are no unanswered questions in the module
+						response.json({
+							error:"There are no unanswered questions in this module for this user",
+							errorCode:errorCode.noUnansweredQuestions
+						});
+					} else {
+						database.getQuestionSegments(questionID).then((segments) => {
+							response.json({
+								id:questionID,
+								segments:segments
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
+						});
+					}
+				}).catch(() => {
 					response.json({
-						error:"There are no unanswered questions in this module for this user",
-						errorCode:errorCode.noUnansweredQuestions
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				} else {
-					database.getQuestionSegments(questionID).then((segments) => {
-						response.json({
-							id:questionID,
-							segments:segments
-						});
-					}).catch(() => {
-						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
-						});
-					});
-				}
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -282,16 +317,21 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const questionID = parseInt(request.body.questionID, 10);
 
-			//TODO validate input
-
-			database.getQuestionSegments(questionID).then((question) => {
-				response.json(question);
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
+			if(validation.validateUnsignedInt(questionID)) {
+				database.getQuestionSegments(questionID).then((question) => {
+					response.json(question);
+				}).catch(() => {
+					response.json({
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
+					});
 				});
-			});
+			} else {
+				reject({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -300,20 +340,15 @@ function init() {
 	app.post("/answer", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const questionID = parseInt(request.body.questionID, 10);
-			let answers = null;
+			let answers;
 
 			try {
 				answers = JSON.parse(request.body.answers);
 			} catch {
-				response.json({
-					error:"Malformed input",
-					errorCode:errorCode.malformedInput
-				});
+				answers = null;
 			}
 
-			//TODO validate input
-
-			if(answers != null) {
+			if(validation.validateUnsignedInt(questionID) && validation.validateStringMaxWithNullArray(answers, 64, 16384)) {
 				database.getQuestionAnswers(questionID).then((answersRegex) => {
 					if(answers.length != answersRegex.length) {
 						response.json({
@@ -366,6 +401,11 @@ function init() {
 						errorCode:errorCode.unknownDatabaseError
 					});
 				});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
 			}
 		}).catch((error) => {
 			response.json(error);
@@ -381,18 +421,23 @@ function init() {
 					const description = request.body.description;
 					const color = request.body.color;
 
-					//TODO validate input
-
-					database.createCourse(name, description, color).then(() => {
-						response.json({
-							success:true
+					if(validation.validateStringMax(name, 255) && validation.validateStringMax(description, 65535) && validation.validateHexColor(color)) {
+						database.createCourse(name, description, color).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Malformed input",
+							errorCode:errorCode.malformedInput
 						});
-					});
+					}
 				} else {
 					response.json({
 						error:"Permission denied",
@@ -414,36 +459,41 @@ function init() {
 
 	app.post("/createmodule", (request, response) => {
 		validateUser(request, response).then((userID) => {
-			const name = request.body.name;
 			const courseID = parseInt(request.body.courseID, 10);
+			const name = request.body.name;
 			const description = request.body.description;
 
-			//TODO validate input
-
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				if(isModerator) {
-					database.createModule(courseID, name, description).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(courseID) && validation.validateStringMax(name, 255) && validation.validateStringMax(description, 65536)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					if(isModerator) {
+						database.createModule(courseID, name, description).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
 						});
-					});
-				} else {
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -452,91 +502,60 @@ function init() {
 	app.post("/createquestion", (request, response) => {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
-			let types = null;
-			let content = null;
-			let answers = null;
+			let types;
+			let content;
+			let answers;
 
 			try {
 				types = JSON.parse(request.body.types);
 				content = JSON.parse(request.body.content);
 				answers = JSON.parse(request.body.answers);
 			} catch {
-				response.json({
-					error:"Malformed input",
-					errorCode:errorCode.malformedInput
-				});
+				types = null;
+				content = null;
+				answers = null;
 			}
 
-			//TODO validate input
+			if(validation.validateUnsignedInt(moduleID) && validation.validateStringMaxArray(types, 64, 255) && validation.validateStringMaxWithNullArray(content, 64, 65535) && validation.validateStringMaxWithNullArray(answers, 64, 65535)) {
+				const length = types.length;
 
-			if(content != null && answers != null) {
-				if(!Array.isArray(types) || !Array.isArray(content) || !Array.isArray(answers)) {
-					response.json({
-						error:"Malformed input",
-						errorCode:errorCode.malformedInput
-					});
-				} else if(types.length != content.length || content.length != answers.length) {
-					response.json({
-						error:"Malformed input",
-						errorCode:errorCode.malformedInput
-					});
-				} else if(types.length > 64) {
-					//Max 64 segments
+				//Make sure all lists have same length
+				if(content.length != length || answers.length != length) {
 					response.json({
 						error:"Malformed input",
 						errorCode:errorCode.malformedInput
 					});
 				} else {
-					let incorrectType = false;
-					for(let i = 0; i < content.length; ++i) {
-						if(typeof types[i] != "string" && types[i] != null) {
-							incorrectType = true;
-							break;
-						}
-
-						if(typeof content[i] != "string" && content[i] != null) {
-							incorrectType = true;
-							break;
-						}
-
-						if(typeof answers[i] != "string" && answers[i] != null) {
-							incorrectType = true;
-							break;
-						}
-					}
-
-					if(incorrectType) {
-						response.json({
-							error:"Malformed input",
-							errorCode:errorCode.malformedInput
-						});
-					} else {
-						database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
-							if(isModerator) {
-								database.createQuestion(moduleID, types, content, answers).then(() => {
-									response.json({
-										success:true
-									});
-								}).catch(() => {
-									response.json({
-										error:"Database error",
-										errorCode:errorCode.unknownDatabaseError
-									});
-								});
-							} else {
+					database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+						if(isModerator) {
+							database.createQuestion(moduleID, types, content, answers).then(() => {
 								response.json({
-									error:"Permission denied",
-									errorCode:errorCode.permissionDenied
+									success:true
 								});
-							}
-						}).catch((error) => {
-							response.json({
-								error:"Database error",
-								errorCode:errorCode.unknownDatabaseError
+							}).catch(() => {
+								response.json({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
 							});
+						} else {
+							response.json({
+								error:"Permission denied",
+								errorCode:errorCode.permissionDenied
+							});
+						}
+					}).catch((error) => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
-					}
+					});
 				}
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
 			}
 		}).catch((error) => {
 			response.json(error);
@@ -553,18 +572,23 @@ function init() {
 					const description = request.body.description;
 					const color = request.body.color;
 
-					//TODO validate input
-
-					database.updateCourse(courseID, name, description, color).then(() => {
-						response.json({
-							success:true
+					if(validation.validateStringMax(name, 255) && validation.validateStringMax(description, 65535) && validation.validateHexColor(color)) {
+						database.updateCourse(courseID, name, description, color).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Malformed input",
+							errorCode:errorCode.malformedInput
 						});
-					});
+					}
 				} else {
 					response.json({
 						error:"Permission denied",
@@ -586,30 +610,37 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const courseID = parseInt(request.body.courseID, 10);
 
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				if(isModerator) {
-					database.softDeleteCourse(courseID).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(courseID)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					if(isModerator) {
+						database.softDeleteCourse(courseID).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
 						});
-					});
-				} else {
+					}
+				}).catch(() => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch(() => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -621,32 +652,37 @@ function init() {
 			const name = request.body.name;
 			const description = request.body.description;
 
-			//TODO validate input
-
-			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
-				if(isModerator) {
-					database.updateModule(moduleID, name, description).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(moduleID) && validation.validateStringMax(name, 255) && validation.validateStringMax(description, 65535)) {
+				database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+					if(isModerator) {
+						database.updateModule(moduleID, name, description).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
 						});
-					});
-				} else {
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -656,32 +692,37 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const moduleID = parseInt(request.body.moduleID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
-				if(isModerator) {
-					database.softDeleteModule(moduleID).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(moduleID)) {
+				database.isUserModeratorOfModule(userID, moduleID).then((isModerator) => {
+					if(isModerator) {
+						database.softDeleteModule(moduleID).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
 						});
-					});
-				} else {
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -699,82 +740,51 @@ function init() {
 				content = JSON.parse(request.body.content);
 				answers = JSON.parse(request.body.answers);
 			} catch {
-				response.json({
-					error:"Malformed input",
-					errorCode:errorCode.malformedInput
-				});
+				types = null;
+				content = null;
+				answers = null;
 			}
 
-			//TODO validate input
+			if(validation.validateUnsignedInt(questionID) && validation.validateStringMaxArray(types, 64, 255) && validation.validateStringMaxWithNullArray(content, 64, 65535) && validation.validateStringMaxWithNullArray(answers, 64, 65535)) {
+				const length = types.length;
 
-			if(content != null && answers != null) {
-				if(!Array.isArray(types) || !Array.isArray(content) || !Array.isArray(answers)) {
-					response.json({
-						error:"Malformed input",
-						errorCode:errorCode.malformedInput
-					});
-				} else if(types.length != content.length || content.length != answers.length) {
-					response.json({
-						error:"Malformed input",
-						errorCode:errorCode.malformedInput
-					});
-				} else if(types.length > 64) {
-					//Max 64 segments
+				//Make sure all lists have same length
+				if(content.length != length || answers.length != length) {
 					response.json({
 						error:"Malformed input",
 						errorCode:errorCode.malformedInput
 					});
 				} else {
-					let incorrectType = false;
-					for(let i = 0; i < content.length; ++i) {
-						if(typeof types[i] != "string" && types[i] != null) {
-							incorrectType = true;
-							break;
-						}
-
-						if(typeof content[i] != "string" && content[i] != null) {
-							incorrectType = true;
-							break;
-						}
-
-						if(typeof answers[i] != "string" && answers[i] != null) {
-							incorrectType = true;
-							break;
-						}
-					}
-
-					if(incorrectType) {
-						response.json({
-							error:"Malformed input",
-							errorCode:errorCode.malformedInput
-						});
-					} else {
-						database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
-							if(isModerator) {
-								database.updateQuestion(questionID, types, content, answers).then(() => {
-									response.json({
-										success:true
-									});
-								}).catch(() => {
-									response.json({
-										error:"Database error",
-										errorCode:errorCode.unknownDatabaseError
-									});
-								});
-							} else {
+					database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
+						if(isModerator) {
+							database.updateQuestion(questionID, types, content, answers).then(() => {
 								response.json({
-									error:"Permission denied",
-									errorCode:errorCode.permissionDenied
+									success:true
 								});
-							}
-						}).catch((error) => {
-							response.json({
-								error:"Database error",
-								errorCode:errorCode.unknownDatabaseError
+							}).catch(() => {
+								response.json({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
 							});
+						} else {
+							response.json({
+								error:"Permission denied",
+								errorCode:errorCode.permissionDenied
+							});
+						}
+					}).catch((error) => {
+						response.json({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
 						});
-					}
+					});
 				}
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
 			}
 		}).catch((error) => {
 			response.json(error);
@@ -785,32 +795,37 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const questionID = parseInt(request.body.questionID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
-				if(isModerator) {
-					database.softDeleteQuestion(questionID).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(questionID)) {
+				database.isUserModeratorOfQuestion(userID, questionID).then((isModerator) => {
+					if(isModerator) {
+						database.softDeleteQuestion(questionID).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					}).catch(() => {
+					} else {
 						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
 						});
-					});
-				} else {
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -821,29 +836,34 @@ function init() {
 			const username = request.body.username;
 			const courseID = parseInt(request.body.courseID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				if(isModerator) {
-					database.addModerator(username, courseID).then(() => {
-						response.json({
-							success:true
+			if(validation.validateStringMax(username, 255) && validation.validateUnsignedInt(courseID)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					if(isModerator) {
+						database.addModerator(username, courseID).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch((error) => {
+							response.json(error);
 						});
-					}).catch((error) => {
-						response.json(error);
-					});
-				} else {
+					} else {
+						response.json({
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
+						});
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -854,29 +874,34 @@ function init() {
 			const moderatorID = parseInt(request.body.moderatorID, 10);
 			const courseID = parseInt(request.body.courseID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				if(isModerator) {
-					database.deleteModerator(moderatorID, courseID).then(() => {
-						response.json({
-							success:true
+			if(validation.validateUnsignedInt(moderatorID) && validation.validateUnsignedInt(courseID)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					if(isModerator) {
+						database.deleteModerator(moderatorID, courseID).then(() => {
+							response.json({
+								success:true
+							});
+						}).catch((error) => {
+							response.json(error);
 						});
-					}).catch((error) => {
-						response.json(error);
-					});
-				} else {
+					} else {
+						response.json({
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
+						});
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
@@ -886,30 +911,35 @@ function init() {
 		validateUser(request, response).then((userID) => {
 			const courseID = parseInt(request.body.courseID, 10);
 
-			//TODO validate input
-
-			database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
-				if(isModerator) {
-					database.getModerators(courseID).then((moderators) => {
-						response.json(moderators);
-					}).catch(() => {
-						response.json({
-							error:"Database error",
-							errorCode:errorCode.unknownDatabaseError
+			if(validation.validateUnsignedInt(courseID)) {
+				database.isUserModeratorOfCourse(userID, courseID).then((isModerator) => {
+					if(isModerator) {
+						database.getModerators(courseID).then((moderators) => {
+							response.json(moderators);
+						}).catch(() => {
+							response.json({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
-					});
-				} else {
+					} else {
+						response.json({
+							error:"Permission denied",
+							errorCode:errorCode.permissionDenied
+						});
+					}
+				}).catch((error) => {
 					response.json({
-						error:"Permission denied",
-						errorCode:errorCode.permissionDenied
+						error:"Database error",
+						errorCode:errorCode.unknownDatabaseError
 					});
-				}
-			}).catch((error) => {
-				response.json({
-					error:"Database error",
-					errorCode:errorCode.unknownDatabaseError
 				});
-			});
+			} else {
+				response.json({
+					error:"Malformed input",
+					errorCode:errorCode.malformedInput
+				});
+			}
 		}).catch((error) => {
 			response.json(error);
 		});
