@@ -480,6 +480,12 @@ function init() {
 						error:"Malformed input",
 						errorCode:errorCode.malformedInput
 					});
+				} else if(types.length > 64) {
+					//Max 64 segments
+					response.json({
+						error:"Malformed input",
+						errorCode:errorCode.malformedInput
+					});
 				} else {
 					let incorrectType = false;
 					for(let i = 0; i < content.length; ++i) {
@@ -708,6 +714,12 @@ function init() {
 						errorCode:errorCode.malformedInput
 					});
 				} else if(types.length != content.length || content.length != answers.length) {
+					response.json({
+						error:"Malformed input",
+						errorCode:errorCode.malformedInput
+					});
+				} else if(types.length > 64) {
+					//Max 64 segments
 					response.json({
 						error:"Malformed input",
 						errorCode:errorCode.malformedInput
