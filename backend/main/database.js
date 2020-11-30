@@ -709,7 +709,11 @@ exports.deleteModerator = deleteModerator;
 
 function getModerators(courseID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT userID FROM moderators WHERE courseID = ?", [courseID], (error, result) => {
+		connection.query(`
+			SELECT moderators.userID, userdata.username FROM moderators
+			LEFT JOIN userdata ON userdata.id = moderators.userID
+			WHERE courseID = ?
+			`, [courseID], (error, result) => {
 			if(error) {
 				console.log(error);
 				reject();
@@ -717,7 +721,10 @@ function getModerators(courseID) {
 				const moderators = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					moderators.push(row.userID);
+					moderators.push({
+						id:row.userID,
+						name:row.username
+					});
 				}
 				resolve(moderators);
 			}

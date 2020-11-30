@@ -41,7 +41,14 @@ const moderatorsList = new function() {
 				moderatorsList.innerHTML = "<p>This course has no moderators</p>";
 			} else {
 				for(let i = 0; i < moderators.length; ++i) {
-					addModerator("ID: " + moderators[i], moderators[i]);
+					const user = moderators[i];
+					let name;
+					if(user.name == null) {
+						name = "Unnamed user #" + user.id;
+					} else {
+						name = user.name;
+					}
+					addModerator(name, user.id);
 				}
 			}
 		});
