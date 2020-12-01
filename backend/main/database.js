@@ -17,10 +17,10 @@ function connect() {
 				console.log("MySQL database connected!");
 
 				const tables = [
-					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
-					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description VARCHAR(255) NOT NULL, color CHAR(6) NOT NULL, deleteon DATE, PRIMARY KEY(id))",
+					"CREATE TABLE IF NOT EXISTS userdata (id INT NOT NULL, username VARCHAR(255) UNIQUE, xp BIGINT DEFAULT 0, isAdmin BOOL DEFAULT false, PRIMARY KEY(id))",
+					"CREATE TABLE IF NOT EXISTS courses (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) UNIQUE NOT NULL, description TEXT NOT NULL, color CHAR(6) NOT NULL, deleteon DATE, PRIMARY KEY(id))",
 					"CREATE TABLE IF NOT EXISTS courseaccess (userID int NOT NULL, courseID INT NOT NULL, lastAccess DATETIME, PRIMARY KEY(userID, courseID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(courseID) REFERENCES courses(id))",
-					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description VARCHAR(255) NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
+					"CREATE TABLE IF NOT EXISTS modules (id INT NOT NULL AUTO_INCREMENT, name VARCHAR(255) NOT NULL, courseID int NOT NULL, description TEXT NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(courseID) REFERENCES courses(id) ON DELETE CASCADE, CONSTRAINT uniqueModuleCourse UNIQUE (name, courseID))",
 					"CREATE TABLE IF NOT EXISTS questions (id INT NOT NULL AUTO_INCREMENT, moduleID INT NOT NULL, deleteon DATE, PRIMARY KEY(id), FOREIGN KEY(moduleID) REFERENCES modules(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS questionsegments (questionID INT NOT NULL, segmentOrder INT NOT NULL, type VARCHAR(255) NOT NULL, content TEXT NOT NULL, answer TEXT, PRIMARY KEY(questionID, segmentOrder), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
 					"CREATE TABLE IF NOT EXISTS answers (userID int NOT NULL, questionID int NOT NULL, PRIMARY KEY(userID, questionID), FOREIGN KEY(userID) REFERENCES userdata(id), FOREIGN KEY(questionID) REFERENCES questions(id) ON DELETE CASCADE)",
@@ -123,6 +123,44 @@ function addUserXP(userID, xp) {
 	});
 }
 exports.addUserXP = addUserXP;
+
+function getUsername(userID) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("SELECT username FROM userdata WHERE id = ?", [userID], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					if(result.length == 1) {
+						resolve(result[0].username);
+					} else {
+						reject();
+					}
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.getUsername = getUsername;
+
+function setUsername(userID, username) {
+	return new Promise((resolve, reject) => {
+		createUserIfNotExist(userID).then(() => {
+			connection.query("UPDATE userdata SET username = ? WHERE id = ?", [username, userID], (error, result) => {
+				if(error) {
+					reject();
+				} else {
+					resolve();
+				}
+			});
+		}).catch(() => {
+			reject();
+		});
+	});
+}
+exports.setUsername = setUsername;
 
 function createCourse(name, description, color) {
 	return new Promise((resolve, reject) => {
@@ -623,29 +661,48 @@ function addAnswer(userID, questionID) {
 }
 exports.addAnswer = addAnswer;
 
-function addModerator(userID, courseID) {
+function addModerator(username, courseID) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+		connection.query("SELECT id FROM userdata WHERE username = ?", [username], (error, result) => {
 			if(error) {
-				if(error.code == "ER_DUP_ENTRY") {
-					reject({
-						error:"User is already moderator",
-						errorCode:errorCode.duplicateModerator
-					});
-				} else if(error.code == "ER_NO_REFERENCED_ROW_2") {
+				console.error(error);
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
+			} else {
+				if(result.length == 0) {
 					reject({
 						error:"User does not exist",
 						errorCode:errorCode.userDoesNotExist
 					});
+				} else if(result.length == 1) {
+					const userID = result[0].id;
+					connection.query("INSERT INTO moderators (userID, courseID) VALUES (?, ?)", [userID, courseID], (error, result) => {
+						if(error) {
+							if(error.code == "ER_DUP_ENTRY") {
+								reject({
+									error:"User is already moderator",
+									errorCode:errorCode.duplicateModerator
+								});
+							} else {
+								console.error(error);
+								reject({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
+							}
+						} else {
+							resolve();
+						}
+					});
 				} else {
-					console.error(error);
+					console.error("Several users have same username");
 					reject({
 						error:"Database error",
 						errorCode:errorCode.unknownDatabaseError
 					});
 				}
-			} else {
-				resolve();
 			}
 		});
 	});
@@ -671,7 +728,11 @@ exports.deleteModerator = deleteModerator;
 
 function getModerators(courseID) {
 	return new Promise((resolve, reject) => {
-		connection.query("SELECT userID FROM moderators WHERE courseID = ?", [courseID], (error, result) => {
+		connection.query(`
+			SELECT moderators.userID, userdata.username FROM moderators
+			LEFT JOIN userdata ON userdata.id = moderators.userID
+			WHERE courseID = ?
+			`, [courseID], (error, result) => {
 			if(error) {
 				console.log(error);
 				reject();
@@ -679,7 +740,10 @@ function getModerators(courseID) {
 				const moderators = [];
 				for(let i = 0; i < result.length; ++i) {
 					const row = result[i];
-					moderators.push(row.userID);
+					moderators.push({
+						id:row.userID,
+						name:row.username
+					});
 				}
 				resolve(moderators);
 			}

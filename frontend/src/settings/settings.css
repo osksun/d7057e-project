@@ -27,7 +27,7 @@ body > h2:first-of-type {
 	margin:0;
 	font-size:32px;
 }
-.form > div > input[type="password"] {
+.form > div > input[type="text"], .form > div > input[type="password"] {
 	padding:10px;
 	width:360px;
 	font-size:35px;

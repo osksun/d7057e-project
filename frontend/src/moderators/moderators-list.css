@@ -2,6 +2,49 @@
 #moderators-list-container {
 	color:#fff;
 }
+#moderators-list-container > h2 {
+	margin:10px;
+	padding:0;
+	font-size:35px;
+}
+
 #moderators-list {
 	display:inline-block;
+}
+#moderators-list > span {
+	margin:0;
+	display:block;
+	width:500px;
+	height:64px;
+	text-align:left;
+}
+#moderators-list > span > p {
+	display:inline-block;
+	margin:4px;
+	padding:8px;
+	font-size:28px;
+	width:calc(100% - 120px - 8px * 2 - 8px * 2 - 8px * 2 - 8px);
+	background-color:#323232;
+	border-radius:12px;
+	box-shadow:5px 8px 0 0 #181818;
+}
+#moderators-list > span > .button {
+	margin:8px;
+	padding:8px;
+	font-size:28px;
+	min-height:0;
+	width:120px;
+}
+
+#moderators-list-add-input {
+	margin:4px;
+	padding:8px;
+	font-size:28px;
+	width:calc(100% - 120px - 8px * 2 - 8px * 2 - 8px * 2 - 8px);
+}
+#moderators-list-add-button {
+	margin:2px;
+	padding:8px;
+	font-size:28px;
+	min-height:0;
 }

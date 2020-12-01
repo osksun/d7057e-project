@@ -129,7 +129,11 @@ const questionEditor = new function() {
 		button.innerText = name + " +";
 		addSegmentButtons.appendChild(button);
 		button.addEventListener("click", () => {
-			createSegment(type);
+			if(segmentsData.length == 64) {
+				messageBox.show("Too many question segments");
+			} else {
+				createSegment(type);
+			}
 		});
 	};
 

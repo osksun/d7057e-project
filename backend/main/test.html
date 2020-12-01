@@ -28,6 +28,23 @@
 			<input type="submit">
 		</form>
 
+		<h1>Get username</h1>
+		<form action="http://127.0.0.1:80/getusername" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			<input type="submit">
+		</form>
+
+		<h1>Set username</h1>
+		<form action="http://127.0.0.1:80/setusername" method="post">
+			User ID: <input type="text" name="userID"><br>
+			Token expire time: <input type="text" name="tokenExpireTime"><br>
+			Token: <input type="text" name="token"><br>
+			Username: <input type="text" name="username"><br>
+			<input type="submit">
+		</form>
+
 		<h1>Get course by name</h1>
 		<form action="http://127.0.0.1:80/getcoursebyname" method="post">
 			User ID: <input type="text" name="userID"><br>
@@ -202,7 +219,7 @@
 			User ID: <input type="text" name="userID"><br>
 			Token expire time: <input type="text" name="tokenExpireTime"><br>
 			Token: <input type="text" name="token"><br>
-			ModeratorID: <input type="text" name="moderatorID"><br>
+			Username: <input type="text" name="username"><br>
 			CourseID: <input type="text" name="courseID"><br>
 			<input type="submit">
 		</form>

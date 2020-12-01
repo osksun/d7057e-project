@@ -294,8 +294,8 @@ const DbCom = new function() {
 			"&answers=" + encodeURIComponent(JSON.stringify(answers)));
 	};
 
-	this.addModerator = function(userID, courseId) {
-		return this.ajaxPost(mainURL + "addmoderator", "moderatorID=" + userID + "&courseID=" + courseId);
+	this.addModerator = function(username, courseId) {
+		return this.ajaxPost(mainURL + "addmoderator", "username=" + encodeURIComponent(username) + "&courseID=" + courseId);
 	};
 	this.deleteModerator = function(userID, courseId) {
 		return this.ajaxPost(mainURL + "deletemoderator", "moderatorID=" + userID + "&courseID=" + courseId);
@@ -310,6 +310,13 @@ const DbCom = new function() {
 	 */
 	this.getXp = function() {
 		return this.ajaxPost(mainURL + "getxp");
+	};
+
+	this.getUsername = function() {
+		return this.ajaxPost(mainURL + "getusername");
+	};
+	this.setUsername = function(username) {
+		return this.ajaxPost(mainURL + "setusername", "username=" + encodeURIComponent(username));
 	};
 
 	/**
