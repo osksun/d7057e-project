@@ -70,8 +70,8 @@ const questionViewManager = new function() {
 	};
 
 	this.handleSubmit = function(questionID) {
-		submitButton.style.display = "none";
-		loadingIcon.style.display = "inline-block";
+		submitButton.classList.add("hidden");
+		loadingIcon.classList.remove("hidden");
 
 		const answers = [];
 		for(let i = 0; i < segmentInputBoxes.length; ++i) {
@@ -90,8 +90,8 @@ const questionViewManager = new function() {
 			} else {
 				alert("Wrong");
 			}
-			loadingIcon.style.display = "none";
-			submitButton.style.display = "inline-block";
+			loadingIcon.classList.add("hidden");
+			submitButton.classList.remove("hidden");
 		}).catch((error) => {
 			if(error) {
 				alert("Error: " + error.error);
