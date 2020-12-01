@@ -150,8 +150,17 @@ const questionViewManager = new function() {
 	const setupNoUnansweredQuestions = () => {
 		// Add no questions message
 		const div = document.createElement("div");
-		div.innerText = "There are no unanswered in this module";
+		div.className = "questions-complete";
 		questionSegments.appendChild(div);
+
+		const img = document.createElement("img");
+		img.src = "/src/index/svg/complete.svg";
+		div.appendChild(img);
+
+		const h2 = document.createElement("h2");
+		h2.textContent = "Congratulations you have completed this module!";
+		div.appendChild(h2);
+
 		// Hide submit button
 		submitButton.className = "button hidden";
 	};

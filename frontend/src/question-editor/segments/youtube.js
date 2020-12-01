@@ -28,9 +28,7 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 				embedInput = embedInput.replace("t=", "start=");
 				iframe.src = embedInput;
 
-			}
-
-			else if (urlInput.value.slice(0, 24) == "https://www.youtube.com/") {
+			} else if (urlInput.value.slice(0, 24) == "https://www.youtube.com/") {
 				let idAndTime = urlInput.value.slice(32, urlInput.value.length + 1);
 				let split = idAndTime.split("&t=");
 				if (split.length != 1) {
@@ -46,17 +44,10 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 					embedInput = embedInput.replace("&t=", "?start=");
 					iframe.src = embedInput;
 				}
-			}
-			
-			else{
+			} else {
 
-				console.log("Invalid URL");
 				iframe.src = "";
 			}
-		}
-
-		else {
-			console.log("Invalid URL length");
 		}
 	});
 
@@ -79,19 +70,13 @@ function timeStampToSeconds(timeStamp) {
 	for (i = 0; i < timeStamp.length; i++) {
 		if (!isNaN(parseInt(timeStamp[i]))) {
 			number += timeStamp[i];
-		}
-
-		else if (timeStamp[i] == 'h') {
+		} else if (timeStamp[i] == 'h') {
 			result += parseInt(number) * 3600;
 			number = "";
-		}
-
-		else if (timeStamp[i] == 'm') {
+		} else if (timeStamp[i] == 'm') {
 			result += parseInt(number) * 60;
 			number = "";
-		}
-
-		else if (timeStamp[i] == 's') {
+		} else if (timeStamp[i] == 's') {
 			result += parseInt(number);
 			number = "";
 		}
