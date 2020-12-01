@@ -13,6 +13,19 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER_NUMERIC", "Mathjax Latex Ans
 	const numericAnswer = document.createElement("input");
 	numericAnswer.pattern = "^-?(\\d|\\s)*(\\.|,)?(\\d|\\s)*?$";
 	numericAnswer.className = "numeric-answer-input text-box";
+	if (answer.length !== 0) {
+		answer = answer.substring(1, answer.length-1);
+		const answerParts = answer.split("(\\.|,)");
+		const integerPart = +answerParts[0];
+		const decimalPart = +answerParts[1];
+		if (answerParts[0] === "0?" && !isNaN(decimalPart)) {
+			answer = "0." + decimalPart.toString();
+		} else if (!isNaN(integerPart) && answerParts[1] === "?") {
+			answer = integerPart.toString();
+		} else if (!isNaN(integerPart) && !isNaN(decimalPart)) {
+			answer = integerPart.toString() + "." + decimalPart.toString();
+		}
+	}
 	numericAnswer.value = answer;
 	answerWrapper.appendChild(numericAnswer);
 
@@ -36,10 +49,12 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER_NUMERIC", "Mathjax Latex Ans
 					const integerPart = +answerParts[0];
 					const decimalPart = +answerParts[1];
 					if (answerParts[0].length === 0 && !isNaN(decimalPart)) {
-						return `^(\\.|,)${decimalPart}$`;
+						return `^0?(\\.|,)${decimalPart}$`;
 					} else if (!isNaN(integerPart) && answerParts[1].length === 0) {
+						if (integerPart === 0) return `^0?(\\.|,)?$`;
 						return `^${integerPart}(\\.|,)?$`;
 					} else if (!isNaN(integerPart) && !isNaN(decimalPart)) {
+						if (integerPart === 0) return `^0?(\\.|,)${decimalPart}$`;
 						return `^${integerPart}(\\.|,)${decimalPart}$`;
 					}
 				}
