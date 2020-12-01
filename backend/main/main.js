@@ -134,6 +134,7 @@ function init() {
 			let username = request.body.username;
 
 			if(validation.validateStringMax(username, 255)) {
+				username = username.trim().replace(/\s+/g, " ");
 				if(username.length == 0) {
 					username = null;
 				}
