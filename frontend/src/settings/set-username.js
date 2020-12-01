@@ -3,6 +3,8 @@
 	const message = document.getElementById("set-username-message");
 	const usernameField = document.getElementById("username-field");
 
+	usernameField.placeholder = "Unnamed #" + DbCom.getUserID();
+
 	function showMessage(text, isError) {
 		message.textContent = text;
 		if(isError) {
