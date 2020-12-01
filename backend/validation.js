@@ -94,6 +94,15 @@ function validateStringMax(s, maxLength) {
 }
 exports.validateStringMax = validateStringMax;
 
+function validateStringMaxWithNull(s, maxLength) {
+	if(s == null) {
+		return true;
+	} else {
+		return validateStringMax(s, maxLength);
+	}
+}
+exports.validateStringMaxWithNull = validateStringMaxWithNull;
+
 function validateStringMaxArray(a, maxArrayLength, maxLength) {
 	if(Array.isArray(a)) {
 		if(a.length <= maxArrayLength) {

@@ -47,3 +47,10 @@ a {
 	font-size:20px;
 	min-height:0 !important;
 }
+
+#register-captcha {
+	margin:24px;
+}
+#register-captcha > div {
+	margin:0 auto;
+}

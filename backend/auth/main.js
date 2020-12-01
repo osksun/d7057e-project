@@ -9,8 +9,9 @@ const bcrypt = require("bcrypt");
 const config = require("./config.json");
 const database = require("./database.js");
 const token = require("./token.js");
-const errorCode = require("../error_code.js");
+const captcha = require("./captcha.js");
 
+const errorCode = require("../error_code.js");
 const validation = require("../validation.js");
 
 function registerUser(email, password) {
@@ -72,24 +73,35 @@ function init() {
 	app.post("/register", (request, response) => {
 		const email = request.body.email;
 		const password = request.body.password;
+		let captchaToken = request.body.captcha;
+		if(captchaToken == "null") {
+			captchaToken = null;
+		}
 
-		if(validation.validateEmail(email) && validation.validatePassword(password)) {
-			registerUser(email, password).then((userID) => {
-				console.log("Registered user \"" + email + "\"");
+		if(validation.validateEmail(email) && validation.validatePassword(password) && validation.validateStringMaxWithNull(captchaToken)) {
+			captcha.verify(captchaToken).then(() => {
+				registerUser(email, password).then((userID) => {
+					console.log("Registered user \"" + email + "\"");
 
-				token.createRefreshToken(userID).then((refreshToken) => {
-					response.json({
-						userID:userID,
-						refreshToken:refreshToken
+					token.createRefreshToken(userID).then((refreshToken) => {
+						response.json({
+							userID:userID,
+							refreshToken:refreshToken
+						});
+					}).catch(() => {
+						response.json({
+							error:"Failed to create refresh token",
+							errorCode:errorCode.failedTokenCreation
+						});
 					});
-				}).catch(() => {
-					response.json({
-						error:"Failed to create refresh token",
-						errorCode:errorCode.failedTokenCreation
-					});
+				}).catch((error) => {
+					response.json(error);
 				});
-			}).catch((error) => {
-				response.json(error);
+			}).catch(() => {
+				response.json({
+					error:"Captcha error",
+					errorCode:errorCode.captchaError
+				});
 			});
 		} else {
 			response.json({
@@ -293,10 +305,17 @@ function init() {
 	}, 60 * 60 * 1000);
 }
 
-database.connect().then(() => {
-	init();
-}).catch((error) => {
-	console.error(error);
+if(config.hasOwnProperty("captchaSecret")) {
+	captcha.setSecret(config["captchaSecret"]);
+	database.connect().then(() => {
+		init();
+	}).catch((error) => {
+		console.error(error);
+		console.error("Shutting down...");
+		process.exit(1);
+	});
+} else {
+	console.error("Error: Captcha secret is not defined");
 	console.error("Shutting down...");
 	process.exit(1);
-});
+}
