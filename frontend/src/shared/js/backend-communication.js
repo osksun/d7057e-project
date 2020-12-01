@@ -25,10 +25,10 @@ const DbCom = new function() {
 		return sha512(password + "c27097af11dce54be22679a5bfd7b7ea");
 	}
 
-	this.registerUser = function(email, password) {
+	this.registerUser = function(email, password, captchaToken) {
 		return new Promise((resolve, reject) => {
 			clientSidePasswordHash(password).then((passwordHash) => {
-				this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash)).then(resolve).catch(reject);
+				this.ajaxPostAuth(authURL + "register", "email=" + encodeURIComponent(email) + "&password=" + encodeURIComponent(passwordHash) + "&captcha=" + encodeURIComponent(captchaToken)).then(resolve).catch(reject);
 			});
 		});
 	};

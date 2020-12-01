@@ -1,5 +1,5 @@
 
-questionViewManager.addSegmentType("MATHJAX_LATEX_ANSWER", function(content) {
+questionViewManager.addSegmentType("MATHJAX_LATEX_ANSWER_PLAIN_REGEX", function(content) {
 	const div = document.createElement("div");
 	div.className = "tex2jax_process";
 	div.innerText = content;

@@ -10,23 +10,8 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
-		<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" async defer> </script>
-
+		<script src="https://www.google.com/recaptcha/api.js?render=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></script>
 	</head>
-	<script type="text/javascript">
-		var onloadCallback = function() {
-			console.log("grecaptcha is ready!", );
-			grecaptcha.render('reg-captcha', {
-				'sitekey': "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" ,
-				'theme': "dark",
-				'callback': 'userResponseCallback'
-			})
-		};
-		var userResponseCallback = function () {
-			captchaVerification(grecaptcha.getResponse());
-		}
-	</script>
-
 	<body>
 		<?php include "../shared/html/background.html";?>
 		<h2>REGISTER</h2>
@@ -40,8 +25,9 @@
 			<label>Confirm Password</label>
 			<input id="repeatPasswordField" class="text-box" type="password" required placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
 
+			<div id="register-captcha"></div>
+
 			<button id="registerButton" class="button">Register</button>
-			<div id = "reg-captcha" class="g-recaptcha"> </div>
 		</div>
 
 		<div id="error-box"></div>
@@ -49,5 +35,6 @@
 
 		<script src="/src/register/register.js"></script>
 		<script src="/src/register/error-box.js"></script>
+		<script src="/src/register/captcha.js"></script>
 	</body>
 </html>

@@ -36,36 +36,52 @@
 	-o-tab-size:2;
 	tab-size:2;
 }
+
+/* mathjax-latex-answer common */
 #question-editor-segments > .mathjax-latex-answer > .latex > input {
 	margin:8px;
 }
 #question-editor-segments > .mathjax-latex-answer > .latex {
 	height:100px;
 }
-#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > * {
-	margin:0 2.5px;
-}
-#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input[class="match"] {
-	background-color:#58d68d;
-}
-#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input[class="no-match"] {
-	background-color:#cd6155;
-}
-#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > span[class="test-message"] {
-	display: inline-block;
-	width: 250px;
-	text-align: left;
+
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > *,
+#question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > * {
+	margin:2.5px 2.5px;
 }
 
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type, #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
+#question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > .regex-match {
+	background-color:#58d68d;
+}
+#question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > .regex-no-match,
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input:invalid {
+	background-color:#cd6155;
+}
+#question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > .regex-tester-status {
+	display:inline-block;
+	width:240px;
+	text-align:left;
+}
+/* Hide input number arrrows */
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > .numeric-answer-input::-webkit-outer-spin-button,
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > .numeric-answer-input::-webkit-inner-spin-button {
+	-webkit-appearance:none; /* Chrome, Safari, Edge, Opera */
+	margin:0;
+}
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > .numeric-answer-input[type=number] {
+	-moz-appearance:textfield; /* Firefox */
+}
+
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper, #question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper, #question-editor-segments > .image > div, #question-editor-segments > .youtube > div {
 	margin:10px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > span, #question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
 	color:#fff;
 	font-size:24px;
 }
-#question-editor-segments > .mathjax-latex-answer > div:not(.latex):first-of-type > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
+#question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input, #question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
 	font-size:24px;
+	padding:0 10px;
 }
 
 #question-editor-segments > .geogebra-container > .geogebra-scaling-container {

@@ -20,19 +20,24 @@
 					registerButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 					registerButton.disabled = true;
 
-					DbCom.registerUser(email, password).then((result) => {
-						localStorage.setItem("login_data", JSON.stringify({
-							"userID":result["userID"],
-							"refreshToken":result["refreshToken"]
-						}));
-						window.location = "/";
-					}).catch((error) => {
-						if(error == null) {
-							errorBox.show("Connection error");
-						} else {
-							errorBox.show(error.error);
-						}
-					}).finally(() => {
+					captcha.trigger().then((captchaToken) => {
+						DbCom.registerUser(email, password, captchaToken).then((result) => {
+							localStorage.setItem("login_data", JSON.stringify({
+								"userID":result["userID"],
+								"refreshToken":result["refreshToken"]
+							}));
+							window.location = "/";
+						}).catch((error) => {
+							if(error == null) {
+								errorBox.show("Connection error");
+							} else {
+								errorBox.show(error.error);
+							}
+						}).finally(() => {
+							registerButton.textContent = previousText;
+							registerButton.disabled = false;
+						});
+					}).catch(() => {
 						registerButton.textContent = previousText;
 						registerButton.disabled = false;
 					});
@@ -54,22 +59,3 @@
 	passwordField.addEventListener("keydown", registerClick);
 	repeatPasswordField.addEventListener("keydown", registerClick);
 })();
-
-// WORK IN PROGRESS, function is unfinished and only meant to be here for testing purposes, move function to server side once tested.
-function captchaVerification(userResponse) {
-	const request = new XMLHttpRequest();
-	request.open("POST", "https://www.google.com/recaptcha/api/siteverify", true);
-	request.onload = function () {
-		console.log(request.status,"status code");
-		if (request.status === 200){
-			console.log("Status code 200");
-			verificationResponse = JSON.parse(request.response);
-		}
-
-		else {
-			console.log("Captcha request failed");
-		}
-		console.log(verificationResponse, "verification response");
-	}
-	request.send("response="+encodeURIComponent(userResponse && "secret="+encodeURIComponent("6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe")));
-}

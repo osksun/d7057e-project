@@ -12,5 +12,6 @@ const backendErrorCode = {
 	noUnansweredQuestions:9,
 	userAlreadyRecovered:10,
 	duplicateModerator:11,
-	userDoesNotExist:12
+	userDoesNotExist:12,
+	captchaError:13
 };

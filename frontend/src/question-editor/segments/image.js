@@ -8,6 +8,7 @@ questionEditor.addSegmentType("IMAGE", "Image", function(content = "") {
 	urlTitle.innerText = "Image URL: ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
+	urlInput.className = "text-box";
 	urlInput.value = content;
 	urlWrapper.appendChild(urlInput);
 	div.appendChild(urlWrapper);
