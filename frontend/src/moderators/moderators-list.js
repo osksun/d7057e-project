@@ -9,6 +9,7 @@ const moderatorsList = new function() {
 	moderatorsListAddButton.addEventListener("click", () => {
 		const username = moderatorsListAddInput.value;
 		DbCom.addModerator(username, courseID).then((course) => {
+			moderatorsListAddInput.value = "";
 			messageBox.show("Moderator added!");
 			refreshList();
 		}).catch((error) => {
