@@ -18,7 +18,7 @@
 	height:64px;
 	text-align:left;
 }
-#moderators-list > span > p {
+#moderators-list > span > p, #moderators-list > span > i {
 	display:inline-block;
 	margin:4px;
 	padding:8px;
