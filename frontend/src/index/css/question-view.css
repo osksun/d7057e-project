@@ -41,6 +41,11 @@
 	margin:8px;
 }
 
+#question-segments > .questions-complete > img {
+	width:350px;
+	max-width:30%;
+}
+
 #submit-button {
 	margin:100px 0 0 0;
 	padding:20px 80px;
