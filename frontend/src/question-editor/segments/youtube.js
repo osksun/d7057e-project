@@ -5,7 +5,7 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 
 	const urlWrapper = document.createElement("div");
 	const urlTitle = document.createElement("span");
-	urlTitle.innerText = "Youtube embed URL: ";
+	urlTitle.innerText = "Youtube URL e.g. \"https://www.youtube.com/watch?v=---------\": ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
 	urlInput.value = content;
