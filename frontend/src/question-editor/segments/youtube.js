@@ -8,6 +8,7 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 	urlTitle.innerText = "Youtube embed URL: ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
+	urlInput.className = "text-box";
 	urlInput.value = content;
 	urlWrapper.appendChild(urlInput);
 	div.appendChild(urlWrapper);
