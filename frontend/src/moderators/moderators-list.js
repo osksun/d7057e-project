@@ -32,43 +32,48 @@ const moderatorsList = new function() {
 
 	function refreshList() {
 		DbCom.getModerators(courseID).then((moderators) => {
-			moderatorsList.innerHTML = "";
-			if(moderators.length == 0) {
-				moderatorsList.innerHTML = "<p>This course has no moderators</p>";
-			} else {
-				for(let i = 0; i < moderators.length; ++i) {
-					const user = moderators[i];
-					let name;
-					if(user.name == null) {
-						name = "Unnamed user #" + user.id;
-					} else {
-						name = user.name;
-					}
-					addModerator(name, user.id);
+			//Remove all children except last
+			while(moderatorsList.children.length > 1) {
+				moderatorsList.removeChild(moderatorsList.children[0]);
+			}
+
+			for(let i = 0; i < moderators.length; ++i) {
+				const user = moderators[i];
+				let name;
+				if(user.name == null) {
+					name = "Unnamed user #" + user.id;
+				} else {
+					name = user.name;
 				}
+				addModerator(name, user.id);
 			}
 		});
 	}
 
 	function addModerator(text, userID) {
-		const li = document.createElement("li");
-		li.textContent = text;
-		moderatorsList.appendChild(li);
+		const span = document.createElement("span");
+		moderatorsList.prepend(span);
+
+		const p = document.createElement("p");
+		p.textContent = text;
+		span.appendChild(p);
 
 		const deleteButton = document.createElement("button");
+		deleteButton.className = "button";
 		deleteButton.textContent = "Delete";
 		deleteButton.addEventListener("click", () => {
-			DbCom.deleteModerator(userID, courseID).then((course) => {
-				messageBox.show("Moderator removed!");
-				refreshList();
-			}).catch((error) => {
-				if(error.error) {
-					messageBox.show("Error: " + error.error);
-				} else {
-					messageBox.show("Error: " + error);
-				}
+			messageBox.showConfirm("Are you sure you want to remove \"" + text + "\" from the moderator list?", () => {}, () => {
+				DbCom.deleteModerator(userID, courseID).then((course) => {
+					refreshList();
+				}).catch((error) => {
+					if(error.error) {
+						messageBox.show("Error: " + error.error);
+					} else {
+						messageBox.show("Error: " + error);
+					}
+				});
 			});
 		});
-		li.appendChild(deleteButton);
+		span.appendChild(deleteButton);
 	}
 }();
