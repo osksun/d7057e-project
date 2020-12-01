@@ -32,3 +32,30 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 		}
 	};
 });
+
+// Converts youtube url timestamps to seconds
+function timeStampToSeconds(timeStamp) {
+	let number = "";
+	let result = 0;
+	for (i = 0; i < timeStamp.length; i++) {
+		if (!isNaN(parseInt(timeStamp[i]))) {
+			number += timeStamp[i];
+		}
+
+		else if (timeStamp[i] == 'h') {
+			result += parseInt(number) * 3600;
+			number = "";
+		}
+
+		else if (timeStamp[i] == 'm') {
+			result += parseInt(number) * 60;
+			number = "";
+		}
+
+		else if (timeStamp[i] == 's') {
+			result += parseInt(number);
+			number = "";
+		}
+	}
+	return result;
+}
