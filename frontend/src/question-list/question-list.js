@@ -44,7 +44,13 @@ const questionList = new function() {
 		img.alt = "add";
 		card.appendChild(img);
 		card.addEventListener("click", () => {
-			viewManager.loadQuestionView(questionViewManager.containers.CREATE_QUESTION, courseName, moduleName, null, true);
+			const previousText = card.textContent;
+			card.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+			card.disabled = true;
+			viewManager.loadQuestionView(questionViewManager.containers.CREATE_QUESTION, courseName, moduleName, null, true).finally(() => {
+				card.textContent = previousText;
+				card.disabled = false;
+			});
 		});
 		questionContainer.appendChild(card);
 	}
