@@ -25,7 +25,7 @@ const moderatorsList = new function() {
 		}).finally(() => {
 			moderatorsListAddButton.textContent = previousText;
 			moderatorsListAddButton.disabled = false;
-		})
+		});
 	});
 
 	this.setup = function(courseName) {
@@ -81,7 +81,10 @@ const moderatorsList = new function() {
 			const previousText = deleteButton.textContent;
 			deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			deleteButton.disabled = true;
-			messageBox.showConfirm("Are you sure you want to remove \"" + text + "\" from the moderator list?", () => {}, () => {
+			messageBox.showConfirm("Are you sure you want to remove \"" + text + "\" from the moderator list?", () => {
+				deleteButton.textContent = previousText;
+				deleteButton.disabled = false;
+			}, () => {
 				DbCom.deleteModerator(userID, courseID).then((course) => {
 					refreshList();
 				}).catch((error) => {
@@ -93,7 +96,7 @@ const moderatorsList = new function() {
 				}).finally(() => {
 					deleteButton.textContent = previousText;
 					deleteButton.disabled = false;
-				})
+				});
 			});
 		});
 		span.appendChild(deleteButton);
