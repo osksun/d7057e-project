@@ -277,7 +277,7 @@ function getCourses(userID) {
 				RIGHT JOIN questions ON questions.id = answers.questionID AND answers.userID = ?
 				INNER JOIN modules ON modules.id = questions.moduleID
 				RIGHT JOIN courses ON courses.id = modules.courseID
-				WHERE courses.deleteon IS NULL
+				WHERE courses.deleteon IS NULL AND modules.deleteon IS NULL AND questions.deleteon IS NULL
 				GROUP BY courses.id
 			) AS selectedCourses
 			LEFT JOIN courseaccess ON courseaccess.courseID = selectedCourses.id AND courseaccess.userID = ?
@@ -444,7 +444,7 @@ function getModules(courseID, userID) {
 					SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
 					RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
 					RIGHT JOIN modules ON modules.id = questions.moduleID
-					WHERE modules.courseID = ? AND modules.deleteon IS NULL
+					WHERE modules.courseID = ? AND modules.deleteon IS NULL AND questions.deleteon IS NULL
 					GROUP BY modules.id
 					`, [userID, courseID], (error, result) => {
 					if(error) {
