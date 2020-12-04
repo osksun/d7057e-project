@@ -61,6 +61,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER_PLAIN_REGEX", "Mathjax Latex
 	const previewSpan = document.createElement("span");
 	preview.appendChild(previewSpan);
 	const previewInput = document.createElement("input");
+	previewInput.className = "text-box";
 	preview.appendChild(previewInput);
 	div.appendChild(preview);
 

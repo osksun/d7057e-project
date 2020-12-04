@@ -6,6 +6,7 @@ questionViewManager.addSegmentType("MATHJAX_LATEX_ANSWER_NUMERIC", function(cont
 
 	const input = document.createElement("input");
 	input.type = "text";
+	input.className = "text-box";
 	div.appendChild(input);
 
 	return {
