@@ -440,52 +440,94 @@ function createQuestion(moduleID, types, content, answers) {
 	return new Promise((resolve, reject) => {
 		connection.beginTransaction(function(error) {
 			if(error) {
-				reject();
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
 			} else {
-				connection.query("INSERT INTO questions (moduleID) VALUES (?)", [moduleID], (error, result) => {
+				connection.query("SELECT COUNT(*) FROM questions WHERE moduleID = ? AND deleteon IS NULL", [moduleID], (error, result) => {
 					if(error) {
 						connection.rollback(function() {
-							reject();
+							reject({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
 						});
 					} else {
-						const questionID = result.insertId;
-						const promises = [];
-						for(let i = 0; i < types.length; ++i) {
-							promises.push(new Promise((resolve, reject) => {
-								connection.query("INSERT INTO questionsegments (questionID, segmentOrder, type, content, answer) VALUES (?, ?, ?, ?, ?)", [questionID, i, types[i], content[i], answers[i]], (error, result) => {
-									if(error) {
-										reject();
-									} else {
-										resolve();
-									}
+						if(result.length != 1) {
+							connection.rollback(function() {
+								reject({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
 								});
-							}));
-						}
-
-						Promise.allSettled(promises).then((results) => {
-							let failed = false;
-							for(let i = 0; i < results.length; ++i) {
-								if(results[i].status != "fulfilled") {
-									failed = true;
-								}
-							}
-
-							if(failed) {
+							});
+						} else {
+							const numberOfQuestions = result[0]["COUNT(*)"];
+							if(numberOfQuestions >= 256) {
 								connection.rollback(function() {
-									reject();
+									reject({
+										error:"Too many questions in this module",
+										errorCode:errorCode.tooManyQuestionsInModule
+									});
 								});
 							} else {
-								connection.commit(function(error) {
+								connection.query("INSERT INTO questions (moduleID) VALUES (?)", [moduleID], (error, result) => {
 									if(error) {
 										connection.rollback(function() {
-											reject();
+											reject({
+												error:"Database error",
+												errorCode:errorCode.unknownDatabaseError
+											});
 										});
 									} else {
-										resolve();
+										const questionID = result.insertId;
+										const promises = [];
+										for(let i = 0; i < types.length; ++i) {
+											promises.push(new Promise((resolve, reject) => {
+												connection.query("INSERT INTO questionsegments (questionID, segmentOrder, type, content, answer) VALUES (?, ?, ?, ?, ?)", [questionID, i, types[i], content[i], answers[i]], (error, result) => {
+													if(error) {
+														reject();
+													} else {
+														resolve();
+													}
+												});
+											}));
+										}
+
+										Promise.allSettled(promises).then((results) => {
+											let failed = false;
+											for(let i = 0; i < results.length; ++i) {
+												if(results[i].status != "fulfilled") {
+													failed = true;
+												}
+											}
+
+											if(failed) {
+												connection.rollback(function() {
+													reject({
+														error:"Database error",
+														errorCode:errorCode.unknownDatabaseError
+													});
+												});
+											} else {
+												connection.commit(function(error) {
+													if(error) {
+														connection.rollback(function() {
+															reject({
+																error:"Database error",
+																errorCode:errorCode.unknownDatabaseError
+															});
+														});
+													} else {
+														resolve();
+													}
+												});
+											}
+										});
 									}
 								});
 							}
-						});
+						}
 					}
 				});
 			}
