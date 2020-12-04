@@ -32,6 +32,7 @@ const courseEditor = new function() {
 
 	submitButton.addEventListener("click", () => {
 		if(courseName.reportValidity() && courseDescription.reportValidity()) {
+			const previousText = submitButton.textContent;
 			submitButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			submitButton.disabled = true;
 			submitHandler().then(() => {
@@ -42,7 +43,7 @@ const courseEditor = new function() {
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				submitButton.innerHTML = "";
+				submitButton.textContent = previousText;
 				submitButton.disabled = false;
 			});
 		}

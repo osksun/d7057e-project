@@ -43,6 +43,7 @@ const moduleEditor = new function() {
 
 	createModuleButton.addEventListener("click", () => {
 		if(moduleName.reportValidity() && moduleDescription.reportValidity() && courseId != null) {
+			const previousText = createModuleButton.textContent;
 			createModuleButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
 			createModuleButton.disabled = true;
 			submitHandler().then(() => {
@@ -53,7 +54,7 @@ const moduleEditor = new function() {
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				createModuleButton.innerHTML = "";
+				createModuleButton.textContent = previousText;
 				createModuleButton.disabled = false;
 			});
 		}
