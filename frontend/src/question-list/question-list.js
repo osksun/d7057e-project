@@ -22,8 +22,14 @@ const questionList = new function() {
 		card.classList.add("button");
 		card.innerHTML = "<p>Question " + arrayIndex + "</p>";
 		card.addEventListener("click", () => {
+			const previousText = card.textContent;
+			card.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+			card.disabled = true;
 			//questionViewManager.displayEditQuestion(courseId, courseName, moduleId, moduleName, questionId, true);
-			viewManager.loadQuestionView(questionViewManager.containers.EDIT_QUESTION, courseName, moduleName, questionId, true);
+			viewManager.loadQuestionView(questionViewManager.containers.EDIT_QUESTION, courseName, moduleName, questionId, true).finally(() => {
+				card.textContent = previousText;
+				card.disabled = false;
+			});
 			// TODO: Redirect to editor for question with questionId as id
 		});
 		questionContainer.appendChild(card);
