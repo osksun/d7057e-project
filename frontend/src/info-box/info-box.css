@@ -1,9 +1,8 @@
 
-#error-box {
+.info-box {
 	margin:40px auto;
 	padding:20px;
 	width:500px;
-	background-color:#a93434;
 	border-radius:12px;
 	box-shadow:5px 8px 0 0 #181818;
 	color:#fff;
@@ -15,8 +14,8 @@
 	-ms-transform:scale(0, 0);
 	transform:scale(0, 0);
 }
-#error-box.show {
-	animation-name:error-box-animation;
+.info-box.show {
+	animation-name:info-box-animation;
 	animation-duration:0.175s;
 	animation-iteration-count:1;
 	animation-timing-function:ease-in-out;
@@ -26,7 +25,7 @@
 	transform:scale(1, 1);
 }
 
-@keyframes error-box-animation {
+@keyframes info-box-animation {
 	0% {
 		-webkit-transform:scale(0, 0);
 		-ms-transform:scale(0, 0);

@@ -5,6 +5,7 @@
 	const loginButton = document.getElementById("loginButton");
 	const emailField = document.getElementById("emailField");
 	const passwordField = document.getElementById("passwordField");
+	const errorBox = document.getElementById("error-box");
 
 	loginButton.addEventListener("click", () => {
 		if(emailField.reportValidity() && passwordField.reportValidity()) {
@@ -12,7 +13,7 @@
 			const password = passwordField.value;
 
 			if(email == "") {
-				errorBox.show("Email required!");
+				infoBox.showError(errorBox, "Email required!");
 			} else {
 				const previousText = loginButton.textContent;
 				loginButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
@@ -43,9 +44,9 @@
 									loginButton.disabled = false;
 								}).catch((error) => {
 									if(error == null) {
-										errorBox.show("Connection error");
+										infoBox.showError(errorBox, "Connection error");
 									} else {
-										errorBox.show(error.error);
+										infoBox.showError(errorBox, error.error);
 									}
 
 									loginButton.textContent = previousText;
@@ -53,9 +54,9 @@
 								});
 							}).catch((error) => {
 								if(error == null) {
-									errorBox.show("Connection error");
+									infoBox.showError(errorBox, "Connection error");
 								} else {
-									errorBox.show(error.error);
+									infoBox.showError(errorBox, error.error);
 								}
 
 								loginButton.textContent = previousText;
@@ -65,11 +66,11 @@
 					}
 				}).catch((error) => {
 					if(error == null) {
-						errorBox.show("Connection error");
+						infoBox.showError(errorBox, "Connection error");
 					} else if(error.error) {
-						errorBox.show(error.error);
+						infoBox.showError(errorBox, error.error);
 					} else {
-						errorBox.show(error);
+						infoBox.showError(errorBox, error);
 					}
 
 					loginButton.textContent = previousText;

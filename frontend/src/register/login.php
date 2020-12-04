@@ -7,10 +7,11 @@
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/body.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
-		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
+		<link rel="stylesheet" type="text/css" href="/src/info-box/info-box.css">
 		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/message-box/message-box.js"></script>
+		<script src="/src/info-box/info-box.js"></script>
 	</head>
 	<body>
 		<?php include "../shared/html/background.html"; ?>
@@ -24,10 +25,9 @@
 
 			<button id="loginButton" class="button">Login</button>
 		</div>
-		<div id="error-box"></div>
+		<div id="error-box" class="info-box"></div>
 		<a href="/register" class="button">New account</a>
 
 		<script src="/src/register/login.js"></script>
-		<script src="/src/register/error-box.js"></script>
 	</body>
 </html>

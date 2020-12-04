@@ -20,13 +20,14 @@
 }
 #moderators-list > span > p, #moderators-list > span > i {
 	display:inline-block;
-	margin:4px;
+	margin:8px 0;
 	padding:8px;
 	font-size:28px;
 	width:calc(100% - 120px - 8px * 2 - 8px * 2 - 8px * 2 - 8px);
 	background-color:#323232;
 	border-radius:12px;
 	box-shadow:5px 8px 0 0 #181818;
+	vertical-align:top;
 }
 #moderators-list > span > .button {
 	margin:8px;
@@ -34,17 +35,17 @@
 	font-size:28px;
 	min-height:0;
 	width:120px;
+	vertical-align:top;
 }
 
 #moderators-list-add-input {
-	margin:4px;
+	margin:8px 0;
 	padding:8px;
 	font-size:28px;
 	width:calc(100% - 120px - 8px * 2 - 8px * 2 - 8px * 2 - 8px);
+	vertical-align:top;
 }
 #moderators-list-add-button {
-	margin:2px;
-	padding:8px;
 	font-size:28px;
 	min-height:0;
 }
