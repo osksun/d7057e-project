@@ -362,7 +362,7 @@ const DbCom = new function() {
 						resolve(result);
 					}).catch((result) => {
 						if(result != null) {
-							if(result.error == "Invalid token") {//TODO check with error code instead
+							if(result.errorCode == backendErrorCode.invalidToken) {
 								this.createAccessToken().then((tokenData) => {
 									this.ajaxPostPromise(url, data + createAuthData(tokenData.accessToken, tokenData.accessTokenExpireTime)).then((result) => {
 										resolve(result);
