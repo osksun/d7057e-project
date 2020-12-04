@@ -3,18 +3,52 @@ const questionViewManager = new function() {
 	const questionContainer = document.getElementById("question-container");
 	const editorContainer = document.getElementById("question-editor-container");
 	const questionListContainer = document.getElementById("question-list-container");
-	const submitButton = document.getElementById("submit-button");
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
+
+	const submitButton = document.getElementById("question-submit-button");
+	const continueButton = document.getElementById("question-continue-button");
+	const retryButton = document.getElementById("question-retry-button");
+	const newQuestionButton = document.getElementById("new-question-button");
 
 	let currentCourseId = null;
 	let currentModuleId = null;
 	let currentQuestion = null;
+	let currentCourseName = null;
+	let currentModuleName = null;
 	let segmentInputBoxes = [];
 	let displayHandler = () => {};
 
 	submitButton.addEventListener("click", (event) => {
 		this.handleSubmit(currentQuestion.id);
+	});
+	continueButton.addEventListener("click", (event) => {
+		const previousText = continueButton.textContent;
+		continueButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+		continueButton.disabled = true;
+
+		setupRandomUnansweredQuestion(currentCourseId, currentCourseName, currentModuleId, currentModuleName, true).finally(() => {
+			continueButton.textContent = previousText;
+			continueButton.disabled = false;
+		});
+	});
+	retryButton.addEventListener("click", (event) => {
+		submitButton.className = "button";
+		retryButton.className = "button hidden";
+		newQuestionButton.className = "button hidden";
+	});
+	newQuestionButton.addEventListener("click", (event) => {
+		retryButton.disabled = true;
+
+		const previousText = newQuestionButton.textContent;
+		newQuestionButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+		newQuestionButton.disabled = true;
+
+		setupRandomUnansweredQuestion(currentCourseId, currentCourseName, currentModuleId, currentModuleName, true).finally(() => {
+			newQuestionButton.textContent = previousText;
+			newQuestionButton.disabled = false;
+			retryButton.disabled = false;
+		});
 	});
 
 	questionButton.addEventListener("click", () => {
@@ -87,8 +121,15 @@ const questionViewManager = new function() {
 			if (result.correct) {
 				messageBox.show("Correct");
 				displayLevel.updateXp();
+
+				submitButton.className = "button hidden";
+				continueButton.className = "button";
 			} else {
 				messageBox.show("Wrong");
+
+				submitButton.className = "button hidden";
+				retryButton.className = "button";
+				newQuestionButton.className = "button";
 			}
 		}).catch((error) => {
 			if(error && error.error) {
@@ -118,7 +159,7 @@ const questionViewManager = new function() {
 			if(segmentTypes.has(segment.type)) {
 				const result = segmentTypes.get(segment.type)(segment.content);
 				if(result.input != null) {
-					result.input.addEventListener('keydown', submitClick);
+					result.input.addEventListener("keydown", submitClick);
 				}
 				questionSegments.appendChild(result.div);
 				segmentInputBoxes.push(result.input);
@@ -135,8 +176,12 @@ const questionViewManager = new function() {
 		const mathJaxElements = questionSegments.getElementsByClassName("tex2jax_process");
 		MathJax.typesetClear(mathJaxElements);
 		MathJax.typesetPromise(mathJaxElements);
+
 		// Show submit button
 		submitButton.className = "button";
+		continueButton.className = "button hidden";
+		retryButton.className = "button hidden";
+		newQuestionButton.className = "button hidden";
 	};
 
 	const setupEmptyQuestion = () => {
@@ -144,8 +189,12 @@ const questionViewManager = new function() {
 		const div = document.createElement("div");
 		div.innerText = "There are no segments in this question";
 		questionSegments.appendChild(div);
-		// Hide submit button
+
+		// Hide buttons
 		submitButton.className = "button hidden";
+		continueButton.className = "button hidden";
+		retryButton.className = "button hidden";
+		newQuestionButton.className = "button hidden";
 	};
 
 	const setupNoUnansweredQuestions = () => {
@@ -162,8 +211,11 @@ const questionViewManager = new function() {
 		h2.textContent = "Congratulations you have completed this module!";
 		div.appendChild(h2);
 
-		// Hide submit button
+		// Hide buttons
 		submitButton.className = "button hidden";
+		continueButton.className = "button hidden";
+		retryButton.className = "button hidden";
+		newQuestionButton.className = "button hidden";
 	};
 
 	const setupQuestionButton = (moduleName, displayHandlerCallback) => {
@@ -178,48 +230,64 @@ const questionViewManager = new function() {
 		displayHandler = () => {};
 	};
 
-	this.displayQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
-		const showQuestion = () => {
-			// Note current course and module ids
-			currentCourseId = courseId;
-			currentModuleId = moduleId;
-			// Setup question button
-			setupQuestionButton(moduleName, () => {
-				this.displayQuestion(courseId, courseName, moduleId, moduleName, true);
-			});
-			// Setup Page URL, title and history
-			viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
-			// Toggle view
-			toggleQuestionContainer();
-			viewManager.toggleQuestionView();
-		};
-		if (moduleId != currentModuleId) {
-			currentQuestion = null;
-		}
-		if (currentQuestion === null) {
-			this.clear();
+	const showQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		// Note current course and module
+		currentCourseId = courseId;
+		currentCourseName = courseName;
+		currentModuleId = moduleId;
+		currentModuleName = moduleName;
+		// Setup question button
+		setupQuestionButton(moduleName, () => {
+			this.displayQuestion(courseId, courseName, moduleId, moduleName, true);
+		});
+		// Setup Page URL, title and history
+		viewManager.updatePage("/courses/" + encodeURIComponent(courseName.toLowerCase()) + "/" + encodeURIComponent(moduleName.toLowerCase()), moduleName, addToHistory);
+		// Toggle view
+		toggleQuestionContainer();
+		viewManager.toggleQuestionView();
+	};
+
+ 	const setupRandomUnansweredQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		return new Promise((resolve, reject) => {
 			// Get all questions of the module
 			DbCom.getRandomUnansweredQuestion(moduleId).then((question) => {
+				this.clear();
+
 				currentQuestion = question;
 				if(question.segments.length === 0) {
 					setupEmptyQuestion();
 				} else {
 					setupQuestion(question.segments);
 				}
-				showQuestion();
+				showQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
+				resolve();
 			}).catch((error) => {
+				this.clear();
+
 				switch (error.errorCode) {
 					case backendErrorCode.noUnansweredQuestions:
 						setupNoUnansweredQuestions();
-						showQuestion();
+						showQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
 						break;
 					default:
+						console.error(error);
 						viewManager.redirect404();
 						break;
 				}
+				reject();
 			});
+		});
+	};
+
+	this.displayQuestion = (courseId, courseName, moduleId, moduleName, addToHistory) => {
+		if (moduleId != currentModuleId) {
+			currentQuestion = null;
+		}
+
+		if (currentQuestion === null) {
+			setupRandomUnansweredQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
 		} else {
-			showQuestion();
+			showQuestion(courseId, courseName, moduleId, moduleName, addToHistory);
 		}
 	};
 

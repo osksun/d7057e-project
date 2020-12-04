@@ -47,16 +47,15 @@
 	max-width:30%;
 }
 
-#submit-button {
-	margin:32px 0 32px 0;
+#question-submit-button, #question-continue-button, #question-retry-button, #new-question-button {
+	margin:32px 8px;
 	padding:20px 20px;
 	font-size:28px;
 	width:230px;
+	vertical-align:top;
 }
-
-#submit-button > p {
-	margin:0;
-	padding:0;
+#question-submit-button.hidden, #question-continue-button.hidden, #question-retry-button.hidden, #new-question-button.hidden {
+	display:none;
 }
 
 #question-segments > .geogebra-container > .geogebra-scaling-container {
