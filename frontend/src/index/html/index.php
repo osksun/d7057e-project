@@ -16,6 +16,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/question-list/question-list.css">
 		<link rel="stylesheet" type="text/css" href="/src/moderators/moderators-list.css">
 		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
+		<link rel="stylesheet" type="text/css" href="/src/info-box/info-box.css">
 		<script src="https://cdn.geogebra.org/apps/deployggb.js" defer></script>
 		<script src="/src/shared/js/mathjax-config.js" defer></script>
 		<script id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" defer></script>
@@ -23,6 +24,7 @@
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/message-box/message-box.js"></script>
+		<script src="/src/info-box/info-box.js"></script>
 		<script src="/src/index/js/index.js"></script>
 	</head>
 	<body class="tex2jax_ignore">

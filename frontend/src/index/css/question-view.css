@@ -58,6 +58,10 @@
 	display:none;
 }
 
+#question-result-box {
+	width:300px;
+}
+
 #question-segments > .geogebra-container > .geogebra-scaling-container {
 	width:75vw;
 	height:calc(75vw * 9 / 16);

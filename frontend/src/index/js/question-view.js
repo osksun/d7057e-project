@@ -5,6 +5,7 @@ const questionViewManager = new function() {
 	const questionListContainer = document.getElementById("question-list-container");
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
+	const resultBox = document.getElementById("question-result-box");
 
 	const submitButton = document.getElementById("question-submit-button");
 	const continueButton = document.getElementById("question-continue-button");
@@ -30,12 +31,14 @@ const questionViewManager = new function() {
 		setupRandomUnansweredQuestion(currentCourseId, currentCourseName, currentModuleId, currentModuleName, true).finally(() => {
 			continueButton.textContent = previousText;
 			continueButton.disabled = false;
+			infoBox.hide(resultBox);
 		});
 	});
 	retryButton.addEventListener("click", (event) => {
 		submitButton.className = "button";
 		retryButton.className = "button hidden";
 		newQuestionButton.className = "button hidden";
+		infoBox.hide(resultBox);
 	});
 	newQuestionButton.addEventListener("click", (event) => {
 		retryButton.disabled = true;
@@ -48,6 +51,7 @@ const questionViewManager = new function() {
 			newQuestionButton.textContent = previousText;
 			newQuestionButton.disabled = false;
 			retryButton.disabled = false;
+			infoBox.hide(resultBox);
 		});
 	});
 
@@ -119,13 +123,13 @@ const questionViewManager = new function() {
 
 		DbCom.answerQuestion(questionID, answers).then((result) => {
 			if (result.correct) {
-				messageBox.show("Correct");
+				infoBox.showSuccess(resultBox, "Correct");
 				displayLevel.updateXp();
 
 				submitButton.className = "button hidden";
 				continueButton.className = "button";
 			} else {
-				messageBox.show("Wrong");
+				infoBox.showError(resultBox, "Incorrect");
 
 				submitButton.className = "button hidden";
 				retryButton.className = "button";
@@ -252,6 +256,7 @@ const questionViewManager = new function() {
 			// Get all questions of the module
 			DbCom.getRandomUnansweredQuestion(moduleId).then((question) => {
 				this.clear();
+				infoBox.hide(resultBox);
 
 				currentQuestion = question;
 				if(question.segments.length === 0) {
@@ -263,6 +268,7 @@ const questionViewManager = new function() {
 				resolve();
 			}).catch((error) => {
 				this.clear();
+				infoBox.hide(resultBox);
 
 				switch (error.errorCode) {
 					case backendErrorCode.noUnansweredQuestions:
