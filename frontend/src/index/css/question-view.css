@@ -43,6 +43,7 @@
 
 #question-segments > .questions-complete > img {
 	width:350px;
+	height:350px;
 	max-width:30%;
 }
 
