@@ -468,11 +468,8 @@ function init() {
 							response.json({
 								success:true
 							});
-						}).catch(() => {
-							response.json({
-								error:"Database error",
-								errorCode:errorCode.unknownDatabaseError
-							});
+						}).catch((error) => {
+							response.json(error);
 						});
 					} else {
 						response.json({

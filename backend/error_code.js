@@ -15,5 +15,6 @@ module.exports = {
 	userDoesNotExist:12,
 	captchaError:13,
 	usernameTaken:14,
-	tooManyQuestionsInModule:15
+	tooManyQuestionsInModule:15,
+	tooManyModulesInCourse:16
 };

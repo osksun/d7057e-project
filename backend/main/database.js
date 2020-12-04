@@ -309,11 +309,66 @@ exports.getCourses = getCourses;
 
 function createModule(courseID, name, description) {
 	return new Promise((resolve, reject) => {
-		connection.query("INSERT INTO modules (name, courseID, description) VALUES (?, ?, ?)", [name, courseID, description], (error, result) => {
+		connection.beginTransaction(function(error) {
 			if(error) {
-				reject();
+				reject({
+					error:"Database error",
+					errorCode:errorCode.unknownDatabaseError
+				});
 			} else {
-				resolve();
+				connection.query("SELECT COUNT(*) FROM modules WHERE courseID = ? AND deleteon IS NULL", [courseID], (error, result) => {
+					if(error) {
+						connection.rollback(function() {
+							reject({
+								error:"Database error",
+								errorCode:errorCode.unknownDatabaseError
+							});
+						});
+					} else {
+						if(result.length != 1) {
+							connection.rollback(function() {
+								reject({
+									error:"Database error",
+									errorCode:errorCode.unknownDatabaseError
+								});
+							});
+						} else {
+							const numberOfModules = result[0]["COUNT(*)"];
+							if(numberOfModules >= 256) {
+								connection.rollback(function() {
+									reject({
+										error:"Too many modules in this course",
+										errorCode:errorCode.tooManyModulesInCourse
+									});
+								});
+							} else {
+								connection.query("INSERT INTO modules (name, courseID, description) VALUES (?, ?, ?)", [name, courseID, description], (error, result) => {
+									if(error) {
+										connection.rollback(function() {
+											reject({
+												error:"Database error",
+												errorCode:errorCode.unknownDatabaseError
+											});
+										});
+									} else {
+										connection.commit(function(error) {
+											if(error) {
+												connection.rollback(function() {
+													reject({
+														error:"Database error",
+														errorCode:errorCode.unknownDatabaseError
+													});
+												});
+											} else {
+												resolve();
+											}
+										});
+									}
+								});
+							}
+						}
+					}
+				});
 			}
 		});
 	});
