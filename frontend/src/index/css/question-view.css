@@ -47,7 +47,7 @@
 }
 
 #submit-button {
-	margin:100px 0 0 0;
+	margin:32px 0 32px 0;
 	padding:20px 80px;
 	font-size:28px;
 }
@@ -67,9 +67,12 @@
 	margin:0 auto;
 }
 
+#question-segments > .geogebra-container {
+	margin-top: 32px;
+}
 #question-segments > .geogebra-container > .button {
 	font-size: 28px;
-	margin: 16px 0 0 0;
+	margin: 32px 0 0 0;
 	padding: 0 16px;
 }
 
