@@ -7,6 +7,10 @@ const moderatorsList = new function() {
 	let courseID = null;
 
 	moderatorsListAddButton.addEventListener("click", () => {
+		const previousText = moderatorsListAddButton.textContent;
+		moderatorsListAddButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+		moderatorsListAddButton.disabled = true;
+
 		const username = moderatorsListAddInput.value;
 		DbCom.addModerator(username, courseID).then((course) => {
 			moderatorsListAddInput.value = "";
@@ -18,7 +22,10 @@ const moderatorsList = new function() {
 			} else {
 				messageBox.show("Error: " + error);
 			}
-		});
+		}).finally(() => {
+			moderatorsListAddButton.textContent = previousText;
+			moderatorsListAddButton.disabled = false;
+		})
 	});
 
 	this.setup = function(courseName) {
@@ -71,6 +78,9 @@ const moderatorsList = new function() {
 		deleteButton.className = "button";
 		deleteButton.textContent = "Delete";
 		deleteButton.addEventListener("click", () => {
+			const previousText = deleteButton.textContent;
+			deleteButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+			deleteButton.disabled = true;
 			messageBox.showConfirm("Are you sure you want to remove \"" + text + "\" from the moderator list?", () => {}, () => {
 				DbCom.deleteModerator(userID, courseID).then((course) => {
 					refreshList();
@@ -80,7 +90,10 @@ const moderatorsList = new function() {
 					} else {
 						messageBox.show("Error: " + error);
 					}
-				});
+				}).finally(() => {
+					deleteButton.textContent = previousText;
+					deleteButton.disabled = false;
+				})
 			});
 		});
 		span.appendChild(deleteButton);
