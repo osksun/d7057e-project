@@ -6,6 +6,7 @@ questionViewManager.addSegmentType("MATHJAX_LATEX_ANSWER_PLAIN_REGEX", function(
 
 	const input = document.createElement("input");
 	input.type = "text";
+	input.className = "text-box";
 	div.appendChild(input);
 
 	return {

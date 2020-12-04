@@ -108,6 +108,7 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER_NUMERIC", "Mathjax Latex Ans
 	const previewSpan = document.createElement("span");
 	preview.appendChild(previewSpan);
 	const previewInput = document.createElement("input");
+	previewInput.className = "text-box";
 	preview.appendChild(previewInput);
 	div.appendChild(preview);
 
