@@ -150,13 +150,28 @@ function setUsername(userID, username) {
 		createUserIfNotExist(userID).then(() => {
 			connection.query("UPDATE userdata SET username = ? WHERE id = ?", [username, userID], (error, result) => {
 				if(error) {
-					reject();
+					if(error.code == "ER_DUP_ENTRY") {
+						reject({
+							error:"Username has already been taken",
+							errorCode:errorCode.usernameTaken
+						});
+					} else {
+						console.error(error);
+						reject({
+							error:"Database error",
+							errorCode:errorCode.unknownDatabaseError
+						});
+					}
 				} else {
 					resolve();
 				}
 			});
-		}).catch(() => {
-			reject();
+		}).catch((error) => {
+			console.error(error);
+			reject({
+				error:"Database error",
+				errorCode:errorCode.unknownDatabaseError
+			});
 		});
 	});
 }

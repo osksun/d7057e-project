@@ -144,10 +144,7 @@ function init() {
 						success:true
 					});
 				}).catch((error) => {
-					response.json({
-						error:"Database error",
-						errorCode:errorCode.unknownDatabaseError
-					});
+					response.json(error);
 				});
 			} else {
 				reject({

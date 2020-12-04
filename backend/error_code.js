@@ -13,5 +13,6 @@ module.exports = {
 	userAlreadyRecovered:10,
 	duplicateModerator:11,
 	userDoesNotExist:12,
-	captchaError:13
+	captchaError:13,
+	usernameTaken:14
 };
