@@ -3,7 +3,7 @@ const questionList = new function() {
 	const questionContainer = document.getElementById("question-list-container");
 
 	this.setup = function(courseName, moduleId, moduleName) {
-		questionContainer.innerHTML = "";
+		questionContainer.textContent = "";
 		DbCom.getQuestions(moduleId).then((questions) => {
 			for (let i = 0; i < questions.length; i++) {
 				addQuestionCard(courseName, moduleName, questions[i], i + 1);

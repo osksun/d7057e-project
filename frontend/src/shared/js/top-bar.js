@@ -24,7 +24,7 @@ const displayLevel = new function() {
 			title = "Master";
 		}
 
-		levelNumber.innerHTML = "Level " + level + " | " + title;
+		levelNumber.textContent = "Level " + level + " | " + title;
 	}
 
 	this.updateXp = function() {

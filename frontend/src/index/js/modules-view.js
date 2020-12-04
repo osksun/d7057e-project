@@ -55,7 +55,11 @@ const modulesViewManager = new function() {
 		const descWrapper = document.createElement("div");
 		descWrapper.className = "description-wrapper";
 		const info = document.createElement("ul");
-		info.innerHTML = "<li><span>Progress: " + answerCount + "/" + questionCount + "</span></li>";
+		const li = document.createElement("li");
+		const span = document.createElement("span");
+		span.textContent = "Progress: " + answerCount + "/" + questionCount;
+		li.appendChild(span);
+		info.appendChild(li);
 		info.style.color = color;
 		descWrapper.appendChild(info);
 		cardWrapper.appendChild(header);
@@ -110,7 +114,7 @@ const modulesViewManager = new function() {
 	};
 
 	this.clear = function() {
-		cardContainer.innerHTML = "";
+		cardContainer.textContent = "";
 	};
 
 	this.displayModules = function(courseId, courseName, color, addToHistory) {

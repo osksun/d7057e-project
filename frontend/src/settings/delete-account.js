@@ -30,7 +30,7 @@
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				deleteButton.innerHTML = "Delete account";
+				deleteButton.textContent = "Delete account";
 				deleteButton.disabled = false;
 			});
 		}

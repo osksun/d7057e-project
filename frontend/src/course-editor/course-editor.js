@@ -11,7 +11,7 @@ const courseEditor = new function() {
 	this.setupCreate = function() {
 		clear();
 		courseColor.value = getRandomColor();
-		submitButton.innerHTML = "Create course";
+		submitButton.textContent = "Create course";
 		submitHandler = createCourse;
 		deleteButton.className = "button hidden";
 	};
@@ -22,7 +22,7 @@ const courseEditor = new function() {
 			courseColor.value = "#" + course.color;
 			courseName.value = course.name;
 			courseDescription.value = course.description;
-			submitButton.innerHTML = "Update course";
+			submitButton.textContent = "Update course";
 			submitHandler = updateCourse.bind(this, course.id);
 
 			deleteButton.className = "button";

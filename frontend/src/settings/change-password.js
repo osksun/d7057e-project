@@ -42,7 +42,7 @@
 						showMessage("Error: " + result.error, true);
 					}
 				}).finally(() => {
-					changePasswordButton.innerHTML = "Change password";
+					changePasswordButton.textContent = "Change password";
 					changePasswordButton.disabled = false;
 				});
 			}

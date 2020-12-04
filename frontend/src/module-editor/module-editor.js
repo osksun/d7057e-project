@@ -16,7 +16,7 @@ const moduleEditor = new function() {
 		courseId = _courseId;
 		courseName = _courseName;
 		courseColor = null;
-		createModuleButton.innerHTML = "Create module";
+		createModuleButton.textContent = "Create module";
 		createModuleButton.disabled = false;
 		courseNameTitle.textContent = decodeURIComponent(_courseName);
 		submitHandler = () => createModule();
@@ -29,7 +29,7 @@ const moduleEditor = new function() {
 			courseId = _courseId;
 			courseName = _courseName;
 			courseColor = _courseColor;
-			createModuleButton.innerHTML = "Update module";
+			createModuleButton.textContent = "Update module";
 			createModuleButton.disabled = false;
 			courseNameTitle.textContent = decodeURIComponent(_courseName);
 			moduleName.value = module.name;

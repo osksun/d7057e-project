@@ -138,7 +138,7 @@ const questionEditor = new function() {
 	};
 
 	function clear() {
-		questionSegments.innerHTML = "";
+		questionSegments.textContent = "";
 		showMessage("");
 		segmentsData.length = 0;
 		courseId = null;
@@ -156,7 +156,7 @@ const questionEditor = new function() {
 		moduleId = _moduleId;
 		moduleName = _moduleName;
 		questionId = null;
-		submitButton.innerHTML = "Create question";
+		submitButton.textContent = "Create question";
 		submitButton.disabled = false;
 	};
 
@@ -171,7 +171,7 @@ const questionEditor = new function() {
 			for (let i = 0; i < segments.length; i++) {
 				createSegment(segments[i].type, segments[i].content, segments[i].answer);
 			}
-			submitButton.innerHTML = "Update question";
+			submitButton.textContent = "Update question";
 			submitButton.disabled = false;
 		}).catch((err) => {
 			viewManager.redirect404();
@@ -209,7 +209,7 @@ const questionEditor = new function() {
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				submitButton.innerHTML = "Update question";
+				submitButton.textContent = "Update question";
 				submitButton.disabled = false;
 			});
 		} else {
@@ -221,7 +221,7 @@ const questionEditor = new function() {
 					showMessage("Error: " + result.error, true);
 				}
 			}).finally(() => {
-				submitButton.innerHTML = "Create question";
+				submitButton.textContent = "Create question";
 				submitButton.disabled = false;
 			});
 		}
