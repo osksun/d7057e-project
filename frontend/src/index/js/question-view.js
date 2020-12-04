@@ -4,7 +4,6 @@ const questionViewManager = new function() {
 	const editorContainer = document.getElementById("question-editor-container");
 	const questionListContainer = document.getElementById("question-list-container");
 	const submitButton = document.getElementById("submit-button");
-	const loadingIcon = document.getElementById("loading-icon");
 	const questionSegments = document.getElementById("question-segments");
 	const questionButton = document.getElementById("question-button");
 
@@ -70,8 +69,9 @@ const questionViewManager = new function() {
 	};
 
 	this.handleSubmit = function(questionID) {
-		submitButton.classList.add("hidden");
-		loadingIcon.classList.remove("hidden");
+		const previousText = submitButton.textContent;
+		submitButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
+		submitButton.disabled = true;
 
 		const answers = [];
 		for(let i = 0; i < segmentInputBoxes.length; ++i) {
@@ -90,14 +90,15 @@ const questionViewManager = new function() {
 			} else {
 				messageBox.show("Wrong");
 			}
-			loadingIcon.classList.add("hidden");
-			submitButton.classList.remove("hidden");
 		}).catch((error) => {
 			if(error && error.error) {
 				messageBox.show("Error: " + error.error);
 			} else {
 				messageBox.show("Error: " + error);
 			}
+		}).finally(() => {
+			submitButton.textContent = previousText;
+			submitButton.disabled = false;
 		});
 	};
 

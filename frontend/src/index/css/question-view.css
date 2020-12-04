@@ -48,17 +48,14 @@
 
 #submit-button {
 	margin:32px 0 32px 0;
-	padding:20px 80px;
+	padding:20px 20px;
 	font-size:28px;
+	width:230px;
 }
 
 #submit-button > p {
 	margin:0;
 	padding:0;
-}
-
-#submit-button.hidden, #loading-icon.hidden {
-	display:none;
 }
 
 #question-segments > .geogebra-container > .geogebra-scaling-container {
