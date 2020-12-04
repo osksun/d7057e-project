@@ -85,18 +85,18 @@ const questionViewManager = new function() {
 
 		DbCom.answerQuestion(questionID, answers).then((result) => {
 			if (result.correct) {
-				alert("Correct");
+				messageBox.show("Correct");
 				displayLevel.updateXp();
 			} else {
-				alert("Wrong");
+				messageBox.show("Wrong");
 			}
 			loadingIcon.classList.add("hidden");
 			submitButton.classList.remove("hidden");
 		}).catch((error) => {
-			if(error) {
-				alert("Error: " + error.error);
+			if(error && error.error) {
+				messageBox.show("Error: " + error.error);
 			} else {
-				alert("Error: " + error);
+				messageBox.show("Error: " + error);
 			}
 		});
 	};
