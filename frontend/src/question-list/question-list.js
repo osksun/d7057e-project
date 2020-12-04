@@ -8,10 +8,12 @@ const questionList = new function() {
 			for (let i = 0; i < questions.length; i++) {
 				addQuestionCard(courseName, moduleName, questions[i], i + 1);
 			}
+
+			if(questions.length < 256) {
+				addCreateCard(courseName, moduleName);
+			}
 		}).catch((err) => {
 			viewManager.redirect404();
-		}).finally(() => {
-			addCreateCard(courseName, moduleName);
 		});
 	};
 

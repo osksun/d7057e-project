@@ -14,5 +14,7 @@ const backendErrorCode = {
 	duplicateModerator:11,
 	userDoesNotExist:12,
 	captchaError:13,
-	usernameTaken:14
+	usernameTaken:14,
+	tooManyQuestionsInModule:15,
+	tooManyModulesInCourse:16
 };
