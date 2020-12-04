@@ -13,6 +13,10 @@ const DbCom = new function() {
 		refreshToken = loginData["refreshToken"];
 	}
 
+	this.getUserID = function() {
+		return userID;
+	};
+
 	function sha512(string) {
 		return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(string)).then(buffer => {
 	    return Array.prototype.map.call(new Uint8Array(buffer), (char) => {

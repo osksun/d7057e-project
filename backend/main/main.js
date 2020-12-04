@@ -134,6 +134,7 @@ function init() {
 			let username = request.body.username;
 
 			if(validation.validateStringMax(username, 255)) {
+				username = username.trim().replace(/\s+/g, " ");
 				if(username.length == 0) {
 					username = null;
 				}
@@ -143,10 +144,7 @@ function init() {
 						success:true
 					});
 				}).catch((error) => {
-					response.json({
-						error:"Database error",
-						errorCode:errorCode.unknownDatabaseError
-					});
+					response.json(error);
 				});
 			} else {
 				reject({

@@ -41,23 +41,31 @@ const moderatorsList = new function() {
 			for(let i = 0; i < moderators.length; ++i) {
 				const user = moderators[i];
 				let name;
+				let isItalic;
 				if(user.name == null) {
-					name = "Unnamed user #" + user.id;
+					name = "Unnamed #" + user.id;
+					isItalic = true;
 				} else {
 					name = user.name;
+					isItalic = false;
 				}
-				addModerator(name, user.id);
+				addModerator(name, isItalic, user.id);
 			}
 		});
 	}
 
-	function addModerator(text, userID) {
+	function addModerator(text, isItalic, userID) {
 		const span = document.createElement("span");
 		moderatorsList.prepend(span);
 
-		const p = document.createElement("p");
-		p.textContent = text;
-		span.appendChild(p);
+		let textElement;
+		if(isItalic) {
+			textElement = document.createElement("i");
+		} else {
+			textElement = document.createElement("p");
+		}
+		textElement.textContent = text;
+		span.appendChild(textElement);
 
 		const deleteButton = document.createElement("button");
 		deleteButton.className = "button";
