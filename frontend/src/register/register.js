@@ -11,10 +11,10 @@
 			const passwordRepeat = repeatPasswordField.value;
 
 			if(email == "" || password == "" || passwordRepeat == "") {
-				errorBox.show("Fill in all the required fields");
+				infoBox.showError("Fill in all the required fields");
 			} else {
 				if(password != passwordRepeat) {
-					errorBox.show("Passwords do not match!");
+					infoBox.showError("Passwords do not match!");
 				} else {
 					const previousText = registerButton.textContent;
 					registerButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
@@ -29,9 +29,9 @@
 							window.location = "/";
 						}).catch((error) => {
 							if(error == null) {
-								errorBox.show("Connection error");
+								infoBox.showError("Connection error");
 							} else {
-								errorBox.show(error.error);
+								infoBox.showError(error.error);
 							}
 						}).finally(() => {
 							registerButton.textContent = previousText;

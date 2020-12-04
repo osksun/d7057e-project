@@ -8,7 +8,8 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/top-bar.css">
 		<link rel="stylesheet" type="text/css" href="/src/register/register.css">
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
-		<link rel="stylesheet" type="text/css" href="/src/register/error-box.css">
+		<link rel="stylesheet" type="text/css" href="/src/info-box/info-box.css">
+		<script src="/src/info-box/info-box.js"></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="https://www.google.com/recaptcha/api.js?render=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></script>
 	</head>
@@ -34,7 +35,6 @@
 		<a href="/login" class="button">Login</a>
 
 		<script src="/src/register/register.js"></script>
-		<script src="/src/register/error-box.js"></script>
 		<script src="/src/register/captcha.js"></script>
 	</body>
 </html>
