@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/info-box/info-box.css">
 		<script src="/src/info-box/info-box.js"></script>
+		<script src="/res/lib/sha512.js"></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="https://www.google.com/recaptcha/api.js?render=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"></script>
 	</head>

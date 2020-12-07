@@ -9,6 +9,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/info-box/info-box.css">
 		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
+		<script src="/res/lib/sha512.js"></script>
 		<script src="/src/shared/js/backend-communication.js"></script>
 		<script src="/src/message-box/message-box.js"></script>
 		<script src="/src/info-box/info-box.js"></script>
