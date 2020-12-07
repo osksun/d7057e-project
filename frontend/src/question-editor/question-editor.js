@@ -39,10 +39,18 @@ const questionEditor = new function() {
 	});
 
 	function createSegment(type, content, answer) {
-		const createCallback = segmentCreateCallbacks.get(type);
-		const segment = createCallback(content, answer);
+		let segment;
+		if (segmentCreateCallbacks.has(type)) {
+			const createCallback = segmentCreateCallbacks.get(type);
+			segment = createCallback(content, answer);
+			segment.type = type;
+		} else {
+			segment = {
+				div:document.createElement("div")
+			};
+			segment.div.innerText = "Error: Unknown segment!\nContent: " + content + "\nAnswer: " + answer;
+		}
 		questionSegments.appendChild(segment.div);
-		segment.type = type;
 		segmentsData.push(segment);
 
 		const segmentToolbar = document.createElement("div");
