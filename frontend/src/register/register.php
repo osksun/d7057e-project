@@ -31,7 +31,7 @@
 			<button id="registerButton" class="button">Register</button>
 		</div>
 
-		<div id="error-box"></div>
+		<div id="error-box" class="info-box"></div>
 		<a href="/login" class="button">Login</a>
 
 		<script src="/src/register/register.js"></script>
