@@ -58,29 +58,39 @@ window.addEventListener("load", () => {
 		};
 
 		this.loadQuestionView = function (container, courseName, moduleName, questionId, addToHistory) {
-			DbCom.getCourseByName(courseName).then((course) => {
-				DbCom.getModuleByName(course.id, moduleName).then((module) => {
-					modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
-					switch (container) {
-						case questionViewManager.containers.QUESTION:
-							questionViewManager.displayQuestion(course.id, course.name, module.id, module.name, addToHistory);
-							break;
-						case questionViewManager.containers.EDIT_QUESTION:
-							questionViewManager.displayEditQuestion(course.id, course.name, module.id, module.name, questionId, addToHistory);
-							break;
-						case questionViewManager.containers.CREATE_QUESTION:
-							questionViewManager.displayCreateQuestion(course.id, course.name, module.id, module.name, addToHistory);
-							break;
-						case questionViewManager.containers.QUESTION_LIST:
-							questionViewManager.displayQuestionList(course.id, course.name, module.id, module.name, addToHistory);
-							break;
-					}
-					//questionViewManager.display(container, course.id, course.name, module.id, module.name, addToHistory);
+			return new Promise((resolve, reject) => {
+				DbCom.getCourseByName(courseName).then((course) => {
+					DbCom.getModuleByName(course.id, moduleName).then((module) => {
+						modulesViewManager.updateButton(course.id, course.name, "#" + course.color);
+						switch (container) {
+							case questionViewManager.containers.QUESTION:
+								questionViewManager.displayQuestion(course.id, course.name, module.id, module.name, addToHistory);
+								resolve();
+								break;
+							case questionViewManager.containers.EDIT_QUESTION:
+								questionViewManager.displayEditQuestion(course.id, course.name, module.id, module.name, questionId, addToHistory);
+								resolve();
+								break;
+							case questionViewManager.containers.CREATE_QUESTION:
+								questionViewManager.displayCreateQuestion(course.id, course.name, module.id, module.name, addToHistory);
+								resolve();
+								break;
+							case questionViewManager.containers.QUESTION_LIST:
+								questionViewManager.displayQuestionList(course.id, course.name, module.id, module.name, addToHistory);
+								resolve();
+								break;
+							default:
+								reject();
+								break;
+						}
+					}).catch((err) => {
+						this.redirect404();
+						reject();
+					});
 				}).catch((err) => {
 					this.redirect404();
+					reject();
 				});
-			}).catch((err) => {
-				this.redirect404();
 			});
 		};
 
