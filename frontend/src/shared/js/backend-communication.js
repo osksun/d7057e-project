@@ -19,10 +19,10 @@ const DbCom = new function() {
 
 	function sha512(string) {
 		return crypto.subtle.digest("SHA-512", new TextEncoder("utf-8").encode(string)).then(buffer => {
-	    return Array.prototype.map.call(new Uint8Array(buffer), (char) => {
+			return Array.prototype.map.call(new Uint8Array(buffer), (char) => {
 				return ("00" + char.toString(16)).slice(-2);
 			}).join("");
-	  });
+		});
 	}
 	function clientSidePasswordHash(password) {
 		//Hash password + constant salt
