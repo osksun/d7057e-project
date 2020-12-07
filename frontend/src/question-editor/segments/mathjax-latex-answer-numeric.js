@@ -46,8 +46,8 @@ questionEditor.addSegmentType("MATHJAX_LATEX_ANSWER_NUMERIC", "Mathjax Latex Ans
 			}
 			if (answerParts !== undefined) {
 				if (answerParts.length === 2) {
-					const integerPart = +answerParts[0];
-					const decimalPart = +answerParts[1];
+					const integerPart = answerParts[0];
+					const decimalPart = answerParts[1];
 					if (answerParts[0].length === 0 && !isNaN(decimalPart)) {
 						return `^0?(\\.|,)${decimalPart}$`;
 					} else if (!isNaN(integerPart) && answerParts[1].length === 0) {
