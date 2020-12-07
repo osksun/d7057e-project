@@ -38,8 +38,11 @@
 }
 
 /* mathjax-latex-answer common */
-#question-editor-segments > .mathjax-latex-answer > .latex > input {
+#question-editor-segments > .mathjax-latex-answer > div > input {
 	margin:8px;
+	padding:0 6px;
+	vertical-align:middle;
+	border-radius:4px;
 }
 #question-editor-segments > .mathjax-latex-answer > .latex {
 	height:100px;
@@ -78,10 +81,13 @@
 #question-editor-segments > .mathjax-latex-answer > .answer-wrapper > span, #question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > span, #question-editor-segments > .image > div > span, #question-editor-segments > .youtube > div > span {
 	color:#fff;
 	font-size:24px;
+	vertical-align:middle;
 }
 #question-editor-segments > .mathjax-latex-answer > .answer-wrapper > input, #question-editor-segments > .mathjax-latex-answer > .regex-tester-wrapper > input, #question-editor-segments > .image > div > input, #question-editor-segments > .youtube > div > input {
 	font-size:24px;
-	padding:0 10px;
+	padding:0 6px;
+	vertical-align:middle;
+	border-radius:4px;
 }
 
 #question-editor-segments > .geogebra-container > .geogebra-scaling-container {

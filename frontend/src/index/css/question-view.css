@@ -16,6 +16,9 @@
 
 #question-segments > div > input {
 	margin:8px;
+	padding:4px 6px;
+	vertical-align:middle;
+	border-radius:4px;
 }
 
 #question-segments > .questions-complete > img {
