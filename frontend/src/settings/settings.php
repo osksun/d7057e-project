@@ -10,6 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="/src/shared/css/theme.css">
 		<link rel="stylesheet" type="text/css" href="/src/message-box/message-box.css">
 		<script src="/res/lib/sha512.js"></script>
+		<script src="/src/shared/js/backend-error-code.js"></script>
 		<script src="/src/shared/js/backend-communication.js" defer></script>
 		<script src="/src/shared/js/top-bar.js" defer></script>
 		<script src="/src/message-box/message-box.js" defer></script>
