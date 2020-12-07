@@ -9,7 +9,7 @@
 #page-content {
 	margin:0 auto;
 	width:92%;
-	height:100%;
+	height:calc(100% - 65px); /* 65px is the height of top-bar */
 }
 
 .button-container > button {
