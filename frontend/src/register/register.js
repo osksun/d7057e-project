@@ -1,9 +1,12 @@
 
 (function() {
+
 	const registerButton = document.getElementById("registerButton");
 	const emailField = document.getElementById("emailField");
 	const passwordField = document.getElementById("passwordField");
 	const repeatPasswordField = document.getElementById("repeatPasswordField");
+	const errorBox = document.getElementById("error-box");
+
 	registerButton.addEventListener("click", () => {
 		if(emailField.reportValidity() && passwordField.reportValidity() && repeatPasswordField.reportValidity()) {
 			const email = emailField.value;
@@ -11,10 +14,10 @@
 			const passwordRepeat = repeatPasswordField.value;
 
 			if(email == "" || password == "" || passwordRepeat == "") {
-				infoBox.showError("Fill in all the required fields");
+				infoBox.showError(errorBox, "Fill in all the required fields");
 			} else {
 				if(password != passwordRepeat) {
-					infoBox.showError("Passwords do not match!");
+					infoBox.showError(errorBox, "Passwords do not match!");
 				} else {
 					const previousText = registerButton.textContent;
 					registerButton.innerHTML = "<img class=\"loading\" src=\"/src/shared/svg/loading.svg\">";
@@ -29,9 +32,9 @@
 							window.location = "/";
 						}).catch((error) => {
 							if(error == null) {
-								infoBox.showError("Connection error");
+								infoBox.showError(errorBox, "Connection error");
 							} else {
-								infoBox.showError(error.error);
+								infoBox.showError(errorBox, error.error);
 							}
 						}).finally(() => {
 							registerButton.textContent = previousText;
