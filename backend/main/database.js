@@ -273,17 +273,19 @@ function getCourses(userID) {
 	return new Promise((resolve, reject) => {
 		connection.query(`
 			SELECT id, name, description, color, questionCount, answerCount, CASE WHEN moderators.userID IS NULL THEN False ELSE True END AS isModerator FROM (
-				SELECT courses.id, courses.name, courses.description, courses.color, COUNT(modules.courseID) AS questionCount, COUNT(answers.userID) AS answerCount FROM answers
-				RIGHT JOIN questions ON questions.id = answers.questionID AND answers.userID = ?
-				INNER JOIN modules ON modules.id = questions.moduleID
-				RIGHT JOIN courses ON courses.id = modules.courseID
-				WHERE courses.deleteon IS NULL AND modules.deleteon IS NULL AND questions.deleteon IS NULL
-				GROUP BY courses.id
+				SELECT courses.id, courses.name, courses.description, courses.color,
+				COUNT(CASE WHEN questions.moduleID = modules.id AND modules.courseID = courses.id AND modules.deleteon IS NULL AND questions.deleteon IS NULL THEN 1 END) AS questionCount,
+				COUNT(CASE WHEN questions.moduleID = modules.id and modules.courseID = courses.id AND answers.questionID = questions.id AND answers.userID = ? AND modules.deleteon IS NULL AND questions.deleteon IS NULL THEN 1 END) AS answerCount FROM courses
+					LEFT JOIN modules ON modules.courseID = courses.id
+					LEFT JOIN questions ON questions.moduleID = modules.id
+					LEFT JOIN answers ON answers.questionID = questions.id AND answers.userID = ?
+					WHERE courses.deleteon IS NULL
+					GROUP BY courses.id
 			) AS selectedCourses
 			LEFT JOIN courseaccess ON courseaccess.courseID = selectedCourses.id AND courseaccess.userID = ?
 			LEFT JOIN moderators ON moderators.courseID = selectedCourses.id AND moderators.userID = ?
 			ORDER BY courseaccess.lastAccess DESC
-			`, [userID, userID, userID], (error, result) => {
+			`, [userID, userID, userID, userID], (error, result) => {
 			if(error) {
 				reject();
 			} else {
