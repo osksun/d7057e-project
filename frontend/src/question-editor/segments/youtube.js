@@ -5,10 +5,11 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 
 	const urlWrapper = document.createElement("div");
 	const urlTitle = document.createElement("span");
-	urlTitle.innerText = "Youtube URL e.g. \"https://www.youtube.com/watch?v=---------\": ";
+	urlTitle.innerText = "Youtube URL: ";
 	urlWrapper.appendChild(urlTitle);
 	const urlInput = document.createElement("input");
 	urlInput.className = "text-box";
+	urlInput.placeholder = "https://www.youtube.com/watch?v=abcdefghijk";
 	let embedInput = "";
 	urlInput.value = content;
 
@@ -16,8 +17,8 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 	div.appendChild(urlWrapper);
 
 	const iframe = document.createElement("iframe");
-	iframe.width = 560;
-	iframe.height = 315;
+	iframe.width = 640;
+	iframe.height = 360;
 	iframe.src = content;
 	iframe.setAttribute("allowfullscreen", "");
 	iframe.setAttribute("mozallowfullscreen", ""); 
@@ -27,37 +28,38 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 	iframe.frameBorder = 0;
 	div.appendChild(iframe);
 
+	const idExtractRegex = /^(?:http(?:s?):\/\/)?(?:www\.)?(?:youtube(?:-nocookie)?\.com\/(?:(?:v|e(?:mbed)?)\/|.*[?&]v=|[^\/]+\/.+\/)|youtu\.be\/)([0-9A-Za-z-_]{11})(?:.*)$/;
+	const startTimeExtractRegex = /(?:(?:\?|#|&)(?:t|start)=)(?:(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s|(\d+)))/;
+	const endTimeExtractRegex = /(?:(?:\?|#|&)end=)(\d+)/;
 	urlInput.addEventListener("input", () => {
-		if (urlInput.value.length >= 17){
-			if (urlInput.value.slice(0, 17) == "https://youtu.be/") {
-				embedInput = "https://www.youtube.com/embed/" + urlInput.value.slice(17, urlInput.value.length + 1);
-				embedInput = embedInput.replace("t=", "start=");
-				iframe.src = embedInput;
-
-			} else if (urlInput.value.slice(0, 24) == "https://www.youtube.com/") {
-				let idAndTime = urlInput.value.slice(32, urlInput.value.length + 1);
-				let split = idAndTime.split("&t=");
-				if (split.length != 1) {
-					embedInput = "https://www.youtube.com/embed/" + split[0] + "?start=" + timeStampToSeconds(split[1]);
-					iframe.src = embedInput;
+		const idMatch = urlInput.value.match(idExtractRegex);
+		// idMatch => [match, id]
+		if (idMatch !== null) {
+			let embedProperties = idMatch[1] + "?";
+			const startTimeMatch = urlInput.value.match(startTimeExtractRegex);
+			// startTimeMatch => [match, hours, minutes, seconds (=3 when t=...3s), seconds (=3 when t=3)]
+			if (startTimeMatch !== null) {
+				const startSecond = (+startTimeMatch[1] || 0) * 3600 + // hours
+					(+startTimeMatch[2] || 0) * 60 + // minutes
+					(+startTimeMatch[3] || 0) + (+startTimeMatch[4] || 0); // seconds
+				if (startSecond > 0) {
+					embedProperties += "&start=" + startSecond; // Append start time
 				}
-
-				else {
-					embedInput = urlInput.value;
-					// convert regular url to embedded version
-					embedInput =  embedInput.replace("watch?v=", "embed/");
-					// convert regular url time stamp to embedded version time stamp
-					embedInput = embedInput.replace("&t=", "?start=");
-					iframe.src = embedInput;
-				}
-			} else {
-
-				iframe.src = "";
 			}
+			const endTimeMatch = urlInput.value.match(endTimeExtractRegex);
+			// endTimeMatch => [match, seconds]
+			if (endTimeMatch !== null) {
+				const endSecond = (endTimeMatch[1] || 0); 
+				if (endSecond > 0) {
+					embedProperties += "&end=" + endSecond; // Append end time
+				}
+			}
+			embedInput = "https://www.youtube.com/embed/" + embedProperties;
+		} else {
+			embedInput = "";
 		}
+		iframe.src = embedInput;
 	});
-
-
 	return {
 		div:div,
 		getContent:() => {
@@ -68,24 +70,3 @@ questionEditor.addSegmentType("YOUTUBE", "Youtube embed", function(content = "")
 		}
 	};
 });
-
-// Converts youtube url timestamps to seconds
-function timeStampToSeconds(timeStamp) {
-	let number = "";
-	let result = 0;
-	for (i = 0; i < timeStamp.length; i++) {
-		if (!isNaN(parseInt(timeStamp[i]))) {
-			number += timeStamp[i];
-		} else if (timeStamp[i] == 'h') {
-			result += parseInt(number) * 3600;
-			number = "";
-		} else if (timeStamp[i] == 'm') {
-			result += parseInt(number) * 60;
-			number = "";
-		} else if (timeStamp[i] == 's') {
-			result += parseInt(number);
-			number = "";
-		}
-	}
-	return result;
-}

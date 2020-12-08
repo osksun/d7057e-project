@@ -3,9 +3,8 @@ questionViewManager.addSegmentType("YOUTUBE", function(content) {
 	const div = document.createElement("div");
 
 	const iframe = document.createElement("iframe");
-	iframe.width = 560;
-	iframe.height = 315;
-	iframe.src = content;
+	iframe.width = 640;
+	iframe.height = 360;
 	iframe.setAttribute("allowfullscreen", "");
 	iframe.setAttribute("mozallowfullscreen", ""); 
 	iframe.setAttribute("msallowfullscreen", ""); 
@@ -13,28 +12,34 @@ questionViewManager.addSegmentType("YOUTUBE", function(content) {
 	iframe.setAttribute("webkitallowfullscreen", "");
 	iframe.frameBorder = 0;
 	div.appendChild(iframe);
-	if (content.value.length >= 17) {
-		if (content.value.slice(0, 17) == "https://youtu.be/") {
-			embedInput = "https://www.youtube.com/embed/" + content.value.slice(17, content.value.length + 1);
-			embedInput = embedInput.replace("t=", "start=");
-			iframe.src = embedInput;
-		} else if (content.value.slice(0, 24) == "https://www.youtube.com/") {
-			let idAndTime = content.value.slice(32, content.value.length + 1);
-			let split = idAndTime.split("&t=");
-			if (split.length != 1) {
-				embedInput = "https://www.youtube.com/embed/" + split[0] + "?start=" + timeStampToSeconds(split[1]);
-				iframe.src = embedInput;
-			} else {
-				embedInput = content.value;
-				// convert regular url to embedded version
-				embedInput =  embedInput.replace("watch?v=", "embed/");
-				// convert regular url time stamp to embedded version time stamp
-				embedInput = embedInput.replace("&t=", "?start=");
-				iframe.src = embedInput;
+	const idExtractRegex = /^(?:http(?:s?):\/\/)?(?:www\.)?(?:youtube(?:-nocookie)?\.com\/(?:(?:v|e(?:mbed)?)\/|.*[?&]v=|[^\/]+\/.+\/)|youtu\.be\/)([0-9A-Za-z-_]{11})(?:.*)$/;
+	const startTimeExtractRegex = /(?:(?:\?|#|&)(?:t|start)=)(?:(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s|(\d+)))/;
+	const endTimeExtractRegex = /(?:(?:\?|#|&)end=)(\d+)/;
+	const idMatch = content.match(idExtractRegex);
+	// idMatch => [match, id]
+	if (idMatch !== null) {
+		let embedProperties = idMatch[1] + "?";
+		const startTimeMatch = content.match(startTimeExtractRegex);
+		// startTimeMatch => [match, hours, minutes, seconds (=3 when t=...3s), seconds (=3 when t=3)]
+		if (startTimeMatch !== null) {
+			const startSecond = (+startTimeMatch[1] || 0) * 3600 + // hours
+				(+startTimeMatch[2] || 0) * 60 + // minutes
+				(+startTimeMatch[3] || 0) + (+startTimeMatch[4] || 0); // seconds
+			if (startSecond > 0) {
+				embedProperties += "&start=" + startSecond; // Append start time
 			}
-		} else {
-			iframe.src = "";
 		}
+		const endTimeMatch = content.match(endTimeExtractRegex);
+		// endTimeMatch => [match, seconds]
+		if (endTimeMatch !== null) {
+			const endSecond = (endTimeMatch[1] || 0); 
+			if (endSecond > 0) {
+				embedProperties += "&end=" + endSecond; // Append end time
+			}
+		}
+		iframe.src = "https://www.youtube.com/embed/" + embedProperties;
+	} else {
+		iframe.src = "";
 	}
 	return {
 		div:div,
