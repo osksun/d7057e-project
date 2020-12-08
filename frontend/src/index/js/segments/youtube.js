@@ -6,6 +6,11 @@ questionViewManager.addSegmentType("YOUTUBE", function(content) {
 	iframe.width = 560;
 	iframe.height = 315;
 	iframe.src = content;
+	iframe.setAttribute("allowfullscreen", "");
+	iframe.setAttribute("mozallowfullscreen", ""); 
+	iframe.setAttribute("msallowfullscreen", ""); 
+	iframe.setAttribute("oallowfullscreen", ""); 
+	iframe.setAttribute("webkitallowfullscreen", "");
 	iframe.frameBorder = 0;
 	div.appendChild(iframe);
 
