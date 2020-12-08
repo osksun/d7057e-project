@@ -443,12 +443,14 @@ function getModules(courseID, userID) {
 				reject();
 			} else {
 				connection.query(`
-					SELECT modules.id, modules.name, modules.description, COUNT(moduleID) AS questionCount, COUNT(userID) AS answerCount FROM answers
-					RIGHT JOIN questions ON questions.id = answers.questionID AND userID = ?
-					RIGHT JOIN modules ON modules.id = questions.moduleID
-					WHERE modules.courseID = ? AND modules.deleteon IS NULL AND questions.deleteon IS NULL
+					SELECT modules.id, modules.name, modules.description,
+					COUNT(CASE WHEN questions.moduleID = modules.id AND questions.deleteon IS NULL THEN 1 END) AS questionCount,
+					COUNT(CASE WHEN answers.userID = ? AND questions.deleteon IS NULL THEN 1 END) AS answerCount FROM modules
+					LEFT JOIN questions ON questions.moduleID = modules.id
+					LEFT JOIN answers ON answers.questionID = questions.id AND answers.userID = ?
+					WHERE modules.courseID = ? AND modules.deleteon IS NULL
 					GROUP BY modules.id
-					`, [userID, courseID], (error, result) => {
+					`, [userID, userID, courseID], (error, result) => {
 					if(error) {
 						connection.rollback(function() {
 							reject();
